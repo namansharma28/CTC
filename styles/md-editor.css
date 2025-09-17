@@ -1,0 +1,57 @@
+/* Custom styles for Markdown Editor in dark mode */
+.w-md-editor {
+    --md-editor-bg-color: transparent !important;
+    --md-editor-color: var(--foreground) !important;
+    --md-editor-border-color: var(--border) !important;
+    --md-editor-toolbar-bg-color: var(--card) !important;
+    --md-editor-toolbar-color: var(--card-foreground) !important;
+    --md-editor-toolbar-active-bg-color: var(--primary) !important;
+    --md-editor-toolbar-active-color: var(--primary-foreground) !important;
+    --md-editor-toolbar-hover-bg-color: var(--accent) !important;
+    --md-editor-toolbar-hover-color: var(--accent-foreground) !important;
+    --md-editor-toolbar-border-color: var(--border) !important;
+    --md-editor-font-family: var(--font-sans) !important;
+    background-color: var(--background) !important;
+    color: var(--foreground) !important;
+  }
+  
+  .w-md-editor-toolbar {
+    background-color: var(--card) !important;
+    border-bottom: 1px solid var(--border) !important;
+  }
+  
+  .w-md-editor-toolbar-divider {
+    background-color: var(--border) !important;
+  }
+  
+  .w-md-editor-toolbar-item {
+    color: var(--card-foreground) !important;
+  }
+  
+  .w-md-editor-toolbar-item:hover {
+    background-color: var(--accent) !important;
+    color: var(--accent-foreground) !important;
+  }
+  
+  .w-md-editor-toolbar-item.active {
+    background-color: var(--primary) !important;
+    color: var(--primary-foreground) !important;
+  }
+  
+  .w-md-editor-text {
+    background-color: var(--background) !important;
+    color: var(--foreground) !important;
+  }
+  
+  .w-md-editor-text-pre {
+    color: var(--foreground) !important;
+  }
+  
+  .w-md-editor-text-input {
+    color: var(--foreground) !important;
+  }
+  
+  .w-md-editor-preview {
+    background-color: var(--background) !important;
+    color: var(--foreground) !important;
+  }
