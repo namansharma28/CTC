@@ -15,7 +15,7 @@ export async function POST(
     }
 
     const data = await request.json();
-    const { title, description, date, endDate, time, location, capacity, image, isMultiDay } = data;
+    const { title, description, date, endDate, time, location, capacity, image, isMultiDay, eventType } = data;
 
     const client = await clientPromise;
     const db = client.db('gravitas');
@@ -40,6 +40,7 @@ export async function POST(
       location,
       capacity,
       image,
+      eventType: eventType || 'offline', // Default to offline if not provided
       communityId: community._id.toString(),
       creatorId: session.user.id,
       attendees: [],
@@ -74,6 +75,7 @@ export async function POST(
       location,
       capacity,
       image,
+      eventType: eventType || 'offline',
       isMultiDay: !!isMultiDay,
     });
   } catch (error: any) {
@@ -122,6 +124,7 @@ export async function GET(
       isMultiDay: event.isMultiDay || false,
       attendees: event.attendees || [],
       interested: event.interested || [],
+      eventType: event.eventType || 'offline', // Include eventType
       community: {
         id: community._id.toString(),
         name: community.name,

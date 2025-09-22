@@ -2,7 +2,7 @@
 
 import { metadata } from './metadata';
 import Link from 'next/link';
-import { ModeToggle } from '@/components/layout/mode-toggle';
+
 import LandingNavbar from '@/components/layout/landing-navbar';
 
 export default function LandingLayout({ children }: { children: React.ReactNode }) {

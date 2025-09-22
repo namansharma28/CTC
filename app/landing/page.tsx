@@ -4,19 +4,25 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { Users, CalendarDays, Compass, Sparkles, CheckCircle, ArrowRight } from "lucide-react";
+import { Users, CalendarDays, Compass, Sparkles, CheckCircle, ArrowRight, Globe, Shield } from "lucide-react";
 
 export default function LandingPage() {
   return (
     <>
-
-      {/* Hero Section */}
-      <section className="min-h-screen flex flex-col justify-center items-center relative">
+      {/* Hero Section with Sci-Fi Theme */}
+      <section className="min-h-screen flex flex-col justify-center items-center relative overflow-hidden">
+        {/* Animated background elements */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute top-20 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-10 right-10 w-96 h-96 bg-secondary/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute top-1/3 right-1/4 w-32 h-32 bg-accent/5 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+        </div>
+        
         <motion.section
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
-          className="w-full max-w-2xl px-6 py-16 text-center space-y-8 bg-transparent"
+          className="w-full max-w-2xl px-6 py-16 text-center space-y-8 bg-transparent relative z-10"
         >
           <div className="space-y-4">
             <motion.div
@@ -29,20 +35,19 @@ export default function LandingPage() {
                 delay: 0.1,
               }}
             >
-              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600">
-                  Gravitas
+              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight sci-fi-glow">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                  CTC
                 </span>
-                <Sparkles className="inline-block w-8 h-8 ml-2 text-yellow-400" />
+                <Sparkles className="inline-block w-8 h-8 ml-2 text-secondary" />
               </h1>
-              <p className="mt-4 text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-700 dark:from-slate-100 dark:to-slate-300">
-                Where Communities Connect & Events Come Alive
+              <p className="mt-4 text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-700 dark:from-slate-100 dark:to-slate-300 sci-fi-text">
+                Next Generation Event Platform
               </p>
             </motion.div>
             <p className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto">
               Discover, join, and engage with vibrant communities. Stay in the loop
-              with trending events, updates, and more—all in one beautiful, social
-              hub.
+              with trending events, updates, and more—all in one advanced, sci-fi inspired hub.
             </p>
           </div>
 
@@ -55,7 +60,7 @@ export default function LandingPage() {
             <Button
               asChild
               size="lg"
-              className="text-lg px-8 py-6 shadow-lg bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105"
+              className="text-lg px-8 py-6 shadow-lg bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-all duration-300 transform hover:scale-105 sci-fi-glow"
             >
               <Link href="/">
                 Go to the App
@@ -76,9 +81,9 @@ export default function LandingPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
               whileHover={{ y: -5 }}
-              className="flex flex-col items-center backdrop-blur-md bg-transparent rounded-xl p-6 shadow-lg border border-slate-200 dark:border-slate-800 w-full md:w-1/3"
+              className="flex flex-col items-center backdrop-blur-md bg-transparent rounded-xl p-6 shadow-lg sci-fi-card sci-fi-border w-full md:w-1/3"
             >
-              <Users className="h-10 w-10 text-purple-500 dark:text-purple-400 mb-2" />
+              <Users className="h-10 w-10 text-primary mb-2" />
               <h3 className="font-bold text-lg mb-1">Find Your People</h3>
               <p className="text-sm text-muted-foreground">
                 Join communities that match your interests and passions.
@@ -90,9 +95,9 @@ export default function LandingPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
               whileHover={{ y: -5 }}
-              className="flex flex-col items-center backdrop-blur-md bg-transparent rounded-xl p-6 shadow-lg border border-slate-200 dark:border-slate-800 w-full md:w-1/3"
+              className="flex flex-col items-center backdrop-blur-md bg-transparent rounded-xl p-6 shadow-lg sci-fi-card sci-fi-border w-full md:w-1/3"
             >
-              <CalendarDays className="h-10 w-10 text-pink-500 dark:text-pink-400 mb-2" />
+              <CalendarDays className="h-10 w-10 text-secondary mb-2" />
               <h3 className="font-bold text-lg mb-1">Never Miss an Event</h3>
               <p className="text-sm text-muted-foreground">
                 Stay updated with the latest happenings and exclusive events.
@@ -104,9 +109,9 @@ export default function LandingPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
               whileHover={{ y: -5 }}
-              className="flex flex-col items-center backdrop-blur-md bg-transparent rounded-xl p-6 shadow-lg border border-slate-200 dark:border-slate-800 w-full md:w-1/3"
+              className="flex flex-col items-center backdrop-blur-md bg-transparent rounded-xl p-6 shadow-lg sci-fi-card sci-fi-border w-full md:w-1/3"
             >
-              <Compass className="h-10 w-10 text-cyan-500 dark:text-cyan-400 mb-2" />
+              <Compass className="h-10 w-10 text-accent mb-2" />
               <h3 className="font-bold text-lg mb-1">Explore & Connect</h3>
               <p className="text-sm text-muted-foreground">
                 Discover trending communities and make meaningful connections.
@@ -121,12 +126,12 @@ export default function LandingPage() {
         {/* Animated background elements */}
         <div className="absolute inset-0 -z-10">
           <motion.div 
-            className="absolute -right-20 -top-20 w-96 h-96 rounded-full bg-purple-500/10 blur-3xl"
+            className="absolute -right-20 -top-20 w-96 h-96 rounded-full bg-primary/10 blur-3xl"
             animate={{ scale: [1, 1.2, 1], rotate: [0, 10, 0] }}
             transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
           />
           <motion.div 
-            className="absolute -left-20 -bottom-20 w-96 h-96 rounded-full bg-pink-500/10 blur-3xl"
+            className="absolute -left-20 -bottom-20 w-96 h-96 rounded-full bg-secondary/10 blur-3xl"
             animate={{ scale: [1, 1.3, 1], rotate: [0, -10, 0] }}
             transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
           />
@@ -139,9 +144,9 @@ export default function LandingPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl font-bold mb-4">Everything You Need</h2>
+            <h2 className="text-3xl font-bold mb-4 sci-fi-glow">Advanced Features</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Powerful features to help you manage your communities and events effectively
+              Next-generation tools to help you manage your communities and events effectively
             </p>
           </motion.div>
           
@@ -149,34 +154,34 @@ export default function LandingPage() {
             {/* Feature cards */}
             {[
               {
-                icon: <Users className="h-10 w-10 text-purple-500" />,
+                icon: <Users className="h-10 w-10 text-primary" />,
                 title: "Community Management",
                 description: "Create and manage vibrant communities with powerful moderation tools."
               },
               {
-                icon: <CalendarDays className="h-10 w-10 text-pink-500" />,
+                icon: <CalendarDays className="h-10 w-10 text-secondary" />,
                 title: "Event Planning",
                 description: "Schedule, promote, and manage events with integrated RSVP and ticketing."
               },
               {
-                icon: <Compass className="h-10 w-10 text-cyan-500" />,
+                icon: <Compass className="h-10 w-10 text-accent" />,
                 title: "Discovery Feed",
                 description: "Personalized content feed to discover communities and events you'll love."
               },
               {
                 icon: <motion.div animate={{ rotate: [0, 360] }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }}>
-                  <Sparkles className="h-10 w-10 text-yellow-500" />
+                  <Sparkles className="h-10 w-10 text-secondary" />
                 </motion.div>,
                 title: "Trending Content",
                 description: "Stay updated with what's popular and trending across all communities."
               },
               {
-                icon: <CheckCircle className="h-10 w-10 text-emerald-500" />,
+                icon: <CheckCircle className="h-10 w-10 text-primary" />,
                 title: "Verified Profiles",
                 description: "Build trust with verified profiles and community badges."
               },
               {
-                icon: <ArrowRight className="h-10 w-10 text-blue-500" />,
+                icon: <ArrowRight className="h-10 w-10 text-accent" />,
                 title: "Seamless Integration",
                 description: "Connect with your favorite tools and platforms for a unified experience."
               }
@@ -188,7 +193,7 @@ export default function LandingPage() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
-                className="flex flex-col items-center backdrop-blur-md bg-white/80 dark:bg-slate-900/80 rounded-xl p-8 shadow-lg border border-slate-200 dark:border-slate-800"
+                className="flex flex-col items-center backdrop-blur-md bg-transparent sci-fi-card sci-fi-border rounded-xl p-8 shadow-lg"
               >
                 <div className="mb-4">{feature.icon}</div>
                 <h3 className="font-bold text-xl mb-2">{feature.title}</h3>
@@ -210,7 +215,7 @@ export default function LandingPage() {
             return (
               <motion.div
                 key={i}
-                className="absolute h-1.5 w-1.5 rounded-full bg-purple-500/30 dark:bg-purple-400/30"
+                className="absolute h-1.5 w-1.5 rounded-full bg-primary/30 dark:bg-primary/30"
                 style={{
                   left: `${col * 10 + 5}%`,
                   top: `${row * 20 + 5}%`,
@@ -236,16 +241,16 @@ export default function LandingPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl font-bold mb-4">Trusted by Communities</h2>
+            <h2 className="text-3xl font-bold mb-4 sci-fi-glow">Trusted by Organizations</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto mb-12">
-              Join thousands of communities already using Gravitas to connect and grow
+              Join thousands of organizations already using CTC to connect and grow
             </p>
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center">
               {/* SVG Logos */}
                 {[
                   // Tech Community SVG
-                  <motion.svg key="tech" viewBox="0 0 100 40" className="h-12 w-full text-slate-400 dark:text-slate-600"
+                  <motion.svg key="tech" viewBox="0 0 100 40" className="h-12 w-full text-primary/60 dark:text-primary/60"
                     whileHover={{ scale: 1.05 }}
                     transition={{ type: "spring", stiffness: 400, damping: 10 }}>
                     <path d="M10,20 L20,10 L30,20 L20,30 Z" fill="currentColor" />
@@ -253,7 +258,7 @@ export default function LandingPage() {
                   </motion.svg>,
                   
                   // Creative Community SVG
-                  <motion.svg key="creative" viewBox="0 0 100 40" className="h-12 w-full text-slate-400 dark:text-slate-600"
+                  <motion.svg key="creative" viewBox="0 0 100 40" className="h-12 w-full text-secondary/60 dark:text-secondary/60"
                     whileHover={{ scale: 1.05 }}
                     transition={{ type: "spring", stiffness: 400, damping: 10 }}>
                     <circle cx="20" cy="20" r="10" fill="currentColor" />
@@ -261,7 +266,7 @@ export default function LandingPage() {
                   </motion.svg>,
                   
                   // Education Community SVG
-                  <motion.svg key="edu" viewBox="0 0 100 40" className="h-12 w-full text-slate-400 dark:text-slate-600"
+                  <motion.svg key="edu" viewBox="0 0 100 40" className="h-12 w-full text-accent/60 dark:text-accent/60"
                     whileHover={{ scale: 1.05 }}
                     transition={{ type: "spring", stiffness: 400, damping: 10 }}>
                     <path d="M10,25 L20,15 L30,25 L20,10 Z" fill="currentColor" />
@@ -269,7 +274,7 @@ export default function LandingPage() {
                   </motion.svg>,
                   
                   // Sports Community SVG
-                  <motion.svg key="sports" viewBox="0 0 100 40" className="h-12 w-full text-slate-400 dark:text-slate-600"
+                  <motion.svg key="sports" viewBox="0 0 100 40" className="h-12 w-full text-primary/60 dark:text-primary/60"
                     whileHover={{ scale: 1.05 }}
                     transition={{ type: "spring", stiffness: 400, damping: 10 }}>
                     <circle cx="20" cy="20" r="10" stroke="currentColor" strokeWidth="2" fill="none" />
@@ -284,13 +289,13 @@ export default function LandingPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
-              className="mt-16 max-w-3xl mx-auto bg-white/50 dark:bg-slate-900/50 backdrop-blur-md p-8 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-800"
+              className="mt-16 max-w-3xl mx-auto backdrop-blur-md p-8 rounded-2xl shadow-lg sci-fi-card sci-fi-border"
             >
               <p className="text-lg italic text-slate-700 dark:text-slate-300 mb-4">
-                "Gravitas has transformed how we manage our community events. The platform is intuitive, powerful, and our members love it!"
+                "CTC has transformed how we manage our community events. The platform is intuitive, powerful, and our members love it!"
               </p>
               <div className="flex items-center justify-center">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-xl">J</div>
+                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-primary to-secondary flex items-center justify-center text-white font-bold text-xl">J</div>
                 <div className="ml-4 text-left">
                   <p className="font-semibold">Jamie Chen</p>
                   <p className="text-sm text-muted-foreground">Community Lead, TechHub</p>
@@ -302,16 +307,16 @@ export default function LandingPage() {
       </section>
 
       {/* How It Works Section */}
-      <section className="py-20 bg-slate-50/50 dark:bg-slate-900/50 backdrop-blur-sm relative overflow-hidden">
+      <section className="py-20 backdrop-blur-sm relative overflow-hidden">
         {/* Animated background elements */}
         <div className="absolute inset-0 -z-10">
           <motion.div 
-            className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500/0 via-purple-500/30 to-pink-500/0"
+            className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/0 via-primary/30 to-secondary/0"
             animate={{ x: ["-100%", "100%"] }}
             transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
           />
           <motion.div 
-            className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-pink-500/0 via-pink-500/30 to-purple-500/0"
+            className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-secondary/0 via-secondary/30 to-primary/0"
             animate={{ x: ["100%", "-100%"] }}
             transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
           />
@@ -324,15 +329,15 @@ export default function LandingPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl font-bold mb-4">How It Works</h2>
+            <h2 className="text-3xl font-bold mb-4 sci-fi-glow">How It Works</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Get started with Gravitas in three simple steps
+              Get started with CTC in three simple steps
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
             {/* Connecting line for desktop */}
-            <div className="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-purple-300/50 to-pink-300/50 -z-10" />
+            <div className="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-primary/50 to-secondary/50 -z-10" />
             
             {/* Step cards */}
             {[
@@ -340,19 +345,19 @@ export default function LandingPage() {
                 number: "01",
                 title: "Create Your Profile",
                 description: "Sign up and create your personalized profile to start connecting with communities.",
-                icon: <Users className="h-8 w-8 text-purple-500" />
+                icon: <Users className="h-8 w-8 text-primary" />
               },
               {
                 number: "02",
                 title: "Join Communities",
                 description: "Discover and join communities that match your interests and passions.",
-                icon: <Compass className="h-8 w-8 text-pink-500" />
+                icon: <Compass className="h-8 w-8 text-secondary" />
               },
               {
                 number: "03",
                 title: "Engage & Connect",
                 description: "Participate in events, discussions, and build meaningful connections.",
-                icon: <Sparkles className="h-8 w-8 text-cyan-500" />
+                icon: <Sparkles className="h-8 w-8 text-accent" />
               }
             ].map((step, index) => (
               <motion.div
@@ -363,8 +368,8 @@ export default function LandingPage() {
                 transition={{ delay: index * 0.2 }}
                 className="relative"
               >
-                <div className="bg-white dark:bg-slate-900 rounded-xl p-8 shadow-lg border border-slate-200 dark:border-slate-800 h-full">
-                  <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center text-white font-bold">
+                <div className="sci-fi-card sci-fi-border rounded-xl p-8 shadow-lg h-full">
+                  <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full bg-gradient-to-r from-primary to-secondary flex items-center justify-center text-white font-bold">
                     {step.number}
                   </div>
                   
@@ -404,7 +409,7 @@ export default function LandingPage() {
           ].map((particle, i) => (
             <motion.div
               key={i}
-              className="absolute rounded-full bg-purple-500/20 dark:bg-purple-400/20"
+              className="absolute rounded-full bg-primary/20 dark:bg-primary/30"
               style={{
                 width: particle.size,
                 height: particle.size,
@@ -432,11 +437,11 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ type: "spring", stiffness: 100, damping: 15 }}
-            className="text-center bg-gradient-to-r from-purple-600 to-pink-600 rounded-3xl p-12 text-white relative overflow-hidden shadow-2xl"
+            className="text-center bg-gradient-to-r from-primary to-secondary rounded-3xl p-12 text-white relative overflow-hidden shadow-2xl sci-fi-border"
           >
             {/* Animated gradient overlay */}
             <motion.div 
-              className="absolute inset-0 bg-gradient-to-r from-purple-600/0 via-white/10 to-pink-600/0 skew-x-12"
+              className="absolute inset-0 bg-gradient-to-r from-primary/0 via-white/10 to-secondary/0 skew-x-12"
               animate={{ x: ["-100%", "100%"] }}
               transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
             />
@@ -446,7 +451,7 @@ export default function LandingPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="text-3xl md:text-4xl font-bold mb-4"
+              className="text-3xl md:text-4xl font-bold mb-4 sci-fi-glow"
             >
               Ready to Get Started?
             </motion.h2>
@@ -458,7 +463,7 @@ export default function LandingPage() {
               transition={{ delay: 0.3 }}
               className="max-w-2xl mx-auto mb-8 text-lg"
             >
-              Join thousands of communities already using Gravitas to connect and grow.
+              Join thousands of communities already using CTC to connect and grow.
             </motion.p>
             
             <motion.div
@@ -472,7 +477,7 @@ export default function LandingPage() {
               <Button
                 asChild
                 size="lg"
-                className="bg-white text-purple-600 hover:bg-white/90 px-8 py-6 text-lg shadow-lg"
+                className="bg-black text-accent hover:bg-black/90 px-8 py-6 text-lg shadow-lg sci-fi-glow border border-accent/50"
               >
                 <Link href="/">
                   Launch App
@@ -488,8 +493,8 @@ export default function LandingPage() {
             </motion.div>
             
             {/* Decorative elements */}
-            <div className="absolute -left-12 -top-12 w-24 h-24 rounded-full bg-white/10 blur-xl" />
-            <div className="absolute -right-12 -bottom-12 w-24 h-24 rounded-full bg-white/10 blur-xl" />
+            <div className="absolute -left-12 -top-12 w-24 h-24 rounded-full bg-accent/10 blur-xl" />
+            <div className="absolute -right-12 -bottom-12 w-24 h-24 rounded-full bg-accent/10 blur-xl" />
           </motion.div>
         </div>
       </section>

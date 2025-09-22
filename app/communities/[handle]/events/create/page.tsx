@@ -66,6 +66,7 @@ const formSchema = z.object({
   }),
   image: z.string().optional(),
   isMultiDay: z.boolean().default(false),
+  eventType: z.enum(['online', 'offline', 'hybrid']),
 });
 
 export default function CreateEventPage({ params }: { params: { handle: string } }) {
@@ -89,6 +90,7 @@ export default function CreateEventPage({ params }: { params: { handle: string }
       capacity: 100,
       image: "",
       isMultiDay: false,
+      eventType: "offline",
     },
   });
 
@@ -174,6 +176,7 @@ export default function CreateEventPage({ params }: { params: { handle: string }
         capacity: values.capacity,
         image: values.image,
         isMultiDay: values.isMultiDay,
+        eventType: values.eventType,
       };
 
       const response = await fetch(`/api/communities/${params.handle}/events`, {
@@ -370,6 +373,49 @@ export default function CreateEventPage({ params }: { params: { handle: string }
                           <Input placeholder="Event venue or address" className="pl-10" {...field} />
                         </div>
                       </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="eventType"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Event Type</FormLabel>
+                      <div className="flex flex-col space-y-1.5">
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="radio"
+                            id="offline"
+                            value="offline"
+                            checked={field.value === 'offline'}
+                            onChange={() => field.onChange('offline')}
+                          />
+                          <Label htmlFor="offline">In-person (Offline)</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="radio"
+                            id="online"
+                            value="online"
+                            checked={field.value === 'online'}
+                            onChange={() => field.onChange('online')}
+                          />
+                          <Label htmlFor="online">Virtual (Online)</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="radio"
+                            id="hybrid"
+                            value="hybrid"
+                            checked={field.value === 'hybrid'}
+                            onChange={() => field.onChange('hybrid')}
+                          />
+                          <Label htmlFor="hybrid">Hybrid (Both Online & In-person)</Label>
+                        </div>
+                      </div>
                       <FormMessage />
                     </FormItem>
                   )}

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60">
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00BFFF" />
+      <stop offset="100%" stop-color="#7B68EE" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  <g filter="url(#glow)">
+    <path d="M40 15 C 25 15, 15 25, 15 40 C 15 55, 25 65, 40 65 L 60 65" stroke="url(#gradient)" stroke-width="6" fill="none" stroke-linecap="round" />
+    <path d="M70 15 L 70 65" stroke="url(#gradient)" stroke-width="6" fill="none" stroke-linecap="round" />
+    <path d="M100 15 C 85 15, 75 25, 75 40 C 75 55, 85 65, 100 65 L 120 65" stroke="url(#gradient)" stroke-width="6" fill="none" stroke-linecap="round" />
+  </g>
+  <text x="130" y="50" font-family="Arial, sans-serif" font-size="12" fill="#ffffff" filter="url(#glow)">TECH</text>
+</svg>

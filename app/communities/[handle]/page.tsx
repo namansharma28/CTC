@@ -69,7 +69,7 @@ interface Member {
 }
 
 interface Event {
-  id: string;
+  _id: string;
   title: string;
   description: string;
   date: string;
@@ -79,6 +79,7 @@ interface Event {
   image?: string;
   attendees: string[];
   interested: string[];
+  eventType: 'offline' | 'online' | 'hybrid';
 }
 
 interface Update {
@@ -373,7 +374,7 @@ export default function CommunityPage({ params }: { params: { handle: string } }
                             .slice(0, 3)
                             .map(event => (
                               <CalendarEventCard 
-                                key={event.id} 
+                                key={event._id} 
                                 event={{
                                   ...event,
                                   creatorId: '', // Add default creatorId
@@ -424,19 +425,20 @@ export default function CommunityPage({ params }: { params: { handle: string } }
                               .filter(event => new Date(event.date) >= new Date())
                               .slice(0, 3)
                               .map(event => (
-                                  <Link key={event.id} href={`/events/${event.id}`}>
+                                  <Link key={event._id} href={`/events/${event._id}`}>
                                 <CalendarEventCard 
-                                  key={event.id} 
+                                  key={event._id} 
                                   event={{
-                                  ...event,
-                                  creatorId: '', // Add default creatorId
-                                  community: {
-                                    id: community.id,
-                                    name: community.name,
-                                    handle: community.handle,
-                                    avatar: community.avatar
-                                  }
-                                }} 
+                                    // Remove duplicate eventType since it's included in ...event spread
+                                    ...event,
+                                    creatorId: '', // Add default creatorId
+                                    community: {
+                                      id: community.id,
+                                      name: community.name,
+                                      handle: community.handle,
+                                      avatar: community.avatar
+                                    }
+                                  }} 
                                   variant="horizontal"
                                 />
 </Link>
@@ -513,7 +515,7 @@ export default function CommunityPage({ params }: { params: { handle: string } }
               )}
               {events.length > 0 ? (
                 events.map((event) => (
-                  <Link key={event.id} href={`/events/${event.id}`}>
+                  <Link key={event._id} href={`/events/${event._id}`}>
                     <Card className="transition-colors hover:bg-accent">
                       <CardContent className="p-6">
                         <div className="flex items-start gap-4">

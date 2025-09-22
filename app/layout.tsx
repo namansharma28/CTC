@@ -7,12 +7,11 @@ import { Metadata } from 'next';
 const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
 
 export const metadata: Metadata = {
-  title: "Gravitas – Discover, Join & Create Communities and Events",
-  description:
-    "Gravitas is your all-in-one community and event management platform. Discover vibrant communities, explore upcoming events, connect with like-minded people, and create meaningful experiences. Join Gravitas to build, share, and grow together.",
+  title: 'CTC',
+  description: 'Advanced Event Management System',
   keywords: [
-    "Gravitas",
-    "community platform",
+    "CTC",
+    "sci-fi",
     "event management",
     "online communities",
     "social events",
@@ -32,17 +31,17 @@ export const metadata: Metadata = {
   ],
   metadataBase: new URL(baseUrl),
   openGraph: {
-    title: "Gravitas – Discover, Join & Create Communities and Events",
+    title: "CTC - Advanced Event Management System",
     description:
-      "Gravitas is your all-in-one community and event management platform. Discover vibrant communities, explore upcoming events, connect with like-minded people, and create meaningful experiences. Join Gravitas to build, share, and grow together.",
+      "CTC is your advanced event management platform with a sci-fi theme. Discover and create futuristic experiences.",
     url: baseUrl,
-    siteName: "Gravitas",
+    siteName: "CTC",
     images: [
       {
         url: `${baseUrl}/og-image.svg`,
         width: 1200,
         height: 630,
-        alt: "Gravitas Open Graph Image",
+        alt: "CTC Open Graph Image",
       },
     ],
     locale: "en_US",
@@ -50,8 +49,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Gravitas – Discover, Join & Create Communities and Events",    description:
-      "Gravitas is your all-in-one community and event management platform. Discover vibrant communities, explore upcoming events, connect with like-minded people, and create meaningful experiences. Join Gravitas to build, share, and grow together.",
+    title: "CTC - Advanced Event Management System",
+    description:
+      "CTC is your advanced event management platform with a sci-fi theme. Discover and create futuristic experiences.",
     images: [`${baseUrl}/og-image.svg`],
   },
   robots: {
@@ -71,6 +71,10 @@ export const metadata: Metadata = {
     shortcut: "/favicon.ico",
     apple: "/icons/icon-192x192.png",
   },
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f0f4fa' },
+    { media: '(prefers-color-scheme: dark)', color: '#0a0e1a' },
+  ],
 };
 
 

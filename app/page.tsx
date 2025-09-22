@@ -237,13 +237,13 @@ export default function Home() {
   return (
     <div className="container mx-auto space-y-8 py-6">
       {/* Hero Section */}
-      <motion.section 
+      {/* <motion.section 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="space-y-4 pb-8"
       >
         <div className="text-center space-y-4">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight bg-gradient-to-r from-[#91D6FF] via-blue-600 to-purple-600 dark:from-[#91D6FF] dark:via-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight bg-gradient-to-r from-primary/80 via-accent to-secondary dark:from-primary/60 dark:via-accent/80 dark:to-secondary/80 bg-clip-text text-transparent">
             {session ? `Welcome back, ${session.user?.name?.split(' ')[0]}!` : 'Welcome to Gravitas'}
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -263,7 +263,7 @@ export default function Home() {
             </div>
           )}
         </div>
-      </motion.section>
+      </motion.section> */}
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
         <div className="lg:col-span-8">
@@ -319,12 +319,12 @@ export default function Home() {
                       transition={{ delay: index * 0.1 }}
                     >
                       <Card
-                        className="overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 shadow-md cursor-pointer"
+                        className="overflow-hidden hover:shadow-lg transition-shadow duration-200 shadow-sm cursor-pointer"
                         onClick={() => handleCardClick(item)}
                       >
                         {item.type === "event" && item.image && (
                           <div 
-                            className="relative h-40 md:h-48 w-full bg-gradient-to-r from-[#91D6FF] to-purple-600"
+                            className="relative h-40 md:h-48 w-full bg-gradient-to-r from-primary/60 to-accent/60"
                             style={{
                               backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${item.image})`,
                               backgroundSize: "cover",
@@ -357,7 +357,7 @@ export default function Home() {
                             <div className="flex items-center gap-3">
                               <Avatar className="h-10 w-10 ring-2 ring-primary/10">
                                 <AvatarImage src={item.community.avatar} />
-                                <AvatarFallback className="bg-gradient-to-br from-[#91D6FF] to-purple-500 text-white">
+                                <AvatarFallback className="bg-gradient-to-br from-primary/60 to-accent/60 text-white">
                                   {item.community.name.substring(0, 2)}
                                 </AvatarFallback>
                               </Avatar>
@@ -449,7 +449,7 @@ export default function Home() {
                                     >
                                       <div className="flex items-center gap-3">
                                         <div 
-                                          className="h-12 w-12 rounded-lg bg-gradient-to-r from-[#91D6FF] to-indigo-600 flex-shrink-0 flex items-center justify-center"
+                                          className="h-12 w-12 rounded-lg bg-gradient-to-r from-primary/60 to-accent/60 flex-shrink-0 flex items-center justify-center"
                                           style={{
                                             backgroundImage: event.image 
                                               ? `url(${event.image})`
@@ -463,15 +463,15 @@ export default function Home() {
                                           )}
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                          <p className="font-semibold truncate text-sm">{event.title}</p>
+                                          <p className="font-semibold truncate">{event.title}</p>
                                           <div className="flex items-center gap-2 mt-1">
-                                            <Avatar className="h-3 w-3">
+                                            <Avatar className="h-4 w-4">
                                               <AvatarImage src={event.community.avatar} />
                                               <AvatarFallback>{event.community.name.substring(0, 2)}</AvatarFallback>
                                             </Avatar>
                                             <p className="text-xs text-muted-foreground truncate">{event.community.name}</p>
                                           </div>
-                                          <div className="flex items-center gap-2 text-xs text-muted-foreground mt-2">
+                                          <div className="flex items-center gap-3 text-xs text-muted-foreground mt-2">
                                             <div className="flex items-center gap-1">
                                               <CalendarDays className="h-3 w-3" />
                                               <span>{event.date}</span>
@@ -505,12 +505,12 @@ export default function Home() {
                           <div className="mb-6">
                             <div className="flex items-center justify-between mb-4">
                               <h3 className="text-lg font-bold flex items-center gap-2">
-                                <Compass className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                                <Compass className="h-5 w-5 text-green-600 dark:text-green-400" />
                                 Trending Communities
                               </h3>
                               <Link href="/explore">
-                                <Button variant="ghost" size="sm" className="text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300">
-                                  Explore
+                                <Button variant="ghost" size="sm" className="text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300">
+                                  View All
                                 </Button>
                               </Link>
                             </div>
@@ -527,7 +527,7 @@ export default function Home() {
                                     <div className="flex items-center gap-3 rounded-lg border p-4 transition-all hover:shadow-md hover:border-primary/30 bg-card">
                                       <Avatar className="ring-2 ring-primary/10">
                                         <AvatarImage src={community.avatar} />
-                                        <AvatarFallback className="bg-gradient-to-br from-[#91D6FF] to-pink-500 text-white">
+                                        <AvatarFallback className="bg-gradient-to-br from-primary/60 to-accent/60 text-white">
                                           {community.name.substring(0, 2)}
                                         </AvatarFallback>
                                       </Avatar>
@@ -559,9 +559,9 @@ export default function Home() {
                                             e.preventDefault();
                                             handleFollow(community._id, community.handle);
                                           }}
-                                          className="h-6 text-xs px-2"
+                                          className="bg-primary text-primary-foreground hover:bg-primary/80"
                                         >
-                                          {followingStates[community._id] ? "Following" : "Follow"}
+                                          Follow
                                         </Button>
                                       )}
                                     </div>
@@ -650,7 +650,7 @@ export default function Home() {
                               >
                                 <div className="flex items-center gap-3">
                                   <div 
-                                    className="h-12 w-12 rounded-lg bg-gradient-to-r from-[#91D6FF] to-indigo-600 flex-shrink-0 flex items-center justify-center"
+                                    className="h-12 w-12 rounded-lg bg-gradient-to-r from-primary/60 to-accent/60 flex-shrink-0 flex items-center justify-center"
                                     style={{
                                       backgroundImage: event.image 
                                         ? `url(${event.image})`
@@ -664,15 +664,15 @@ export default function Home() {
                                     )}
                                   </div>
                                   <div className="flex-1 min-w-0">
-                                    <p className="font-semibold truncate text-sm">{event.title}</p>
+                                    <p className="font-semibold truncate">{event.title}</p>
                                     <div className="flex items-center gap-2 mt-1">
-                                      <Avatar className="h-3 w-3">
+                                      <Avatar className="h-4 w-4">
                                         <AvatarImage src={event.community.avatar} />
                                         <AvatarFallback>{event.community.name.substring(0, 2)}</AvatarFallback>
                                       </Avatar>
                                       <p className="text-xs text-muted-foreground truncate">{event.community.name}</p>
                                     </div>
-                                    <div className="flex items-center gap-2 text-xs text-muted-foreground mt-2">
+                                    <div className="flex items-center gap-3 text-xs text-muted-foreground mt-2">
                                       <div className="flex items-center gap-1">
                                         <CalendarDays className="h-3 w-3" />
                                         <span>{event.date}</span>
@@ -723,7 +723,7 @@ export default function Home() {
                               <div className="flex items-center gap-3 rounded-lg border p-4 transition-all hover:shadow-md hover:border-primary/30 bg-card">
                                 <Avatar className="ring-2 ring-primary/10">
                                   <AvatarImage src={community.avatar} />
-                                  <AvatarFallback className="bg-gradient-to-br from-[#91D6FF] to-pink-500 text-white">
+                                  <AvatarFallback className="bg-gradient-to-br from-primary/60 to-accent/60 text-white">
                                     {community.name.substring(0, 2)}
                                   </AvatarFallback>
                                 </Avatar>
@@ -778,23 +778,23 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="space-y-6 md:space-y-8 lg:col-span-4">
-          {/* Upcoming Events - Hidden on mobile */}
+        <div className="space-y-6 md:space-y-8 lg:col-span-4 border border-primary/10 bg-background/90 md:block flex-shrink-0">
+          {/* Upcoming Events - Hidden o    n mobile */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
             className="hidden md:block"
           >
-            <Card className="overflow-hidden shadow-lg">
-              <CardHeader className="bg-muted/50 border-b">
+              <Card className="overflow-hidden shadow-lg bg-background/90 border-none">
+              <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center gap-2 text-lg">
-                    <CalendarDays className="h-5 w-5 text-green-600 dark:text-green-400" />
+                    <CalendarDays className="h-5 w-5 text-white dark:text-white" />
                     Upcoming Events
                   </CardTitle>
                   <Link href="/calendar">
-                    <Button variant="ghost" size="sm" className="text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300">
+                    <Button variant="ghost" size="sm" className="text-white dark:text-white hover:text-green-700 dark:hover:text-green-300">
                       View All
                     </Button>
                   </Link>
@@ -810,7 +810,7 @@ export default function Home() {
                     </Button>
                   </div>
                 ) : (
-                  <div className="p-4 space-y-3">
+                  <div className="p-4 space-y-3 ">
                     {upcomingEvents.slice(0, 3).map((event, index) => (
                       <motion.div
                         key={event._id}
@@ -824,7 +824,7 @@ export default function Home() {
                         >
                           <div className="flex items-center gap-3">
                             <div 
-                              className="h-12 w-12 md:h-14 md:w-14 rounded-lg bg-gradient-to-r from-[#91D6FF] to-indigo-600 flex-shrink-0 flex items-center justify-center"
+                              className="h-12 w-12 md:h-14 md:w-14 rounded-lg bg-gradient-to-r from-primary/60 to-accent/60 flex-shrink-0 flex items-center justify-center"
                               style={{
                                 backgroundImage: event.image 
                                   ? `url(${event.image})`
@@ -879,15 +879,15 @@ export default function Home() {
             transition={{ delay: 0.4 }}
             className="hidden md:block"
           >
-            <Card className="overflow-hidden shadow-lg">
-              <CardHeader className="bg-muted/50 border-b">
+            <Card className="overflow-hidden shadow-lg bg-background/90 border-none">
+              <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center gap-2 text-lg">
-                    <Compass className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                    <Compass className="h-5 w-5 text-white dark:text-white" />
                     Trending Communities
                   </CardTitle>
                   <Link href="/explore">
-                    <Button variant="ghost" size="sm" className="text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300">
+                    <Button variant="ghost" size="sm" className="text-white dark:text-white hover:text-purple-700 dark:hover:text-purple-300">
                       Explore
                     </Button>
                   </Link>
@@ -914,7 +914,7 @@ export default function Home() {
                       >
                         <Avatar className="ring-2 ring-primary/10">
                           <AvatarImage src={community.avatar} />
-                          <AvatarFallback className="bg-gradient-to-br from-[#91D6FF] to-pink-500 text-white">
+                          <AvatarFallback className="bg-gradient-to-br from-primary/60 to-accent/60 text-white">
                             {community.name.substring(0, 2)}
                           </AvatarFallback>
                         </Avatar>
@@ -927,7 +927,7 @@ export default function Home() {
                               {community.name}
                             </Link>
                             {community.isVerified && (
-                              <Badge variant="outline" className="h-4 border-blue-300 dark:border-blue-700 px-1 text-[10px] text-blue-500 dark:text-blue-400">
+                              <Badge variant="outline" className="h-3 border-blue-300 dark:border-blue-700 px-1 text-[8px] text-blue-500 dark:text-blue-400">
                                 ✓
                               </Badge>
                             )}

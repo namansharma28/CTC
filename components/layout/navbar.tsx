@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Search, X, Menu, CalendarDays, Loader2, Users } from "lucide-react";
+import { Search, X, Menu, CalendarDays, Loader2, Users, Home, Bell, User } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ModeToggle } from "@/components/layout/mode-toggle";
+
 import { useSession, signOut } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useRouter } from "next/navigation";
@@ -62,6 +62,7 @@ export default function Navbar() {
   const [isSearching, setIsSearching] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Check if we're on mobile
   useEffect(() => {
@@ -209,119 +210,30 @@ export default function Navbar() {
   };
 
   return (
-    <div className="top-navbar fixed left-0 right-0 top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-2 py-2 md:px-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Image
-            src="/logo.svg"
-            alt="Gravitas"
-            width={32}
-            height={32}
-            className="h-8 w-auto"
-          />
-          <span className="text-xl font-bold">Gravitas</span>
-        </div>
-        
-        <div className="flex items-center gap-1 md:gap-4">
-          {/* Mobile Search */}
-          <div className="md:hidden">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => {
-                setIsSearchOpen(!isSearchOpen);
-                if (!isSearchOpen) {
-                  setSearchQuery("");
-                  setSearchResults([]);
-                }
-              }}
-            >
-              {isSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
-            </Button>
-            
-            {isSearchOpen && (
-              <div className="absolute inset-x-0 top-full mt-1 p-2 bg-background border-b">
-                <div className="relative">
-                  <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    ref={searchInputRef}
-                    placeholder="Search events, communities..."
-                    className="pl-8 w-full"
-                    value={searchQuery}
-                    onChange={(e) => handleSearch(e.target.value)}
-                  />
-                </div>
-                {searchQuery.length > 1 && (
-                  <div className="mt-2 max-h-[calc(100vh-200px)] overflow-y-auto rounded-md border bg-popover shadow-md">
-                    {isSearching ? (
-                      <div className="flex items-center justify-center py-6">
-                        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-                      </div>
-                    ) : searchResults.length > 0 ? (
-                      <div className="p-1">
-                        <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground">
-                          Events
-                        </div>
-                        {searchResults
-                          .filter(result => result.type === 'event')
-                          .map(result => (
-                            <div 
-                              key={result.id}
-                              className="flex items-center gap-2 rounded-sm px-2 py-1.5 hover:bg-accent cursor-pointer"
-                              onClick={() => handleSelectSearchResult(result.url)}
-                            >
-                              <CalendarDays className="h-4 w-4 text-blue-500 flex-shrink-0" />
-                              <div className="flex-1 min-w-0">
-                                <p className="text-sm truncate">{result.title}</p>
-                                {result.date && (
-                                  <p className="text-xs text-muted-foreground truncate">{result.date}</p>
-                                )}
-                              </div>
-                            </div>
-                          ))}
-                        
-                        <div className="mt-2 px-2 py-1.5 text-xs font-medium text-muted-foreground">
-                          Communities
-                        </div>
-                        {searchResults
-                          .filter(result => result.type === 'community')
-                          .map(result => (
-                            <div 
-                              key={result.id}
-                              className="flex items-center gap-2 rounded-sm px-2 py-1.5 hover:bg-accent cursor-pointer"
-                              onClick={() => handleSelectSearchResult(result.url)}
-                            >
-                              <div 
-                                className="h-5 w-5 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white text-xs flex-shrink-0"
-                              >
-                                {result.title.substring(0, 2)}
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <p className="text-sm truncate">{result.title}</p>
-                                {result.handle && (
-                                  <p className="text-xs text-muted-foreground truncate">@{result.handle}</p>
-                                )}
-                              </div>
-                            </div>
-                          ))}
-                      </div>
-                    ) : (
-                      <div className="p-6 text-center text-sm text-muted-foreground">
-                        No results found
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-          
-          {/* Desktop Search */}
-          {!isSearchOpen && (
-            <div className="hidden md:block w-64">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-primary/10 bg-background/90 backdrop-blur">
+      <div className="flex h-14 items-center px-4">
+        <div className="flex w-full items-center justify-between md:justify-start">
+          {/* Logo - only visible on mobile */}
+           <div className="md:hidden">
+             <Link href="/" className="flex items-center">
+               <Image src="/ctc-logo.svg" alt="CTC Logo" width={28} height={28} />
+             </Link>
+           </div>
+           
+           {/* Logo and title - visible on desktop */}
+           <div className="hidden md:flex items-center gap-2 w-[68px] xl:w-[275px] justify-center xl:justify-start px-4">
+             <Link href="/" className="flex items-center gap-2">
+               <Image src="/ctc-logo.svg" alt="CTC Logo" width={32} height={32} />
+               <span className="hidden font-bold xl:inline-block">CTC Events</span>
+             </Link>
+           </div>
+
+          {/* Center section with title on mobile, search on desktop */}
+          <div className="flex items-center justify-center md:flex-1">
+            <div className="flex-1 flex justify-center">
               <Popover open={searchQuery.length > 1} onOpenChange={() => {}}>
                 <PopoverTrigger asChild>
-                  <div className="relative">
+                  <div className="relative w-full max-w-md">
                     <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
                       placeholder="Search events, communities..."
@@ -331,7 +243,7 @@ export default function Navbar() {
                     />
                   </div>
                 </PopoverTrigger>
-                <PopoverContent className="w-[350px] p-0" align="start" sideOffset={5}>
+                <PopoverContent className="w-[448px] p-0" align="start" sideOffset={5}>
                   <Command>
                     <CommandList>
                       {isSearching ? (
@@ -395,11 +307,10 @@ export default function Navbar() {
                 </PopoverContent>
               </Popover>
             </div>
-          )}
-          
-          <ModeToggle />
-          
-          {/* Notification Bell Component */}
+          </div>
+
+          {/* Right section with user controls */}
+          <div className="flex items-center gap-1">
           <NotificationBell />
           
           {session ? (
@@ -459,6 +370,7 @@ export default function Navbar() {
           )}
         </div>
       </div>
-    </div>
+      </div>
+    </header>
   );
 }

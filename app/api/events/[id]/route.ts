@@ -13,6 +13,11 @@ export async function GET(
     // Allow non-logged-in users to view event details
     const userId = session?.user?.id;
 
+    // Validate the ID parameter
+    if (!params.id || params.id === 'undefined') {
+      return NextResponse.json({ error: 'Invalid event ID' }, { status: 400 });
+    }
+
     const client = await clientPromise;
     const db = client.db('gravitas');
 
@@ -80,7 +85,7 @@ export async function PATCH(
     }
 
     const data = await request.json();
-    const { title, description, date, time, location, capacity, image } = data;
+    const { title, description, date, time, location, capacity, image, eventType } = data;
 
     const client = await clientPromise;
     const db = client.db('gravitas');
@@ -117,6 +122,7 @@ export async function PATCH(
           location,
           capacity,
           image,
+          eventType: eventType || event.eventType || 'offline', // Use provided value, fallback to existing, or default to offline
           updatedAt: new Date(),
         },
       }
@@ -131,6 +137,7 @@ export async function PATCH(
       location,
       capacity,
       image,
+      eventType: eventType || event.eventType || 'offline',
     });
   } catch (error: any) {
     console.error('Error updating event:', error);

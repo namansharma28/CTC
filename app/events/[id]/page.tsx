@@ -14,7 +14,7 @@ const Preview = dynamic(
   () => import('@uiw/react-md-editor').then((mod) => mod.default.Markdown),
   { ssr: false }
 );
-import { Calendar, Clock, MapPin, Users, Share2, ArrowLeft, Pencil, Plus, FileText, Mail, User, Trash2, QrCode } from "lucide-react";
+import { Calendar, Clock, MapPin, Users, Share2, ArrowLeft, Pencil, Plus, FileText, Mail, User, Trash2, QrCode, Video, Laptop } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -47,6 +47,7 @@ interface Event {
   location: string;
   capacity: number;
   image: string;
+  eventType?: 'online' | 'offline' | 'hybrid';
   creatorId: string;
   community: {
     id: string;
@@ -244,8 +245,11 @@ export default function EventPage({ params }: { params: { id: string } }) {
           backgroundPosition: "center",
         }}
       >
-        <div className="absolute inset-x-0 bottom-0 p-6 text-white">
-          <Badge className="mb-2 bg-primary/80 hover:bg-primary/70">Event</Badge>
+        <div className="absolute bottom-0 left-0 p-6 text-white">
+          <Badge className="mb-2 bg-primary/80 hover:bg-primary/70">
+            {event.eventType === 'online' ? 'Online Event' : 
+             event.eventType === 'hybrid' ? 'Hybrid Event' : 'Event'}
+          </Badge>
           <h1 className="mb-1 text-2xl font-bold md:text-4xl">{event.title}</h1>
           
           <div className="mt-2 flex items-center gap-2">
@@ -371,9 +375,18 @@ export default function EventPage({ params }: { params: { id: string } }) {
                   </div>
                 </div>
                 <div className="flex items-start gap-2">
-                  <MapPin className="mt-0.5 h-5 w-5 text-muted-foreground" />
+                  {event.eventType === 'online' ? (
+                    <Video className="mt-0.5 h-5 w-5 text-muted-foreground" />
+                  ) : event.eventType === 'hybrid' ? (
+                    <Laptop className="mt-0.5 h-5 w-5 text-muted-foreground" />
+                  ) : (
+                    <MapPin className="mt-0.5 h-5 w-5 text-muted-foreground" />
+                  )}
                   <div>
-                    <p className="text-sm font-medium">Location</p>
+                    <p className="text-sm font-medium">
+                      {event.eventType === 'online' ? 'Online Event' : 
+                       event.eventType === 'hybrid' ? 'Hybrid Event' : 'Location'}
+                    </p>
                     <p>{event.location}</p>
                   </div>
                 </div>

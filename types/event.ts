@@ -1,5 +1,5 @@
 export interface Event {
-  id: string;
+  _id: string;
   title: string;
   description: string;
   date: string;
@@ -8,6 +8,7 @@ export interface Event {
   capacity?: number;
   image?: string;
   creatorId: string;
+  eventType: 'online' | 'offline' | 'hybrid';
   community: {
     id: string;
     name: string;

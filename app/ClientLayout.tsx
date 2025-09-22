@@ -6,26 +6,68 @@ import AuthProvider from '@/components/providers/session-provider';
 import { NotificationProvider } from '@/components/notifications/notification-provider';
 import Sidebar from '@/components/layout/sidebar';
 import Navbar from '@/components/layout/navbar';
+import BottomNavbar from '@/components/layout/bottom-navbar';
 import { usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { Search } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const [isMobile, setIsMobile] = useState(false);
   
-  return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <AuthProvider>
-        <NotificationProvider>
-          <div className="flex min-h-screen w-full flex-col mt-20">
-            {!pathname?.startsWith('/auth') && <Navbar />}
-            <div className="flex w-full flex-1">
-              {!pathname?.startsWith('/auth') && <Sidebar />}
-              <main className="flex-1 w-full overflow-auto">
-                <div className="w-full h-full">
-                  {children}
-                </div>
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+  
+  // Don't render layout components for auth pages
+  if (pathname?.startsWith('/auth')) {
+    return (
+      <ThemeProvider attribute="class" defaultTheme="dark">
+        <AuthProvider>
+          <NotificationProvider>
+            <div className="min-h-screen w-full bg-background sci-fi-background">
+              <main className="w-full">
+                {children}
                 <Toaster />
               </main>
             </div>
+          </NotificationProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    );
+  }
+  
+  return (
+    <ThemeProvider attribute="class" defaultTheme="dark">
+      <AuthProvider>
+        <NotificationProvider>
+          <div className="flex min-h-screen w-full bg-background sci-fi-background">
+            <Navbar />
+            <div className="flex w-full mt-16 md:mt-14">
+              {/* Desktop sidebar - always visible on large screens */}
+              <div className="hidden md:block w-[68px] xl:w-[275px] flex-shrink-0">
+                <Sidebar />
+              </div>
+              
+              {/* Main content area */}
+              <main className="flex-1 w-full overflow-auto pb-16 md:pb-0">
+                <div className="mx-auto w-full h-full border-x border-primary/10">
+                  {children}
+                </div>
+              </main>
+            </div>
+            
+            {/* Mobile bottom navbar */}
+            {isMobile && <BottomNavbar />}
+            <Toaster />
           </div>
         </NotificationProvider>
       </AuthProvider>

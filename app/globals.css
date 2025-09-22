@@ -3,49 +3,27 @@
 @tailwind utilities;
 
 :root {
-  --background: 0 0% 100%;
-  --foreground: 0 0% 3.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 0 0% 3.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 3.9%;
-  --primary: 199 100% 78%;
-  --primary-foreground: 0 0% 9%;
-  --secondary: 60 10% 97%;
-  --secondary-foreground: 0 0% 9%;
-  --muted: 60 10% 97%;
-  --muted-foreground: 0 0% 45.1%;
-  --accent: 60 10% 97%;
-  --accent-foreground: 0 0% 9%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 0 0% 89.8%;
-  --input: 0 0% 89.8%;
-  --ring: 199 100% 78%;
-  --radius: 0.75rem;
-}
-
-.dark {
-  --background: 0 0% 3.9%;
-  --foreground: 0 0% 98%;
-  --card: 0 0% 3.9%;
-  --card-foreground: 0 0% 98%;
-  --popover: 0 0% 3.9%;
-  --popover-foreground: 0 0% 98%;
-  --primary: 199 100% 78%;
-  --primary-foreground: 0 0% 9%;
-  --secondary: 0 0% 14.9%;
-  --secondary-foreground: 0 0% 98%;
-  --muted: 0 0% 14.9%;
-  --muted-foreground: 0 0% 63.9%;
-  --accent: 0 0% 14.9%;
-  --accent-foreground: 0 0% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 0 0% 14.9%;
-  --input: 0 0% 14.9%;
-  --ring: 199 100% 78%;
-  --page-background: #0a0a0a;
+  --background: 230 30% 5%;
+  --foreground: 220 20% 95%;
+  --card: 230 35% 9%;
+  --card-foreground: 220 20% 95%;
+  --popover: 230 35% 9%;
+  --popover-foreground: 220 20% 95%;
+  --primary: 210 100% 55%;
+  --primary-foreground: 210 10% 8%;
+  --secondary: 250 70% 60%;
+  --secondary-foreground: 250 20% 95%;
+  --muted: 230 30% 12%;
+  --muted-foreground: 220 10% 65%;
+  --accent: 280 80% 55%;
+  --accent-foreground: 280 20% 95%;
+  --destructive: 0 60% 28%;
+  --destructive-foreground: 0 0% 95%;
+  --border: 230 30% 15%;
+  --input: 230 30% 15%;
+  --ring: 210 100% 55%;
+  --page-background: #080c17;
+  --radius: 0.5rem;
 }
 
 @layer base {
@@ -54,16 +32,143 @@
   }
   body {
     @apply bg-background text-foreground;
-  }
-  
-  /* Light mode background improvements */
-  :root {
-    --page-background: #f8fafc;
-  }
-  
-  body {
     background-color: var(--page-background) !important;
   }
+}
+
+@layer components {
+  /* Sci-fi UI elements */
+  .sci-fi-border {
+    @apply border border-primary/30 rounded-md relative overflow-hidden;
+    box-shadow: 0 0 15px rgba(0, 191, 255, 0.3);
+  }
+  
+  .sci-fi-border::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    animation: sci-fi-border-flow 3s linear infinite;
+  }
+  
+  @keyframes sci-fi-border-flow {
+    0% { left: -100%; }
+    100% { left: 100%; }
+  }
+  
+  .sci-fi-glow {
+    text-shadow: 0 0 8px rgba(0, 191, 255, 0.8);
+  }
+  
+  .sci-fi-card {
+    @apply bg-card/80 backdrop-blur-sm border border-primary/20 rounded-md;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 191, 255, 0.2);
+  }
+  
+  .sci-fi-gradient {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+  }
+  
+  /* Enhanced sci-fi UI elements */
+  .sci-fi-panel {
+    @apply bg-black/40 backdrop-blur-md border border-primary/30 rounded-md;
+    box-shadow: 0 0 20px rgba(0, 191, 255, 0.2), inset 0 0 10px rgba(0, 191, 255, 0.1);
+  }
+  
+  .sci-fi-button {
+    @apply bg-black/60 text-primary border border-primary/40 rounded px-4 py-2 transition-all;
+    box-shadow: 0 0 10px rgba(0, 191, 255, 0.2);
+  }
+  
+  .sci-fi-button:hover {
+    @apply border-primary/80;
+    box-shadow: 0 0 15px rgba(0, 191, 255, 0.4);
+  }
+  
+  .sci-fi-input {
+    @apply bg-black/50 border border-primary/30 text-foreground rounded-md px-3 py-2;
+    box-shadow: inset 0 0 8px rgba(0, 191, 255, 0.1);
+  }
+  
+  .sci-fi-input:focus {
+    @apply outline-none border-primary/60;
+    box-shadow: 0 0 10px rgba(0, 191, 255, 0.3), inset 0 0 8px rgba(0, 191, 255, 0.1);
+  }
+  
+  .sci-fi-grid {
+    background-image: 
+      linear-gradient(rgba(0, 191, 255, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 191, 255, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  
+  .sci-fi-text {
+    @apply text-primary font-mono tracking-wide;
+  }
+  
+  .sci-fi-heading {
+    @apply font-bold tracking-wider sci-fi-glow;
+    letter-spacing: 0.05em;
+  }
+  
+  .sci-fi-terminal {
+    @apply bg-black/80 text-green-400 font-mono p-4 rounded-md border border-green-500/30;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.2), inset 0 0 10px rgba(0, 255, 0, 0.05);
+  }
+  
+  .sci-fi-hologram {
+    @apply relative;
+  }
+  
+  .sci-fi-hologram::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      transparent 0px,
+      rgba(0, 191, 255, 0.05) 1px,
+      transparent 2px
+    );
+    pointer-events: none;
+    z-index: 10;
+    animation: sci-fi-hologram-scan 10s linear infinite;
+  }
+  
+  @keyframes sci-fi-hologram-scan {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 100px; }
+  }
+  
+  /* Animated elements */
+  .sci-fi-pulse {
+    animation: sci-fi-pulse 2s infinite;
+  }
+  
+  @keyframes sci-fi-pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.6; }
+    100% { opacity: 1; }
+  }
+  
+  .sci-fi-loading {
+    @apply relative inline-block w-6 h-6 border-2 border-transparent rounded-full;
+    border-top-color: hsl(var(--primary));
+    animation: sci-fi-spin 1s linear infinite;
+  }
+  
+  @keyframes sci-fi-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+}
+    /* -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    @apply font-bold; */
+  
+
   
   /* Main content area background */
   main {
@@ -76,7 +181,7 @@
     overflow-x: hidden;
     width: 100%;
   }
-}
+/* Remove extra closing brace */
 
 /* Container responsiveness */
 .container {
