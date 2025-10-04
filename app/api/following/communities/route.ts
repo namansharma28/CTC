@@ -11,7 +11,7 @@ export async function GET() {
     }
 
     const client = await clientPromise;
-    const db = client.db('gravitas');
+    const db = client.db('CTC');
 
     // Get communities user follows
     const followedCommunities = await db.collection('follows')

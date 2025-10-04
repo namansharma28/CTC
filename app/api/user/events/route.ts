@@ -12,7 +12,7 @@ export async function GET() {
     }
 
     const client = await clientPromise;
-    const db = client.db('gravitas');
+    const db = client.db('CTC');
 
     // Get events user is registered for
     const userEvents = await db.collection('eventRegistrations')

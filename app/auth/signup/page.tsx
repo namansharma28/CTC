@@ -18,8 +18,8 @@ export default function SignUpPage() {
   const { toast } = useToast();
   const { data: session, status } = useSession();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/";
-  
+  const callbackUrl = searchParams.get("callbackUrl") || "/home";
+
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -41,7 +41,7 @@ export default function SignUpPage() {
 
   const handleGoogleSignUp = async () => {
     setIsGoogleLoading(true);
-    
+
     try {
       const result = await signIn("google", {
         callbackUrl,
@@ -68,7 +68,7 @@ export default function SignUpPage() {
 
   const handleEmailSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validation
     if (formData.password !== formData.confirmPassword) {
       toast({
@@ -149,14 +149,14 @@ export default function SignUpPage() {
             <CardHeader className="space-y-1 text-center">
               <div className="flex items-center justify-center gap-2 mb-4">
                 <CalendarDays size={24} className="text-primary" />
-                <span className="text-xl font-bold">Gravitas</span>
+                <span className="text-xl font-bold">CTC</span>
               </div>
               <div className="flex justify-center mb-4">
                 <Mail className="h-16 w-16 text-blue-500" />
               </div>
               <CardTitle className="text-2xl">Check Your Email</CardTitle>
               <CardDescription>
-                We've sent a 6-digit verification code to <strong>{userEmail}</strong>. 
+                We've sent a 6-digit verification code to <strong>{userEmail}</strong>.
                 Please enter the code to verify your account.
               </CardDescription>
             </CardHeader>
@@ -188,19 +188,19 @@ export default function SignUpPage() {
       <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
         <div className="absolute inset-0 bg-gradient-to-b from-primary to-primary/90" />
         <div className="relative z-20 flex items-center gap-2 text-lg font-medium">
-                <Image
-                    src="/logo.svg"
-                    alt="Gravitas"
-                    width={32}
-                    height={32}
-                    className="h-8 w-auto"
-                  />          
-                  <span>Gravitas</span>
+          <Image
+            src="/icons/icon-128x128.png"
+            alt="CTC"
+            width={32}
+            height={32}
+            className="h-8 w-auto rounded-lg"
+          />
+          <span>CTC</span>
         </div>
         <div className="relative z-20 mt-auto">
           <blockquote className="space-y-2">
             <p className="text-lg">
-              Join our vibrant community of event organizers and enthusiasts. 
+              Join our vibrant community of event organizers and enthusiasts.
               Create, discover, and connect through meaningful experiences.
             </p>
             <footer className="text-sm">Mike Thompson, Event Coordinator</footer>
@@ -219,16 +219,16 @@ export default function SignUpPage() {
                 <div className="flex items-center justify-center gap-2">
                   {/* <Image
                     src="/logo.svg"
-                    alt="Gravitas"
+                    alt="CTC"
                     width={32}
                     height={32}
                     className="h-8 w-auto"
                   />
-                  <span className="text-xl font-bold">Gravitas</span> */}
+                  <span className="text-xl font-bold">CTC</span> */}
                 </div>
                 <CardTitle className="text-center text-2xl">Create an account</CardTitle>
                 <CardDescription className="text-center">
-                  Get started with Gravitas today
+                  Get started with CTC today
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">

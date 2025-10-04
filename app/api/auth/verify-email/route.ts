@@ -17,7 +17,7 @@ export async function GET(request: Request) {
     }
 
     const client = await clientPromise;
-    const db = client.db('gravitas');
+    const db = client.db('CTC');
 
     // Find verification token
     const verificationToken = await db.collection('verification_tokens').findOne({

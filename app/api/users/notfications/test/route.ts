@@ -12,13 +12,13 @@ export async function POST(request: Request) {
     }
 
     const client = await clientPromise;
-    const db = client.db('gravitas');
+    const db = client.db('CTC');
 
     // Create a test notification
     const notification = {
       userId: session.user.id,
       title: "Test Notification",
-      description: "This is a test notification from Gravitas",
+      description: "This is a test notification from CTC",
       type: "system",
       read: false,
       createdAt: new Date(),

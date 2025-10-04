@@ -28,7 +28,7 @@ export default async function EventPage({ params }: { params: { id: string; slug
         data={{
           title: event.title,
           description: event.description,
-          slug: event.id,
+          slug: event._id,
           startDate: new Date(`${event.date}T${event.time}`).toISOString(),
           endDate: new Date(`${event.date}T${event.time}`).toISOString(),
           location: event.location,
@@ -42,4 +42,4 @@ export default async function EventPage({ params }: { params: { id: string; slug
       {/* ... rest of the existing JSX ... */}
     </>
   );
-} 
+}

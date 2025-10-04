@@ -231,7 +231,7 @@ export default function Navbar() {
         <Link href="/" className="flex items-center gap-2 group">
           <div className="relative">
             <Image
-              src="/ctc-logo.svg"
+              src="/icons/icon-128x128.png"
               alt="CTC Logo"
               width={32}
               height={32}

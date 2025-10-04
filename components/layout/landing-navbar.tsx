@@ -10,7 +10,7 @@ export default function LandingNavbar() {
         <Link href="/" className="flex items-center gap-2 group">
           <div className="relative">
             <Image
-              src="/ctc-logo.svg"
+              src="/icons/icon-128x128.png"
               alt="CTC Logo"
               width={40}
               height={40}
@@ -35,7 +35,7 @@ export default function LandingNavbar() {
           </Link>
         </nav>
         <div className="flex items-center gap-2">
-          
+
           <Link href="/auth/signin">
             <Button variant="outline" size="sm" className="sci-fi-border">
               Sign In

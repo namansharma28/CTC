@@ -179,7 +179,7 @@ export default function UpdatePage({ params }: { params: { id: string } }) {
         <h1 className="text-3xl font-bold">Update Not Found</h1>
         <p className="mb-6 text-muted-foreground">The update you&apos;re looking for doesn&apos;t exist.</p>
         <Button asChild>
-          <Link href="/">Go Home</Link>
+          <Link href="/home">Go Home</Link>
         </Button>
       </div>
     );

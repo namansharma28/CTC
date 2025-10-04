@@ -27,8 +27,8 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
   
-  // Don't render layout components for auth pages
-  if (pathname?.startsWith('/auth')) {
+  // Don't render layout components for auth pages and landing page
+  if (pathname?.startsWith('/auth') || pathname === '/') {
     return (
       <ThemeProvider attribute="class" defaultTheme="dark">
         <AuthProvider>
@@ -53,9 +53,11 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
             <Navbar />
             <div className="flex w-full mt-16 md:mt-14">
               {/* Desktop sidebar - always visible on large screens */}
-              <div className="hidden md:block w-[68px] xl:w-[275px] flex-shrink-0">
-                <Sidebar />
-              </div>
+              {!isMobile && (
+                <div className="md:block w-[68px] xl:w-[275px] flex-shrink-0">
+                  <Sidebar />
+                </div>
+              )}
               
               {/* Main content area */}
               <main className="flex-1 w-full overflow-auto pb-16 md:pb-0">

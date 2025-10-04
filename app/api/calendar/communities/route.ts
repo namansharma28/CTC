@@ -11,7 +11,7 @@ export async function GET() {
     }
 
     const client = await clientPromise;
-    const db = client.db('gravitas');
+    const db = client.db('CTC');
 
     // Get user's communities (member and admin)
     const userCommunities = await db.collection('communities')

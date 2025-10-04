@@ -4,9 +4,10 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import clientPromise from "@/lib/mongodb";
 import bcrypt from "bcryptjs";
+import { UserRole } from "@/types/user";
 
 // Admin credentials
-const ADMIN_EMAIL = "admin@gravitas.com";
+const ADMIN_EMAIL = "admin@ctc.com";
 const ADMIN_PASSWORD = "Admin@123456";
 
 export const authOptions: NextAuthOptions = {
@@ -39,7 +40,7 @@ export const authOptions: NextAuthOptions = {
 
           // Regular user login
           const client = await clientPromise;
-          const db = client.db('gravitas');
+          const db = client.db('CTC');
           
           const user = await db.collection('users').findOne({
             email: credentials.email.toLowerCase()
@@ -66,7 +67,7 @@ export const authOptions: NextAuthOptions = {
             name: user.name,
             image: user.image,
             emailVerified: user.emailVerified,
-            role: user.role || "user",
+            role: user.role || 'user',
           };
         } catch (error) {
           console.error("Auth error:", error);
@@ -76,7 +77,7 @@ export const authOptions: NextAuthOptions = {
     })
   ],
   adapter: MongoDBAdapter(clientPromise, {
-    databaseName: "gravitas",
+    databaseName: "CTC",
     collections: {
       Users: "users",
       Accounts: "accounts",
@@ -100,7 +101,7 @@ export const authOptions: NextAuthOptions = {
       // For OAuth providers, auto-verify email
       if (account?.provider === "google") {
         const client = await clientPromise;
-        const db = client.db('gravitas');
+        const db = client.db('CTC');
         
         await db.collection('users').updateOne(
           { email: user.email },
@@ -119,7 +120,7 @@ export const authOptions: NextAuthOptions = {
       console.log("Session callback:", { session, token });
       if (session.user) {
         session.user.id = token.sub!;
-        session.user.role = token.role as string;
+        session.user.role = token.role as UserRole;
       }
       return session;
     },
@@ -128,6 +129,28 @@ export const authOptions: NextAuthOptions = {
       if (account && user) {
         token.id = user.id;
         token.role = (user as any).role || "user";
+      } else if (token.sub) {
+        // Refresh user data from database to get latest role
+        try {
+          const client = await clientPromise;
+          const db = client.db('CTC');
+          
+          // Skip database lookup for admin user
+          if (token.sub === "admin") {
+            token.role = "admin";
+          } else {
+            const dbUser = await db.collection('users').findOne({
+              _id: new (await import('mongodb')).ObjectId(token.sub)
+            });
+            
+            if (dbUser) {
+              token.role = dbUser.role || "user";
+            }
+          }
+        } catch (error) {
+          console.error("Error refreshing user data in JWT callback:", error);
+          // Keep existing role if database lookup fails
+        }
       }
       return token;
     },

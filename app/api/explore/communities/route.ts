@@ -7,7 +7,7 @@ export async function GET() {
   try {
     const session = await getServerSession(authOptions);
     const client = await clientPromise;
-    const db = client.db('gravitas');
+    const db = client.db('CTC');
 
     // Get all communities with additional data, filtering out pending and rejected communities
     const communities = await db.collection('communities')
@@ -15,7 +15,7 @@ export async function GET() {
         {
           $match: {
             $or: [
-              { status: 'approved' },
+              { status: 'active' },
               { status: { $exists: false } } // For backward compatibility with existing communities
             ],
             status: { $ne: 'rejected' } // Explicitly exclude rejected communities

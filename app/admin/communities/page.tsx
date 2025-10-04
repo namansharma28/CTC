@@ -403,7 +403,7 @@ export default function AdminCommunitiesPage() {
     const matchesStatus = 
       statusFilter === 'all' || 
       community.status === statusFilter ||
-      (statusFilter === 'approved' && !community.status); // For backward compatibility
+      (statusFilter === 'active' && !community.status); // For backward compatibility
     
     return matchesSearch && matchesStatus;
   });
@@ -454,7 +454,7 @@ export default function AdminCommunitiesPage() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Statuses</SelectItem>
-                      <SelectItem value="approved">Approved</SelectItem>
+                      <SelectItem value="active">Active</SelectItem>
                       <SelectItem value="pending">Pending</SelectItem>
                       <SelectItem value="rejected">Rejected</SelectItem>
                     </SelectContent>
@@ -496,8 +496,8 @@ export default function AdminCommunitiesPage() {
                           </TableCell>
                           <TableCell>@{community.handle}</TableCell>
                           <TableCell>
-                            {community.status === 'approved' || !community.status ? (
-                              <Badge className="bg-green-500">Approved</Badge>
+                            {community.status === 'active' || !community.status ? (
+                              <Badge className="bg-green-500">Active</Badge>
                             ) : community.status === 'pending' ? (
                               <Badge variant="outline" className="border-yellow-300 text-yellow-600">Pending</Badge>
                             ) : (
@@ -731,14 +731,14 @@ export default function AdminCommunitiesPage() {
                   </div>
                   <Badge 
                     className={
-                      selectedCommunity.status === 'approved' || !selectedCommunity.status
+                      selectedCommunity.status === 'active' || !selectedCommunity.status
                         ? "bg-green-500"
                         : selectedCommunity.status === 'pending'
                         ? "bg-yellow-500"
                         : "bg-red-500"
                     }
                   >
-                    {selectedCommunity.status || 'Approved'}
+                    {selectedCommunity.status || 'Active'}
                   </Badge>
                 </div>
                 

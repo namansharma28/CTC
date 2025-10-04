@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Shield, Users, CheckCircle, XCircle, Loader2, LogOut, Calendar, BarChart } from "lucide-react";
+import { Shield, Users, CheckCircle, XCircle, Loader2, LogOut, Calendar, BarChart, PlusCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { handleApiResponse } from "@/lib/utils";
 import {
@@ -40,6 +40,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import TechnicalLeadsMonitor from "@/components/admin/technical-leads-monitor";
+import TechnicalLeadsProfiles from "@/components/admin/technical-leads-profiles";
 
 interface PendingCommunity {
   id: string;
@@ -382,10 +384,20 @@ export default function AdminDashboardPage() {
             <p className="text-muted-foreground">Manage community approvals and platform settings</p>
           </div>
         </div>
-        <Button variant="outline" onClick={handleLogout}>
-          <LogOut className="mr-2 h-4 w-4" />
-          Logout
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => router.push('/admin/users')}>
+            <Users className="mr-2 h-4 w-4" />
+            Manage Users
+          </Button>
+          <Button variant="outline" onClick={() => router.push('/communities/create')}>
+            <PlusCircle className="mr-2 h-4 w-4" />
+            Create Community
+          </Button>
+          <Button variant="outline" onClick={handleLogout}>
+            <LogOut className="mr-2 h-4 w-4" />
+            Logout
+          </Button>
+        </div>
       </div>
 
       {/* Stats Overview */}
@@ -421,14 +433,13 @@ export default function AdminDashboardPage() {
       </div>
 
       <Tabs defaultValue="pending" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 mb-6">
-          <TabsTrigger value="pending">
+        <TabsList className="w-full flex-row mb-6 ">
+          <TabsTrigger value="pending" className="w-full">
             Pending Approvals <Badge className="ml-2">{communityStats?.pendingCommunities || 0}</Badge>
           </TabsTrigger>
-          <TabsTrigger value="communities">Communities</TabsTrigger>
-          <TabsTrigger value="settings">Settings</TabsTrigger>
+          <TabsTrigger value="communities" className="w-full">Communities</TabsTrigger>
+          <TabsTrigger value="technical-leads" className="w-full">Technical Leads</TabsTrigger>
         </TabsList>
-
         <TabsContent value="pending">
           <Card>
             <CardHeader>
@@ -528,8 +539,7 @@ export default function AdminDashboardPage() {
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm text-muted-foreground">Approved</p>
-                        <p className="text-2xl font-bold">{communityStats?.approvedCommunities || 0}</p>
+                        <p className="text-sm text-muted-foreground">Active</p>
                       </div>
                       <CheckCircle className="h-8 w-8 text-green-500" />
                     </div>
@@ -564,8 +574,8 @@ export default function AdminDashboardPage() {
                         <TableCell className="font-medium">{community.name}</TableCell>
                         <TableCell>@{community.handle}</TableCell>
                         <TableCell>
-                          {community.status === 'approved' ? (
-                            <Badge className="bg-green-500">Approved</Badge>
+                          {community.status === 'active' ? (
+                            <Badge className="bg-green-500">Active</Badge>
                           ) : community.status === 'pending' ? (
                             <Badge variant="outline" className="border-yellow-300 text-yellow-600">Pending</Badge>
                           ) : (
@@ -582,62 +592,13 @@ export default function AdminDashboardPage() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="settings">
-          <Card>
-            <CardHeader>
-              <CardTitle>Admin Settings</CardTitle>
-              <CardDescription>
-                Configure platform settings and admin preferences
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-lg font-medium mb-2">Platform Settings</h3>
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                      <div className="space-y-2">
-                        <Label htmlFor="site-name">Site Name</Label>
-                        <Input id="site-name" defaultValue="Gravitas" disabled />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="admin-email">Admin Email</Label>
-                        <Input id="admin-email" defaultValue="admin@gravitas.com" disabled />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="site-description">Site Description</Label>
-                      <Textarea 
-                        id="site-description" 
-                        defaultValue="A modern community event management platform" 
-                        disabled
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-medium mb-2">Security Settings</h3>
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                      <div className="space-y-2">
-                        <Label htmlFor="change-password">Change Admin Password</Label>
-                        <div className="flex gap-2">
-                          <Input id="change-password" type="password" placeholder="New password" disabled />
-                          <Button disabled>Update</Button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex justify-end">
-                  <Button disabled>Save Settings</Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+        <TabsContent value="technical-leads">
+          <div className="space-y-6">
+            <TechnicalLeadsMonitor />
+            <TechnicalLeadsProfiles />
+          </div>
         </TabsContent>
+
       </Tabs>
 
       {/* Rejection Dialog */}

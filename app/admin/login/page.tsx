@@ -76,7 +76,7 @@ export default function AdminLoginPage() {
 
       // Use window.location.replace for a hard redirect
       console.log('Redirecting to admin dashboard...'); // Debug log
-      window.location.replace('/admin/communities');
+      window.location.replace('/admin/dashboard');
     } catch (error) {
       console.error('Login error:', error);
       setError(error instanceof Error ? error.message : 'An error occurred');

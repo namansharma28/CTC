@@ -5,6 +5,46 @@ import clientPromise from '@/lib/mongodb';
 import mongoose from 'mongoose';
 import { authOptions } from '@/lib/auth';
 
+export async function GET() {
+  try {
+    // Connect to MongoDB
+    const client = await clientPromise;
+    const db = client.db('CTC');
+
+    // Fetch all communities
+    const communities = await db.collection('communities')
+      .find({})
+      .sort({ createdAt: -1 })
+      .toArray();
+
+    // Transform the data for the frontend
+    const transformedCommunities = communities.map(community => ({
+      id: community._id.toString(),
+      name: community.name,
+      handle: community.handle,
+      description: community.description,
+      avatar: community.avatar,
+      banner: community.banner,
+      website: community.website,
+      location: community.location,
+      members: community.members || [],
+      admins: community.admins || [],
+      status: community.status || 'active',
+      isVerified: community.isVerified || false,
+      createdAt: community.createdAt,
+      followersCount: community.followersCount || 0
+    }));
+
+    return NextResponse.json(transformedCommunities);
+  } catch (error: any) {
+    console.error('Error fetching communities:', error);
+    return NextResponse.json(
+      { error: error.message || 'Failed to fetch communities' },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions);
@@ -20,7 +60,7 @@ export async function POST(request: Request) {
 
     // Connect to MongoDB
     const client = await clientPromise;
-    const db = client.db('gravitas');
+    const db = client.db('CTC');
 
     // Check if handle already exists
     const existingCommunity = await db.collection('communities').findOne({ handle });
@@ -31,7 +71,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Create new community with pending status
+    // Create new community with active status (no approval needed for operators)
     const community = await db.collection('communities').insertOne({
       name,
       handle,
@@ -46,19 +86,8 @@ export async function POST(request: Request) {
       updates: [],
       followersCount: 0,
       isVerified: false,
-      status: 'pending', // Set status to pending
+      status: 'active', // Set status to active immediately
       creatorId: session.user.id,
-      createdAt: new Date()
-    });
-
-    // Create notification for admin
-    await db.collection('adminNotifications').insertOne({
-      type: 'community_pending',
-      communityId: community.insertedId,
-      communityName: name,
-      communityHandle: handle,
-      creatorId: session.user.id,
-      read: false,
       createdAt: new Date()
     });
 
@@ -77,7 +106,7 @@ export async function POST(request: Request) {
       updates: [],
       followersCount: 0,
       isVerified: false,
-      status: 'pending',
+      status: 'active',
       createdAt: new Date()
     });
   } catch (error: any) {

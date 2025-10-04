@@ -251,6 +251,19 @@ export default function CreateFormPage({ params }: { params: { id: string } }) {
           ...data,
           eventId: params.id,
           isRSVPForm: isRSVP,
+          // Automatically add referral field to all forms
+          fields: [
+            ...data.fields,
+            {
+              id: `referral-${Date.now()}`,
+              type: 'text',
+              label: 'Referred By',
+              placeholder: 'Technical Lead Email (Auto-filled)',
+              required: false,
+              description: 'This field tracks referrals from Technical Leads',
+              isHidden: true, // Hidden field that gets auto-populated
+            }
+          ]
         }),
       });
 

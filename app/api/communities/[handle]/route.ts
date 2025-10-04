@@ -9,7 +9,7 @@ export async function GET(
 ) {
   try {
     const client = await clientPromise;
-    const db = client.db('gravitas');
+    const db = client.db('CTC');
 
     const community = await db.collection('communities').findOne({ handle: params.handle });
     if (!community) {
@@ -42,7 +42,7 @@ export async function GET(
       updates: community.updates,
       followersCount: community.followersCount,
       isVerified: community.isVerified,
-      status: community.status || 'approved', // Default for backward compatibility
+      status: community.status || 'active', // Default for backward compatibility
       createdAt: community.createdAt
     });
   } catch (error: any) {
@@ -68,7 +68,7 @@ export async function PATCH(
     const { name, description, banner, avatar, website, location } = data;
 
     const client = await clientPromise;
-    const db = client.db('gravitas');
+    const db = client.db('CTC');
 
     // Get community and check permissions
     const community = await db.collection('communities').findOne({ handle: params.handle });

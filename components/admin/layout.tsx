@@ -13,7 +13,9 @@ import {
   ChevronRight,
   Shield,
   Bell,
-  Menu
+  Menu,
+  UserPlus,
+  Plus
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -55,7 +57,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   const navItems = [
     { href: "/admin/dashboard", icon: <LayoutDashboard size={20} />, label: "Dashboard" },
+    { href: "/admin/users", icon: <UserPlus size={20} />, label: "Users" },
     { href: "/admin/communities", icon: <Users size={20} />, label: "Communities" },
+    { href: "/communities/create", icon: <Plus size={20} />, label: "Create Community" },
     { href: "/admin/events", icon: <Calendar size={20} />, label: "Events" },
     { href: "/admin/settings", icon: <Settings size={20} />, label: "Settings" },
   ];
@@ -83,11 +87,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         <div className="flex h-16 items-center justify-between border-b px-4">
           <div className="flex items-center gap-2">
             <Image
-              src="/logo.svg"
-              alt="Gravitas"
+              src="/icons/icon-128x128.png"
+              alt="CTC"
               width={32}
               height={32}
-              className="h-8 w-auto"
+              className="h-8 w-auto rounded-lg"
             />
             {!isCollapsed && <span className="text-xl font-bold">Admin</span>}
           </div>
@@ -137,11 +141,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           </Button>
           <div className="flex items-center gap-2">
             <Image
-              src="/logo.svg"
-              alt="Gravitas"
+              src="/icons/icon-128x128.png"
+              alt="CTC"
               width={32}
               height={32}
-              className="h-8 w-auto"
+              className="h-8 w-auto rounded-lg"
             />
             <span className="text-xl font-bold">Admin</span>
           </div>
@@ -160,11 +164,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           >
             <div className="mb-6 flex items-center gap-2">
               <Image
-                src="/logo.svg"
-                alt="Gravitas"
+                src="/icons/icon-128x128.png"
+                alt="CTC"
                 width={32}
                 height={32}
-                className="h-8 w-auto"
+                className="h-8 w-auto rounded-lg"
               />
               <span className="text-xl font-bold">Admin</span>
             </div>

@@ -185,13 +185,13 @@ export default function VerifyOTPPage() {
             <CardHeader className="space-y-1 text-center">
               <div className="flex items-center justify-center gap-2 mb-4">
                 <Image
-                  src="/logo.svg"
-                  alt="Gravitas"
+                  src="/icons/icon-128x128.png"
+                  alt="CTC"
                   width={32}
                   height={32}
-                  className="h-8 w-auto"
+                  className="h-8 w-auto rounded-lg"
                 />
-                <span className="text-xl font-bold">Gravitas</span>
+                <span className="text-xl font-bold">CTC</span>
               </div>
               <div className="flex justify-center mb-4">
                 <CheckCircle className="h-16 w-16 text-green-500" />
@@ -219,12 +219,12 @@ export default function VerifyOTPPage() {
             <div className="flex items-center justify-center gap-2 mb-4">
               <Image
                 src="/logo.svg"
-                alt="Gravitas"
+                alt="CTC"
                 width={32}
                 height={32}
                 className="h-8 w-auto"
               />
-              <span className="text-xl font-bold">Gravitas</span>
+              <span className="text-xl font-bold">CTC</span>
             </div>
             <div className="flex justify-center mb-4">
               <Mail className="h-16 w-16 text-blue-500" />

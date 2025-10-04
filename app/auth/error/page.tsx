@@ -32,13 +32,13 @@ export default function AuthErrorPage() {
         <CardHeader className="space-y-1">
           <div className="flex items-center gap-2">
             <Image
-              src="/logo.svg"
-              alt="Gravitas"
+              src="/icons/icon-128x128.png"
+              alt="CTC"
               width={32}
               height={32}
-              className="h-8 w-auto"
+              className="h-8 w-auto rounded-lg"
             />
-            <span className="text-xl font-bold">Gravitas</span>
+            <span className="text-xl font-bold">CTC</span>
           </div>
           <CardTitle className="text-center text-2xl">Authentication Error</CardTitle>
           <CardDescription className="text-center">

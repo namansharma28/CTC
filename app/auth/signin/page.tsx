@@ -19,7 +19,7 @@ export default function SignInPage() {
   const { toast } = useToast();
   const { data: session, status } = useSession();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/";
+  const callbackUrl = searchParams.get("callbackUrl") || "/home";
   const verified = searchParams.get("verified");
   
   const [isLoading, setIsLoading] = useState(false);
@@ -133,13 +133,13 @@ export default function SignInPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-primary to-primary/90" />
         <div className="relative z-20 flex items-center gap-2 text-lg font-medium">
           <Image
-                    src="/logo.svg"
-                    alt="Gravitas"
+                    src="/icons/icon-128x128.png"
+                    alt="CTC"
                     width={32}
                     height={32}
-                    className="h-8 w-auto"
+                    className="h-8 w-auto rounded-lg"
                   />
-          <span>Gravitas</span>
+          <span>CTC</span>
         </div>
         <div className="relative z-20 mt-auto">
           <blockquote className="space-y-2">
@@ -163,15 +163,15 @@ export default function SignInPage() {
                 <div className="flex items-center justify-center gap-2">
                   {/* <Image
                     src="/logo.svg"
-                    alt="Gravitas"
+                    alt="CTC"
                     width={32}
                     height={32}
                     className="h-8 w-auto"
                   />
-                  <span className="text-xl font-bold">Gravitas</span> */}
+                  <span className="text-xl font-bold">CTC</span> */}
                 </div>
                 <CardTitle className="text-center text-2xl">
-                  {session ? `Welcome back, ${session.user?.name?.split(' ')[0]}!` : 'Welcome to Gravitas'}
+                  {session ? `Welcome back, ${session.user?.name?.split(' ')[0]}!` : 'Welcome to CTC'}
                 </CardTitle>
                 <CardDescription className="text-center">
                   Sign in to your account to continue
@@ -302,7 +302,7 @@ export default function SignInPage() {
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
                     <span className="bg-background px-2 text-muted-foreground">
-                      New to Gravitas?
+                      New to CTC?
                     </span>
                   </div>
                 </div>

@@ -246,7 +246,7 @@ export default function CommunityPage({ params }: { params: { handle: string } }
               : error}
           </p>
           <Button asChild>
-            <Link href="/">Go Home</Link>
+            <Link href="/home">Go Home</Link>
           </Button>
         </div>
       </div>
@@ -260,7 +260,7 @@ export default function CommunityPage({ params }: { params: { handle: string } }
           <h1 className="text-2xl font-bold mb-4">Something went wrong</h1>
           <p className="text-muted-foreground mb-6">Unable to load community data.</p>
           <Button asChild>
-            <Link href="/">Go Home</Link>
+            <Link href="/home">Go Home</Link>
           </Button>
         </div>
       </div>

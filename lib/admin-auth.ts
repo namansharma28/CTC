@@ -1,10 +1,10 @@
-import { NextAuthOptions } from "next-auth";
+import { NextAuthOptions, getServerSession } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcryptjs";
 
 // Hardcoded admin credentials - in a real app, these would be stored securely
 // and potentially in environment variables
-const ADMIN_EMAIL = "admin@gravitas.com";
+const ADMIN_EMAIL = "admin@ctc.com";
 const ADMIN_PASSWORD = "Admin@123456"; // This should be hashed in a real application
 
 export const adminAuthOptions: NextAuthOptions = {

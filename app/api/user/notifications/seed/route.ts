@@ -20,7 +20,7 @@ export async function POST() {
     }
 
     const client = await clientPromise;
-    const db = client.db('gravitas');
+    const db = client.db('CTC');
 
     // Sample notifications
     const sampleNotifications = [
@@ -53,7 +53,7 @@ export async function POST() {
       },
       {
         userId: session.user.id,
-        title: 'Welcome to Gravitas!',
+        title: 'Welcome to CTC!',
         description: 'Thanks for joining. Discover communities and events that match your interests.',
         type: 'system',
         read: true,

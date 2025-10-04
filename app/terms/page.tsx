@@ -4,16 +4,16 @@ const TermsPage = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">Terms of Service</h1>
-      <p className="mb-4">Welcome to Gravitas! These terms and conditions outline the rules and regulations for the use of Gravitas's Website, located at [Your Website URL].</p>
-      <p className="mb-4">By accessing this website we assume you accept these terms and conditions. Do not continue to use Gravitas if you do not agree to take all of the terms and conditions stated on this page.</p>
+      <p className="mb-4">Welcome to CTC! These terms and conditions outline the rules and regulations for the use of CTC's Website, located at [Your Website URL].</p>
+      <p className="mb-4">By accessing this website we assume you accept these terms and conditions. Do not continue to use CTC if you do not agree to take all of the terms and conditions stated on this page.</p>
 
       <h2 className="text-2xl font-semibold mb-4">License</h2>
-      <p className="mb-4">Unless otherwise stated, Gravitas and/or its licensors own the intellectual property rights for all material on Gravitas. All intellectual property rights are reserved. You may access this from Gravitas for your own personal use subjected to restrictions set in these terms and conditions.</p>
+      <p className="mb-4">Unless otherwise stated, CTC and/or its licensors own the intellectual property rights for all material on CTC. All intellectual property rights are reserved. You may access this from CTC for your own personal use subjected to restrictions set in these terms and conditions.</p>
       <ul className="list-disc list-inside mb-4">
-        <li>Republish material from Gravitas</li>
-        <li>Sell, rent or sub-license material from Gravitas</li>
-        <li>Reproduce, duplicate or copy material from Gravitas</li>
-        <li>Redistribute content from Gravitas</li>
+        <li>Republish material from CTC</li>
+        <li>Sell, rent or sub-license material from CTC</li>
+        <li>Reproduce, duplicate or copy material from CTC</li>
+        <li>Redistribute content from CTC</li>
       </ul>
 
       <h2 className="text-2xl font-semibold mb-4">Content Liability</h2>

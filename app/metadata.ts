@@ -3,11 +3,11 @@ import type { Metadata } from "next";
 const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
 
 export const metadata: Metadata = {
-  title: "Gravitas – Discover, Join & Create Communities and Events",
+  title: "CTC – Discover, Join & Create Communities and Events",
   description:
-    "Gravitas is your all-in-one community and event management platform. Discover vibrant communities, explore upcoming events, connect with like-minded people, and create meaningful experiences. Join Gravitas to build, share, and grow together.",
+    "CTC is your all-in-one community and event management platform. Discover vibrant communities, explore upcoming events, connect with like-minded people, and create meaningful experiences. Join CTC to build, share, and grow together.",
   keywords: [
-    "Gravitas",
+    "CTC",
     "community platform",
     "event management",
     "online communities",
@@ -28,17 +28,17 @@ export const metadata: Metadata = {
   ],
   metadataBase: new URL(baseUrl),
   openGraph: {
-    title: "Gravitas – Discover, Join & Create Communities and Events",
+    title: "CTC – Discover, Join & Create Communities and Events",
     description:
-      "Gravitas is your all-in-one community and event management platform. Discover vibrant communities, explore upcoming events, connect with like-minded people, and create meaningful experiences. Join Gravitas to build, share, and grow together.",
+      "CTC is your all-in-one community and event management platform. Discover vibrant communities, explore upcoming events, connect with like-minded people, and create meaningful experiences. Join CTC to build, share, and grow together.",
     url: baseUrl,
-    siteName: "Gravitas",
+    siteName: "CTC",
     images: [
       {
         url: `${baseUrl}/og-image.svg`,
         width: 1200,
         height: 630,
-        alt: "Gravitas Open Graph Image",
+        alt: "CTC Open Graph Image",
       },
     ],
     locale: "en_US",
@@ -46,8 +46,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Gravitas – Discover, Join & Create Communities and Events",    description:
-      "Gravitas is your all-in-one community and event management platform. Discover vibrant communities, explore upcoming events, connect with like-minded people, and create meaningful experiences. Join Gravitas to build, share, and grow together.",
+    title: "CTC – Discover, Join & Create Communities and Events",    description:
+      "CTC is your all-in-one community and event management platform. Discover vibrant communities, explore upcoming events, connect with like-minded people, and create meaningful experiences. Join CTC to build, share, and grow together.",
     images: [`${baseUrl}/og-image.svg`],
   },
   robots: {

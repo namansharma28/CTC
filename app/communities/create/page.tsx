@@ -55,9 +55,24 @@ const formSchema = z.object({
 export default function CreateCommunityPage() {
   const { toast } = useToast();
   const router = useRouter();
-  const { status } = useSession();
+  const { data: session, status } = useSession();
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [bannerPreview, setBannerPreview] = useState<string | null>(null);
+  
+  // Restrict access to operators and admins only
+  useEffect(() => {
+    if (status === "authenticated") {
+      const userRole = session?.user?.role;
+      if (userRole !== "operator" && userRole !== "admin") {
+        toast({
+          title: "Access Denied",
+          description: "Only operators can create communities.",
+          variant: "destructive",
+        });
+        router.push("/");
+      }
+    }
+  }, [status, session, router, toast]);
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -195,7 +210,7 @@ export default function CreateCommunityPage() {
         toast,
         successMessage: {
           title: "Community Created",
-          description: `Successfully created @${values.handle}`,
+          description: `Successfully created @${values.handle} and it's now live!`,
         },
         errorMessage: {
           title: "Error",
@@ -221,7 +236,7 @@ export default function CreateCommunityPage() {
     <div className="container mx-auto py-8">
       <div className="mb-8">
         <h1 className="text-4xl font-bold tracking-tight">Create a Community</h1>
-        <p className="text-muted-foreground">Start building your own community and host events</p>
+        <p className="text-muted-foreground">Start building your own community and host events. Your community will be live immediately!</p>
       </div>
 
       <div className="mx-auto max-w-2xl">

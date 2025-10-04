@@ -11,7 +11,7 @@ export async function POST() {
     }
 
     const client = await clientPromise;
-    const db = client.db('gravitas');
+    const db = client.db('CTC');
 
     // Mark all notifications as read
     const result = await db.collection('notifications').updateMany(

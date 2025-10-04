@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     }
 
     const client = await clientPromise;
-    const db = client.db('gravitas');
+    const db = client.db('CTC');
 
     // Find valid OTP
     const otpRecord = await db.collection('email_otps').findOne({

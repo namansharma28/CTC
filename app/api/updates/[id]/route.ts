@@ -12,7 +12,7 @@ export async function GET(
     const session = await getServerSession(authOptions);
     
     const client = await clientPromise;
-    const db = client.db('gravitas');
+    const db = client.db('CTC');
 
     if (!ObjectId.isValid(params.id)) {
       return NextResponse.json(

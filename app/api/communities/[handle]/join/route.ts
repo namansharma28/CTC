@@ -15,7 +15,7 @@ export async function POST(
     }
 
     const client = await clientPromise;
-    const db = client.db('gravitas');
+    const db = client.db('CTC');
 
     const community = await db.collection('communities').findOne({ handle: params.handle });
     if (!community) {
@@ -61,7 +61,7 @@ export async function DELETE(
     }
 
     const client = await clientPromise;
-    const db = client.db('gravitas');
+    const db = client.db('CTC');
 
     const community = await db.collection('communities').findOne({ handle: params.handle });
     if (!community) {

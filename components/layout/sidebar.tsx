@@ -14,6 +14,10 @@ import {
   Search,
   Bell,
   MessageSquare,
+  Shield,
+  UserPlus,
+  Briefcase,
+  BookOpen,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -83,7 +87,7 @@ export default function Sidebar() {
   useEffect(() => {
     const fetchUserCommunities = async () => {
       if (!session?.user) return;
-      
+
       setIsLoading(true);
       try {
         const response = await fetch('/api/communities/user');
@@ -101,19 +105,38 @@ export default function Sidebar() {
     fetchUserCommunities();
   }, [session]);
 
+  const userRole = (session?.user as any)?.role;
+  const isOperatorOrAdmin = userRole === 'operator' || userRole === 'admin';
+  const isTechnicalLead = userRole === 'technical_lead';
+  const isCTCStudent = userRole === 'ctc_student';
+
   const sidebarLinks = [
-    { href: "/", icon: <Home size={24} />, label: "Home" },
+    { href: "/home", icon: <Home size={24} />, label: "Home" },
     { href: "/explore", icon: <Users size={24} />, label: "Communities" },
     { href: "/events", icon: <CalendarDays size={24} />, label: "Events" },
     { href: "/calendar", icon: <CalendarDays size={24} />, label: "Calendar" },
     { href: "/following", icon: <Heart size={24} />, label: "Following" },
+    ...(isCTCStudent ? [{ href: "/tnp", icon: <Briefcase size={24} />, label: "TNP" }] : []),
     { href: "/profile", icon: <User size={24} />, label: "Profile" },
     { href: "/settings", icon: <Settings size={24} />, label: "Settings" },
   ];
 
+  const operatorLinks = [
+    { href: "/operator/dashboard", icon: <Shield size={24} />, label: "Operator Dashboard" },
+    { href: "/operator/users", icon: <UserPlus size={24} />, label: "Manage Users" },
+    { href: "/operator/communities", icon: <Users size={24} />, label: "Manage Communities" },
+    { href: "/operator/events", icon: <CalendarDays size={24} />, label: "Manage Events" },
+    { href: "/operator/tnp", icon: <Briefcase size={24} />, label: "Manage TNP" },
+    { href: "/operator/study", icon: <BookOpen size={24} />, label: "Manage Study" },
+  ];
+
+  const technicalLeadLinks = [
+    { href: "/technical-lead/dashboard", icon: <Shield size={24} />, label: "TL Dashboard" },
+  ];
+
   return (
     <div className="h-[calc(100vh-3.5rem)] fixed top-14 flex flex-col py-2 px-2 overflow-y-auto">
-      <div className="flex flex-col gap-1 w-full">
+      <div className="flex flex-col w-full">
         {sidebarLinks.map((link) => (
           <SidebarLink
             key={link.href}
@@ -124,49 +147,48 @@ export default function Sidebar() {
             collapsed={isSmallScreen}
           />
         ))}
+
+        {/* Operator/Admin only links */}
+        {isOperatorOrAdmin && (
+          <>
+            {!isSmallScreen && <Separator className="my-1" />}
+            {operatorLinks.map((link) => (
+              <SidebarLink
+                key={link.href}
+                href={link.href}
+                icon={link.icon}
+                label={link.label}
+                active={pathname === link.href}
+                collapsed={isSmallScreen}
+              />
+            ))}
+          </>
+        )}
+
+        {/* Technical Lead only links */}
+        {isTechnicalLead && (
+          <>
+            {!isSmallScreen && <Separator className="my-1" />}
+            {technicalLeadLinks.map((link) => (
+              <SidebarLink
+                key={link.href}
+                href={link.href}
+                icon={link.icon}
+                label={link.label}
+                active={pathname === link.href}
+                collapsed={isSmallScreen}
+              />
+            ))}
+          </>
+        )}
       </div>
 
-      {!isSmallScreen && (
-        <>
-          <Separator className="my-4" />
-          <div className="text-base font-bold px-4 py-2">Your Communities</div>
-          <div className="flex flex-col gap-1">
-            {isLoading ? (
-              <div className="flex items-center justify-center py-4">
-                <Loader2 className="h-5 w-5 animate-spin" />
-              </div>
-            ) : userCommunities.length > 0 ? (
-              userCommunities.map((community) => (
-                <SidebarLink
-                  key={community.handle}
-                  href={`/communities/${community.handle}`}
-                  icon={
-                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-xs font-semibold text-blue-700 dark:bg-blue-900 dark:text-blue-200">
-                      {community.name.substring(0, 2)}
-                    </span>
-                  }
-                  label={community.name}
-                  active={pathname === `/communities/${community.handle}`}
-                />
-              ))
-            ) : (
-              <p className="px-4 py-2 text-sm text-muted-foreground">No communities yet</p>
-            )}
-          </div>
-        </>
-      )}
 
-      <div className="mt-auto px-2">
-        <Link href="/communities/create">
-          <Button className="w-full gap-2 rounded-full" variant="default">
-            <Plus size={20} />
-            {!isSmallScreen && "New Community"}
-          </Button>
-        </Link>
-      </div>
+
+      {/* Community creation button removed - only available for operators/admins */}
 
       {session && !isSmallScreen && (
-        <div className="mt-6 flex items-center gap-3 p-3 rounded-full hover:bg-accent/50 cursor-pointer">
+        <div className="mt-3 flex items-center gap-3 p-3 rounded-full hover:bg-accent/50 cursor-pointer">
           <Avatar>
             <AvatarImage src={session.user?.image || ""} />
             <AvatarFallback>

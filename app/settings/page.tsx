@@ -139,7 +139,7 @@ export default function SettingsPage() {
           setDeferredPrompt(null);
           toast({
             title: "App installed successfully!",
-            description: "Gravitas has been installed on your device",
+            description: "CTC has been installed on your device",
           });
         };
 
@@ -177,7 +177,7 @@ export default function SettingsPage() {
       if (outcome === 'accepted') {
         toast({
           title: "Installation started",
-          description: "Gravitas is being installed on your device",
+          description: "CTC is being installed on your device",
         });
       } else {
         toast({
@@ -581,7 +581,7 @@ export default function SettingsPage() {
                 Install App
               </CardTitle>
               <CardDescription>
-                Install Gravitas as a native app on your device
+                Install CTC as a native app on your device
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -593,7 +593,7 @@ export default function SettingsPage() {
                   <div>
                     <p className="font-medium text-green-900 dark:text-green-100">App Installed</p>
                     <p className="text-sm text-green-700 dark:text-green-300">
-                      Gravitas is installed on your device
+                      CTC is installed on your device
                     </p>
                   </div>
                 </div>
@@ -604,7 +604,7 @@ export default function SettingsPage() {
                       <Smartphone className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                     </div>
                     <div>
-                      <p className="font-medium text-blue-900 dark:text-blue-100">Install Gravitas</p>
+                      <p className="font-medium text-blue-900 dark:text-blue-100">Install CTC</p>
                       <p className="text-sm text-blue-700 dark:text-blue-300">
                         Get a native app experience with offline support, push notifications, and quick access from your home screen.
                       </p>

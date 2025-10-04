@@ -81,13 +81,13 @@ export async function sendTicketEmail(data: TicketEmailData) {
     }
 
     const mailOptions = {
-      from: `"Gravitas" <${process.env.SENDER_EMAIL}>`,
+      from: `"CTC" <${process.env.SENDER_EMAIL}>`,
       to: data.recipientEmail,
       subject: data.emailSubject || `Your Ticket for ${data.eventDetails.title}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="background-color: #1a1a1a; padding: 20px; text-align: center; border-radius: 5px;">
-            <h1 style="color: white; margin: 0;">Gravitas</h1>
+            <h1 style="color: white; margin: 0;">CTC</h1>
             <p style="color: white; margin: 5px 0; opacity: 0.9;">Your Event Ticket</p>
           </div>
           <div style="padding: 20px;">
@@ -122,7 +122,7 @@ export async function sendTicketEmail(data: TicketEmailData) {
             ` : ''}
             <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
             <p style="color: #999; font-size: 12px; text-align: center;">
-              The Gravitas Team
+              The CTC Team
             </p>
           </div>
         </div>
@@ -143,7 +143,7 @@ export async function sendTicketEmail(data: TicketEmailData) {
         Please keep this email as your confirmation.
         
         Best regards,
-        The Gravitas Team
+        The CTC Team
       `,
       attachments: data.includeQR && qrCodeAttachment ? [qrCodeAttachment] : [],
     };

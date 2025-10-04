@@ -12,7 +12,7 @@ export async function GET() {
     }
 
     const client = await clientPromise;
-    const db = client.db('gravitas');
+    const db = client.db('CTC');
 
     const user = await db.collection('users').findOne(
       { _id: new ObjectId(session.user.id) },
@@ -48,7 +48,7 @@ export async function PATCH(request: Request) {
     const settings = await request.json();
 
     const client = await clientPromise;
-    const db = client.db('gravitas');
+    const db = client.db('CTC');
 
     const result = await db.collection('users').updateOne(
       { _id: new ObjectId(session.user.id) },

@@ -11,7 +11,7 @@ export async function GET(
     const session = await getServerSession(authOptions);
     
     const client = await clientPromise;
-    const db = client.db('gravitas');
+    const db = client.db('CTC');
 
     console.log(`[PERMISSIONS] Looking for community with handle: ${params.handle}`);
     
@@ -103,7 +103,7 @@ export async function GET(
         membersCount: community.members.length,
         followersCount: community.followersCount || 0,
         isVerified: community.isVerified,
-        status: community.status || 'approved', // Default for backward compatibility
+        status: community.status || 'active', // Default for backward compatibility
         createdAt: community.createdAt
       },
       userPermissions

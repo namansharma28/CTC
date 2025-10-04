@@ -24,9 +24,9 @@ export async function GET() {
     }
 
     const client = await clientPromise;
-    const db = client.db('gravitas');
+    const db = client.db('CTC');
 
-    // Get community stats
+    // Get community stats - handle missing collections and fields gracefully
     const [
       totalCommunities,
       activeCommunities,
@@ -34,10 +34,10 @@ export async function GET() {
       rejectedCommunities,
       recentCommunities
     ] = await Promise.all([
-      db.collection('communities').countDocuments({}),
-      db.collection('communities').countDocuments({ status: 'active' }),
-      db.collection('communities').countDocuments({ status: 'pending' }),
-      db.collection('communities').countDocuments({ status: 'rejected' }),
+      db.collection('communities').countDocuments({}).catch(() => 0),
+      db.collection('communities').countDocuments({ status: 'active' }).catch(() => 0),
+      db.collection('communities').countDocuments({ status: 'pending' }).catch(() => 0),
+      db.collection('communities').countDocuments({ status: 'rejected' }).catch(() => 0),
       db.collection('communities')
         .find({})
         .sort({ createdAt: -1 })
@@ -50,19 +50,20 @@ export async function GET() {
           createdAt: 1
         })
         .toArray()
+        .catch(() => [])
     ]);
 
     return NextResponse.json({
       totalCommunities,
-      activeCommunities,
+      activeCommunities: activeCommunities, // Changed from 'approvedCommunities' to 'activeCommunities'
       pendingCommunities,
       rejectedCommunities,
       recentCommunities: recentCommunities.map(community => ({
         id: community._id.toString(),
-        name: community.name,
-        handle: community.handle,
-        status: community.status || 'approved', // Default for older communities
-        createdAt: community.createdAt
+        name: community.name || 'Unknown Community',
+        handle: community.handle || 'unknown',
+        status: community.status || 'active', // Default for older communities
+        createdAt: community.createdAt || new Date().toISOString()
       }))
     });
   } catch (error: any) {

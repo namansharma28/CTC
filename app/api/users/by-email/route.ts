@@ -20,7 +20,7 @@ export async function GET(request: Request) {
     }
 
     const client = await clientPromise;
-    const db = client.db('gravitas');
+    const db = client.db('CTC');
 
     const user = await db.collection('users').findOne(
       { email: email.toLowerCase() },

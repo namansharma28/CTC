@@ -11,7 +11,7 @@ export async function GET() {
     }
 
     const client = await clientPromise;
-    const db = client.db('gravitas');
+    const db = client.db('CTC');
 
     const communities = await db.collection('communities')
       .find({ admins: session.user.id })

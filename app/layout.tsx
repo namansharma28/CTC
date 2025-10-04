@@ -1,47 +1,47 @@
 import './globals.css';
 import '../styles/md-editor.css'; // Import custom MD Editor styles
-import ClientLayout from './ClientLayout';
 import { Metadata } from 'next';
+import ClientLayout from './ClientLayout';
 
 
 const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
 
 export const metadata: Metadata = {
-  title: 'CTC',
-  description: 'Advanced Event Management System',
+  title: 'CTC - Coding Thinker',
+  description: 'Transform your future with our innovative coding education platform',
   keywords: [
     "CTC",
-    "sci-fi",
-    "event management",
-    "online communities",
-    "social events",
-    "group activities",
-    "networking platform",
-    "connect with people",
-    "discover events",
-    "create events",
-    "community building",
-    "event organization",
-    "social networking",
-    "interest groups",
-    "local events",
-    "online groups",
-    "event discovery",
-    "community engagement",
+    "coding education",
+    "programming courses",
+    "web development",
+    "MERN stack",
+    "data analytics",
+    "Java programming",
+    "Python programming",
+    "C++ programming",
+    "coding bootcamp",
+    "online learning",
+    "technical skills",
+    "software development",
+    "coding community",
+    "programming mentorship",
+    "career development",
+    "coding certification",
+    "learn to code",
   ],
   metadataBase: new URL(baseUrl),
   openGraph: {
-    title: "CTC - Advanced Event Management System",
+    title: "CTC - Coding Thinker",
     description:
-      "CTC is your advanced event management platform with a sci-fi theme. Discover and create futuristic experiences.",
+      "Transform your future with our innovative coding education platform. Learn from industry experts and join a community of passionate developers.",
     url: baseUrl,
-    siteName: "CTC",
+    siteName: "CTC - Coding Thinker",
     images: [
       {
-        url: `${baseUrl}/og-image.svg`,
-        width: 1200,
-        height: 630,
-        alt: "CTC Open Graph Image",
+        url: `${baseUrl}/icons/icon-512x512.png`,
+        width: 512,
+        height: 512,
+        alt: "CTC - Coding Thinker",
       },
     ],
     locale: "en_US",
@@ -49,10 +49,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "CTC - Advanced Event Management System",
+    title: "CTC - Coding Thinker",
     description:
-      "CTC is your advanced event management platform with a sci-fi theme. Discover and create futuristic experiences.",
-    images: [`${baseUrl}/og-image.svg`],
+      "Transform your future with our innovative coding education platform. Learn from industry experts and join a community of passionate developers.",
+    images: [`${baseUrl}/icons/icon-512x512.png`],
   },
   robots: {
     index: true,
@@ -67,9 +67,21 @@ export const metadata: Metadata = {
   },
   manifest: `${baseUrl}/manifest.json`,
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/icons/icon-192x192.png",
+    icon: [
+      { url: "/icons/favicon.ico", sizes: "any" },
+      { url: "/icons/icon-192x192.png", type: "image/png", sizes: "192x192" },
+    ],
+    shortcut: "/icons/favicon.ico",
+    apple: [
+      { url: "/icons/icon-152x152.png", sizes: "152x152" },
+      { url: "/icons/icon-192x192.png", sizes: "192x192" },
+    ],
+    other: [
+      { rel: "icon", url: "/icons/icon-128x128.png", sizes: "128x128" },
+      { rel: "icon", url: "/icons/icon-144x144.png", sizes: "144x144" },
+      { rel: "icon", url: "/icons/icon-384x384.png", sizes: "384x384" },
+      { rel: "icon", url: "/icons/icon-512x512.png", sizes: "512x512" },
+    ],
   },
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#f0f4fa' },
@@ -92,12 +104,14 @@ export default function RootLayout({
       <head>
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <title>Gravitas</title>
-        <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+        <title>CTC - Coding Thinker</title>
+        <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="/icons/icon-192x192.png" type="image/png" sizes="192x192" />
+        <link rel="apple-touch-icon" href="/icons/icon-152x152.png" sizes="152x152" />
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" sizes="192x192" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="theme-color" content="#ffffff" />
-        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
         <link rel="manifest" href="/manifest.json" />
         <script
           type="application/ld+json"
@@ -105,10 +119,10 @@ export default function RootLayout({
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'WebApplication',
-              name: 'Gravitas',
-              description: 'A modern community event management platform',
+              name: 'CTC - Coding Thinker',
+              description: 'Transform your future with our innovative coding education platform',
               url: baseUrl,
-              applicationCategory: 'SocialApplication',
+              applicationCategory: 'EducationalApplication',
               operatingSystem: 'Web',
               offers: {
                 '@type': 'Offer',
@@ -117,9 +131,10 @@ export default function RootLayout({
               },
               author: {
                 '@type': 'Organization',
-                name: 'Gravitas',
+                name: 'CTC - Coding Thinker',
                 url: baseUrl
-              }
+              },
+              image: `${baseUrl}/icons/icon-512x512.png`
             })
           }}
         />

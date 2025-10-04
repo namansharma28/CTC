@@ -45,18 +45,18 @@ export async function sendOTPEmail(email: string, name: string, otp: string) {
     await transporter.verify();
 
     const mailOptions = {
-      from: `"Gravitas" <${process.env.SENDER_EMAIL}>`,
+      from: `"CTC" <${process.env.SENDER_EMAIL}>`,
       to: email,
-      subject: 'Verify your Gravitas account - OTP Code',
+      subject: 'Verify your CTC account - OTP Code',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="background-color: #f8f9fa; padding: 20px; text-align: center; border-radius: 5px;">
-            <h1 style="color: #333; margin: 0;">Gravitas</h1>
+            <h1 style="color: #333; margin: 0;">CTC</h1>
           </div>
           <div style="padding: 20px;">
             <h2 style="color: #333;">Email Verification</h2>
             <p style="color: #666; line-height: 1.6;">
-              Thank you for signing up for Gravitas! Please use the verification code below to complete your registration:
+              Thank you for signing up for CTC! Please use the verification code below to complete your registration:
             </p>
             <div style="background-color: #f8f9fa; padding: 15px; text-align: center; border-radius: 5px; margin: 20px 0;">
               <h1 style="color: #333; margin: 0; letter-spacing: 5px;">${otp}</h1>
@@ -65,11 +65,11 @@ export async function sendOTPEmail(email: string, name: string, otp: string) {
               This code will expire in 10 minutes.
             </p>
             <p style="color: #666; line-height: 1.6;">
-              If you didn't create an account with Gravitas, please ignore this email.
+              If you didn't create an account with CTC, please ignore this email.
             </p>
             <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
             <p style="color: #999; font-size: 12px; text-align: center;">
-              The Gravitas Team
+              The CTC Team
             </p>
           </div>
         </div>
@@ -94,13 +94,13 @@ export async function sendPasswordResetOTP(email: string, name: string, otp: str
     await transporter.verify();
 
     const mailOptions = {
-      from: `"Gravitas" <${process.env.SMTP_USER}>`,
+      from: `"CTC" <${process.env.SMTP_USER}>`,
       to: email,
-      subject: 'Reset your Gravitas password - OTP Code',
+      subject: 'Reset your CTC password - OTP Code',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="background-color: #f8f9fa; padding: 20px; text-align: center; border-radius: 5px;">
-            <h1 style="color: #333; margin: 0;">Gravitas</h1>
+            <h1 style="color: #333; margin: 0;">CTC</h1>
           </div>
           <div style="padding: 20px;">
             <h2 style="color: #333;">Password Reset</h2>
@@ -118,7 +118,7 @@ export async function sendPasswordResetOTP(email: string, name: string, otp: str
             </p>
             <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
             <p style="color: #999; font-size: 12px; text-align: center;">
-              The Gravitas Team
+              The CTC Team
             </p>
           </div>
         </div>
@@ -146,25 +146,25 @@ export async function sendWelcomeEmail(email: string, name: string) {
   });
 
   const mailOptions = {
-    from: `"Gravitas" <${process.env.SENDER_EMAIL}>`,
+    from: `"CTC" <${process.env.SENDER_EMAIL}>`,
     to: email,
-    subject: 'Welcome to Gravitas!',
+    subject: 'Welcome to CTC!',
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background-color: #f8f9fa; padding: 20px; text-align: center; border-radius: 5px;">
-          <h1 style="color: #333; margin: 0;">Gravitas</h1>
+          <h1 style="color: #333; margin: 0;">CTC</h1>
         </div>
         <div style="padding: 20px;">
-          <h2 style="color: #333;">Welcome to Gravitas!</h2>
+          <h2 style="color: #333;">Welcome to CTC!</h2>
           <p style="color: #666; line-height: 1.6;">
-            Thank you for signing up for Gravitas!
+            Thank you for signing up for CTC!
           </p>
           <p style="color: #666; line-height: 1.6;">
-            If you didn't create an account with Gravitas, please ignore this email.
+            If you didn't create an account with CTC, please ignore this email.
           </p>
           <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
           <p style="color: #999; font-size: 12px; text-align: center;">
-            The Gravitas Team
+            The CTC Team
           </p>
         </div>
       </div>
@@ -186,13 +186,13 @@ export async function sendPasswordResetEmail(email: string, otp: string) {
   });
 
   const mailOptions = {
-    from: `"Gravitas" <${process.env.SMTP_USER}>`,
+    from: `"CTC" <${process.env.SMTP_USER}>`,
     to: email,
-    subject: 'Reset your Gravitas password - OTP Code',
+    subject: 'Reset your CTC password - OTP Code',
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background-color: #f8f9fa; padding: 20px; text-align: center; border-radius: 5px;">
-          <h1 style="color: #333; margin: 0;">Gravitas</h1>
+          <h1 style="color: #333; margin: 0;">CTC</h1>
         </div>
         <div style="padding: 20px;">
           <h2 style="color: #333;">Password Reset</h2>
@@ -210,7 +210,7 @@ export async function sendPasswordResetEmail(email: string, otp: string) {
           </p>
           <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
           <p style="color: #999; font-size: 12px; text-align: center;">
-            The Gravitas Team
+            The CTC Team
           </p>
         </div>
       </div>

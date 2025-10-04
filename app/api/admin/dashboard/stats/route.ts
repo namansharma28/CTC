@@ -24,9 +24,9 @@ export async function GET() {
     }
 
     const client = await clientPromise;
-    const db = client.db('gravitas');
+    const db = client.db('CTC');
 
-    // Get platform stats
+    // Get platform stats - handle missing collections gracefully
     const [
       totalUsers,
       totalCommunities,
@@ -34,10 +34,10 @@ export async function GET() {
       totalRegistrations,
       recentUsers
     ] = await Promise.all([
-      db.collection('users').countDocuments({}),
-      db.collection('communities').countDocuments({}),
-      db.collection('events').countDocuments({}),
-      db.collection('eventRegistrations').countDocuments({}),
+      db.collection('users').countDocuments({}).catch(() => 0),
+      db.collection('communities').countDocuments({}).catch(() => 0),
+      db.collection('events').countDocuments({}).catch(() => 0),
+      db.collection('eventRegistrations').countDocuments({}).catch(() => 0),
       db.collection('users')
         .find({})
         .sort({ createdAt: -1 })
@@ -49,6 +49,7 @@ export async function GET() {
           createdAt: 1
         })
         .toArray()
+        .catch(() => [])
     ]);
 
     // Get monthly growth data
@@ -77,14 +78,22 @@ export async function GET() {
           "_id.month": 1
         }
       }
-    ]).toArray();
+    ]).toArray().catch(() => []);
+
+    // Transform recent users data
+    const transformedRecentUsers = recentUsers.map(user => ({
+      id: user._id.toString(),
+      name: user.name || 'Unknown',
+      email: user.email || 'No email',
+      createdAt: user.createdAt || new Date().toISOString()
+    }));
 
     return NextResponse.json({
       totalUsers,
       totalCommunities,
       totalEvents,
       totalRegistrations,
-      recentUsers,
+      recentUsers: transformedRecentUsers,
       monthlyGrowth
     });
   } catch (error) {

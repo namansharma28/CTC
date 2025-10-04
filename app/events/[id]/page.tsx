@@ -109,6 +109,18 @@ export default function EventPage({ params }: { params: { id: string } }) {
   const isLoggedIn = !!session?.user;
 
   useEffect(() => {
+    // Check for referral parameters and store them
+    const urlParams = new URLSearchParams(window.location.search);
+    const referralCode = urlParams.get('ref');
+    const technicalLeadEmail = urlParams.get('tl');
+    
+    if (referralCode && technicalLeadEmail) {
+      // Store referral info in sessionStorage for form submissions
+      sessionStorage.setItem('referralCode', referralCode);
+      sessionStorage.setItem('technicalLeadEmail', technicalLeadEmail);
+      sessionStorage.setItem('referralEventId', params.id);
+    }
+
     const fetchEventData = async () => {
       try {
         // Fetch event details

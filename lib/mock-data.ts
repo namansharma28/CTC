@@ -39,7 +39,7 @@ export const mockTrendingCommunities = [];
 
 export const mockData = {
   team: {
-    name: 'Gravitas Team',
-    handle: 'gravitas-team',
+    name: 'CTC Team',
+    handle: 'CTC-team',
   },
 };

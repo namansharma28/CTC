@@ -212,12 +212,6 @@ export default function ExplorePage() {
             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">Explore Communities</h1>
             <p className="text-muted-foreground">Discover and join communities that match your interests</p>
           </div>
-          <Button asChild>
-            <Link href="/communities/create">
-              <Plus className="mr-2 h-4 w-4" />
-              Create Community
-            </Link>
-          </Button>
         </div>
 
         {/* Search and Filters */}
@@ -275,12 +269,9 @@ export default function ExplorePage() {
             <p className="text-muted-foreground text-center mb-4">
               {searchQuery 
                 ? "Try adjusting your search terms or filters"
-                : "Be the first to create a community!"
+                : "No communities available at the moment."
               }
             </p>
-            <Button asChild>
-              <Link href="/communities/create">Create Community</Link>
-            </Button>
           </CardContent>
         </Card>
       ) : (

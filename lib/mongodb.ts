@@ -41,7 +41,7 @@ clientPromise
     console.log("MongoDB connected successfully");
     // Initialize collections if they don't exist
     clientPromise.then(async (client) => {
-      const db = client.db('gravitas');
+      const db = client.db('CTC');
       const collections = await db.listCollections().toArray();
       const collectionNames = collections.map(c => c.name);
       

@@ -71,6 +71,9 @@ export default function SubmitFormPage({
       
       // Initialize form data with default values
       const initialData: Record<string, any> = {};
+      const technicalLeadEmail = sessionStorage.getItem('technicalLeadEmail');
+      const referralEventId = sessionStorage.getItem('referralEventId');
+      
       data.fields.forEach((field: any) => {
         if (field.type === "checkbox") {
           if (field.options && field.options.length > 1) {
@@ -80,6 +83,11 @@ export default function SubmitFormPage({
           }
         } else if (field.type === "file") {
           initialData[field.id] = null; // File field
+        } else if (field.label.toLowerCase().includes('referred')) {
+          // Auto-populate referral field
+          initialData[field.id] = (referralEventId === params.id && technicalLeadEmail) 
+            ? technicalLeadEmail 
+            : 'none';
         } else {
           initialData[field.id] = "";
         }
@@ -275,12 +283,28 @@ export default function SubmitFormPage({
         value,
       }));
 
+      // Get referral information from sessionStorage
+      const referralCode = sessionStorage.getItem('referralCode');
+      const technicalLeadEmail = sessionStorage.getItem('technicalLeadEmail');
+      const referralEventId = sessionStorage.getItem('referralEventId');
+      
+      // Include referral info if this form is for the same event the user came from
+      const referralInfo = (referralEventId === params.id && technicalLeadEmail) ? {
+        referredBy: technicalLeadEmail,
+        referralCode: referralCode
+      } : {
+        referredBy: 'none'
+      };
+
       const response = await fetch(`/api/events/${params.id}/forms/${params.formId}/submit`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ answers }),
+        body: JSON.stringify({ 
+          answers,
+          ...referralInfo
+        }),
       });
 
       const data = await handleApiResponse(response, {
@@ -357,7 +381,9 @@ export default function SubmitFormPage({
                     id={field.id}
                     value={formData[field.id] || ""}
                     onChange={(e) => handleInputChange(field.id, e.target.value)}
-                    placeholder={`Enter ${field.label.toLowerCase()}`}
+                    placeholder={field.label.toLowerCase().includes('referred') ? 'Auto-filled from referral link' : `Enter ${field.label.toLowerCase()}`}
+                    disabled={field.label.toLowerCase().includes('referred')}
+                    className={field.label.toLowerCase().includes('referred') ? 'bg-muted' : ''}
                   />
                 )}
                 

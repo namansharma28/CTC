@@ -24,7 +24,7 @@ export async function GET() {
     }
 
     const client = await clientPromise;
-    const db = client.db('gravitas');
+    const db = client.db('CTC');
 
     // Get all pending communities
     const pendingCommunities = await db.collection('communities')

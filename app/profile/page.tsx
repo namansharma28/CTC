@@ -7,11 +7,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { CalendarDays, Link as LinkIcon, MapPin, Pencil, Users, Calendar, Loader2, Settings } from "lucide-react";
+import { CalendarDays, Link as LinkIcon, MapPin, Pencil, Users, Calendar, Loader2, Settings, Shield } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import ProfileReferralStats from "@/components/profile/referral-stats";
 
 interface UserProfile {
   id: string;
@@ -23,6 +24,7 @@ interface UserProfile {
   website?: string;
   emailVerified?: boolean;
   createdAt: string;
+  role?: string;
   stats: {
     communitiesOwned: number;
     communitiesJoined: number;
@@ -165,9 +167,17 @@ export default function ProfilePage() {
                 <AvatarFallback>{userProfile.name?.substring(0, 2)}</AvatarFallback>
               </Avatar>
               <div className="ml-4 md:ml-6 pb-2 md:pb-3">
-                <h1 className="text-xl font-bold text-white md:text-2xl lg:text-3xl">
-                  {userProfile.name}
-                </h1>
+                <div className="flex items-center gap-3">
+                  <h1 className="text-xl font-bold text-white md:text-2xl lg:text-3xl">
+                    {userProfile.name}
+                  </h1>
+                  {userProfile.role === 'technical_lead' && (
+                    <Badge className="bg-white/20 text-white border-white/30">
+                      <Shield className="mr-1 h-3 w-3" />
+                      Technical Lead
+                    </Badge>
+                  )}
+                </div>
                 <p className="text-sm text-white/90 md:text-base">{userProfile.email}</p>
                 {userProfile.bio && (
                   <p className="text-sm text-white/80 mt-1 md:text-base">{userProfile.bio}</p>
@@ -247,6 +257,13 @@ export default function ProfilePage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Technical Lead Referral Stats */}
+      {userProfile.role === 'technical_lead' && (
+        <div className="mb-8">
+          <ProfileReferralStats userRole={userProfile.role} />
+        </div>
+      )}
 
       <Tabs defaultValue="events" className="w-full">
         <TabsList className="grid w-full grid-cols-3 mb-6">

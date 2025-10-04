@@ -19,7 +19,7 @@ export async function GET(request: Request) {
     }
 
     const client = await clientPromise;
-    const db = client.db('gravitas');
+    const db = client.db('CTC');
 
     // Search in events
     const events = await db.collection('events')
@@ -29,7 +29,7 @@ export async function GET(request: Request) {
           { description: { $regex: query, $options: 'i' } },
         ],
       })
-      .project({ _id: 1, title: 1, communityId: 1 })
+      .project({ _id: 1, title: 1, communityId: 1, date: 1 })
       .limit(5)
       .toArray();
 
@@ -46,14 +46,40 @@ export async function GET(request: Request) {
           },
           {
             $or: [
-              { status: 'approved' },
-              { status: { $exists: false } },
-              { status: 'pending' }
+              { status: 'active' },
+              { status: { $exists: false } }
             ]
           }
         ]
       })
       .project({ _id: 1, name: 1, handle: 1 })
+      .limit(5)
+      .toArray();
+
+    // Search in TNP posts
+    const tnpPosts = await db.collection('tnp_posts')
+      .find({
+        $or: [
+          { title: { $regex: query, $options: 'i' } },
+          { content: { $regex: query, $options: 'i' } },
+          { company: { $regex: query, $options: 'i' } },
+          { location: { $regex: query, $options: 'i' } },
+        ],
+      })
+      .project({ _id: 1, title: 1, company: 1, type: 1 })
+      .limit(5)
+      .toArray();
+
+    // Search in study posts
+    const studyPosts = await db.collection('study_posts')
+      .find({
+        $or: [
+          { title: { $regex: query, $options: 'i' } },
+          { content: { $regex: query, $options: 'i' } },
+          { tags: { $in: [new RegExp(query, 'i')] } },
+        ],
+      })
+      .project({ _id: 1, title: 1, tags: 1 })
       .limit(5)
       .toArray();
 
@@ -74,24 +100,36 @@ export async function GET(request: Request) {
       : [];
 
     // Transform results
-    const results = [
-      ...events.map(event => ({
+    const results = {
+      events: events.map(event => ({
         id: event._id.toString(),
         title: event.title,
         type: 'event',
-        url: `/events/${event._id.toString()}`,
+        date: event.date ? new Date(event.date).toLocaleDateString() : null,
         communityId: event.communityId?.toString()
       })),
-      ...communities.map(community => ({
+      communities: communities.map(community => ({
         id: community._id.toString(),
         title: community.name,
         type: 'community',
-        url: `/communities/${community.handle}`,
         handle: community.handle,
       })),
-    ];
+      tnp: tnpPosts.map(post => ({
+        id: post._id.toString(),
+        title: post.title,
+        type: 'tnp',
+        company: post.company,
+        jobType: post.type
+      })),
+      study: studyPosts.map(post => ({
+        id: post._id.toString(),
+        title: post.title,
+        type: 'study',
+        tags: post.tags || []
+      }))
+    };
 
-    return NextResponse.json(results);
+    return NextResponse.json({ results });
   } catch (error: any) {
     console.error('Error searching:', error);
     return NextResponse.json(

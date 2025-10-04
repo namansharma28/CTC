@@ -12,7 +12,7 @@ export async function GET() {
     }
 
     const client = await clientPromise;
-    const db = client.db('gravitas');
+    const db = client.db('CTC');
 
     // Get user profile with stats
     const user = await db.collection('users').findOne(
@@ -54,6 +54,7 @@ export async function GET() {
       website: user.website,
       emailVerified: user.emailVerified,
       createdAt: user.createdAt,
+      role: user.role || 'user', // Include user role
       stats: {
         communitiesOwned,
         communitiesJoined,
@@ -85,7 +86,7 @@ export async function PATCH(request: Request) {
     const { name, bio, location, website, image } = data;
 
     const client = await clientPromise;
-    const db = client.db('gravitas');
+    const db = client.db('CTC');
 
     const result = await db.collection('users').updateOne(
       { _id: new ObjectId(session.user.id) },

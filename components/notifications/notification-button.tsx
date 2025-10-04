@@ -13,8 +13,8 @@ export function NotificationButton() {
 
   const handleTestNotification = () => {
     sendNotification('Test Notification', {
-      body: 'This is a test notification from Gravitas!',
-      icon: '/logo.svg',
+      body: 'This is a test notification from CTC!',
+      icon: '/icons/icon-192x192.png',
       data: {
         url: '/',
       },
