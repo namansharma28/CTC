@@ -140,7 +140,27 @@ export async function GET() {
         ])
         .toArray();
       
-      return NextResponse.json(events);
+      // Transform events to match frontend expectations
+      const transformedEvents = events.map(event => ({
+        _id: event._id.toString(),
+        title: event.title,
+        description: event.description,
+        date: event.date,
+        time: event.time,
+        location: event.location,
+        eventType: event.eventType || 'offline',
+        image: event.image,
+        attendees: event.attendees || [],
+        creatorId: event.creatorId,
+        community: event.community ? {
+          id: event.community._id?.toString(),
+          name: event.community.name,
+          handle: event.community.handle,
+          avatar: event.community.avatar
+        } : null
+      }));
+      
+      return NextResponse.json(transformedEvents);
     } catch (error) {
       console.error("Database error:", error);
       // Return mock data if database connection fails

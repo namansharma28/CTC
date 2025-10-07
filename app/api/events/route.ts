@@ -30,26 +30,32 @@ export async function GET() {
 
     // Transform the data for the frontend
     const transformedEvents = events.map(event => ({
-      id: event._id.toString(),
+      _id: event._id.toString(),
       title: event.title,
       description: event.description,
       date: event.date,
       time: event.time,
       location: event.location,
       image: event.image,
-      maxCapacity: event.maxCapacity,
+      capacity: event.maxCapacity,
+      maxAttendees: event.maxCapacity,
       registrations: event.registrations?.length || 0,
       status: event.status || 'active',
       createdAt: event.createdAt,
+      eventType: event.eventType || 'offline',
+      creatorId: event.creatorId,
       community: event.community ? {
+        id: event.community._id?.toString(),
         name: event.community.name,
         handle: event.community.handle,
         avatar: event.community.avatar
       } : null,
-      tags: event.tags || []
+      tags: event.tags || [],
+      attendees: event.attendees || [],
+      interested: event.interested || []
     }));
 
-    return NextResponse.json(transformedEvents);
+    return NextResponse.json({ events: transformedEvents });
   } catch (error) {
     console.error('Error fetching events:', error);
     return NextResponse.json(

@@ -25,8 +25,8 @@ export default function Home() {
         // Fetch events data
         const eventsResponse = await fetch('/api/events');
         const eventsData = await eventsResponse.json();
-        if (eventsData.success) {
-          setEventsFeedItems(eventsData.data.map((item: any) => ({
+        if (eventsData.events) {
+          setEventsFeedItems(eventsData.events.map((item: any) => ({
             ...item,
             type: 'event'
           })));

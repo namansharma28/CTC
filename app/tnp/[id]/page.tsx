@@ -23,11 +23,6 @@ interface TNPPost {
   requirements: string[];
   applicationLink?: string;
   tags: string[];
-  createdBy: {
-    name: string;
-    email: string;
-    image?: string;
-  };
   createdAt: string;
   updatedAt: string;
 }
@@ -288,22 +283,19 @@ export default function TNPPostPage() {
             </Card>
           )}
 
-          {/* Posted By */}
+          {/* Company Information */}
           <Card>
             <CardHeader>
-              <CardTitle>Posted By</CardTitle>
+              <CardTitle>Company</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-3">
-                <Avatar className="h-12 w-12">
-                  <AvatarImage src={post.createdBy.image} />
-                  <AvatarFallback>
-                    {post.createdBy.name.split(' ').map(n => n[0]).join('').toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
+                <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center">
+                  <Building className="h-6 w-6 text-white" />
+                </div>
                 <div>
-                  <p className="font-medium">{post.createdBy.name}</p>
-                  <p className="text-sm text-muted-foreground">{post.createdBy.email}</p>
+                  <p className="font-medium">{post.company}</p>
+                  <p className="text-sm text-muted-foreground">{post.location}</p>
                 </div>
               </div>
               <div className="mt-3 pt-3 border-t text-xs text-muted-foreground">

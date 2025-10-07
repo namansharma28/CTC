@@ -38,6 +38,7 @@ export async function GET(
     const isAdmin = userId ? community.admins.includes(userId) : false;
 
     return NextResponse.json({
+      _id: event._id.toString(),
       id: event._id.toString(),
       title: event.title,
       description: event.description,
@@ -47,6 +48,7 @@ export async function GET(
       capacity: event.capacity,
       image: event.image,
       creatorId: event.creatorId,
+      eventType: event.eventType || 'offline',
       community: {
         id: community._id.toString(),
         name: community.name,

@@ -112,6 +112,7 @@ export async function GET(
       .toArray();
 
     return NextResponse.json(events.map(event => ({
+      _id: event._id.toString(),
       id: event._id.toString(),
       title: event.title,
       description: event.description,
@@ -124,7 +125,8 @@ export async function GET(
       isMultiDay: event.isMultiDay || false,
       attendees: event.attendees || [],
       interested: event.interested || [],
-      eventType: event.eventType || 'offline', // Include eventType
+      eventType: event.eventType || 'offline',
+      creatorId: event.creatorId,
       community: {
         id: community._id.toString(),
         name: community.name,

@@ -2,14 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { BookOpen, Calendar, User, Tag, Download, ArrowLeft } from "lucide-react";
+import { BookOpen, Calendar, Tag, Download, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSession } from "next-auth/react";
 import { formatDistanceToNow } from "date-fns";
-import Link from "next/link";
 
 interface StudyPost {
   _id: string;
@@ -21,13 +19,12 @@ interface StudyPost {
     url: string;
     type: string;
   }>;
-  createdBy: {
-    name: string;
-    email: string;
-    image?: string;
-  };
   createdAt: string;
   updatedAt: string;
+  type: string;
+  subject?: string;
+  semester?: string;
+  difficulty?: string;
 }
 
 export default function StudyPostPage() {
@@ -111,23 +108,29 @@ export default function StudyPostPage() {
             <h1 className="text-3xl font-bold mb-2">{post.title}</h1>
             
             <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-              <div className="flex items-center gap-2">
-                <Avatar className="h-6 w-6">
-                  <AvatarImage src={post.createdBy.image} />
-                  <AvatarFallback>
-                    {post.createdBy.name.split(' ').map(n => n[0]).join('').toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <span>{post.createdBy.name}</span>
-              </div>
               <div className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
                 <span>{formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}</span>
               </div>
+              {post.subject && (
+                <Badge variant="outline">
+                  {post.subject}
+                </Badge>
+              )}
+              {post.semester && (
+                <Badge variant="outline">
+                  Semester {post.semester}
+                </Badge>
+              )}
+              {post.difficulty && (
+                <Badge variant="outline">
+                  {post.difficulty}
+                </Badge>
+              )}
             </div>
             
             {/* Tags */}
-            {post.tags.length > 0 && (
+            {post.tags && post.tags.length > 0 && (
               <div className="flex gap-2 flex-wrap mb-4">
                 {post.tags.map(tag => (
                   <Badge key={tag} variant="secondary" className="flex items-center gap-1">
@@ -191,36 +194,34 @@ export default function StudyPostPage() {
             </Card>
           )}
 
-          {/* Author Info */}
+          {/* Study Information */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <User className="h-5 w-5" />
-                Author
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center gap-3">
-                <Avatar className="h-12 w-12">
-                  <AvatarImage src={post.createdBy.image} />
-                  <AvatarFallback>
-                    {post.createdBy.name.split(' ').map(n => n[0]).join('').toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <p className="font-medium">{post.createdBy.name}</p>
-                  <p className="text-sm text-muted-foreground">{post.createdBy.email}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Post Info */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Post Information</CardTitle>
+              <CardTitle>Study Information</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Type:</span>
+                <Badge variant="outline">{post.type}</Badge>
+              </div>
+              {post.subject && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Subject:</span>
+                  <span>{post.subject}</span>
+                </div>
+              )}
+              {post.semester && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Semester:</span>
+                  <span>{post.semester}</span>
+                </div>
+              )}
+              {post.difficulty && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Difficulty:</span>
+                  <span>{post.difficulty}</span>
+                </div>
+              )}
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Created:</span>
                 <span>{new Date(post.createdAt).toLocaleDateString()}</span>
@@ -233,11 +234,29 @@ export default function StudyPostPage() {
               )}
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Tags:</span>
-                <span>{post.tags.length}</span>
+                <span>{post.tags?.length || 0}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Attachments:</span>
                 <span>{post.attachments?.length || 0}</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Study Resources */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Study Resources</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center">
+                  <BookOpen className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <p className="font-medium">Study Materials</p>
+                  <p className="text-sm text-muted-foreground">Academic Resources</p>
+                </div>
               </div>
             </CardContent>
           </Card>

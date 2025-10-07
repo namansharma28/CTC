@@ -103,6 +103,7 @@ export async function GET(request: Request) {
     const results = {
       events: events.map(event => ({
         id: event._id.toString(),
+        _id: event._id.toString(),
         title: event.title,
         type: 'event',
         date: event.date ? new Date(event.date).toLocaleDateString() : null,
