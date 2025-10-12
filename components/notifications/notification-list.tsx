@@ -36,7 +36,7 @@ export default function NotificationList({ onClose }: NotificationListProps) {
       case 'event':
         return <Calendar className="h-4 w-4 text-blue-500" />;
       case 'community':
-        return <Users className="h-4 w-4 text-purple-500" />;
+        return <Users className="h-4 w-4 text-silver" />;
       default:
         return <Bell className="h-4 w-4 text-gray-500" />;
     }

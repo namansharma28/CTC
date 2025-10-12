@@ -165,7 +165,7 @@ export default function BottomNavbar() {
           {isOperatorOrAdmin && (
             <>
               <DropdownMenuSeparator />
-              <DropdownMenuLabel className="text-xs text-purple-600">
+              <DropdownMenuLabel className="text-xs text-silver-dark">
                 {userRole === 'admin' ? 'Administration' : 'Operations'}
               </DropdownMenuLabel>
               <DropdownMenuItem asChild>

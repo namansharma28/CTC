@@ -203,7 +203,7 @@ export default function Navbar() {
                                   onClick={() => handleSelectSearchResult(result.url)}
                                   className="flex items-center gap-2 px-3 py-2 hover:bg-muted cursor-pointer"
                                 >
-                                  <div className="h-6 w-6 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white text-xs flex-shrink-0">
+                                  <div className="h-6 w-6 rounded-full bg-gradient-to-r from-silver to-silver-light flex items-center justify-center text-black text-xs flex-shrink-0">
                                     {result.title.substring(0, 2)}
                                   </div>
                                   <div className="min-w-0 flex-1">

@@ -70,18 +70,20 @@ export default function FeedCard({ item }: FeedCardProps) {
 
     return (
       <Link href={`/events/${item.id}`}>
-        <Card className="overflow-hidden transition-colors hover:bg-accent">
+        <Card className="overflow-hidden transition-all duration-300 modern-card-hover min-h-[450px]">
           <div className="relative">
-            <div
-              className="h-32 w-full bg-gradient-to-r from-blue-500 to-purple-600"
-              style={{
-                backgroundImage: item.image
-                  ? `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${item.image})`
-                  : undefined,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
-            />
+            <div className="h-64 w-full bg-gradient-to-r relative">
+              {item.image ? (
+                <>
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full object-contain"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50" />
+                </>
+              ) : null}
+            </div>
             <div className="absolute bottom-0 left-0 p-4 text-white">
               <Badge className="mb-1 bg-primary/80 hover:bg-primary/70">
                 <CalendarDays className="h-3 w-3 mr-1" />
@@ -174,18 +176,18 @@ export default function FeedCard({ item }: FeedCardProps) {
 
   // Regular layout for other content types
   return (
-    <Card className="overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200">
-      {/* Image Section - Instagram style square carousel */}
+    <Card className="overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 silver-border-hover min-h-[500px]">
+      {/* Image Section - Full height image display */}
       {hasImages && (
-        <div className="relative w-full aspect-square bg-gray-100">
-          <div
-            className="w-full h-full bg-gradient-to-b from-transparent to-black/30"
-            style={{
-              backgroundImage: `url(${allImages[currentImageIndex]})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          >
+        <div className="relative w-full h-80 bg-gray-100">
+          <div className="w-full h-full relative bg-black/5">
+            <img
+              src={allImages[currentImageIndex]}
+              alt={item.title}
+              className="w-full h-full object-contain"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/30 pointer-events-none" />
+
             {/* Image navigation for multiple images */}
             {hasMultipleImages && (
               <>
@@ -222,7 +224,7 @@ export default function FeedCard({ item }: FeedCardProps) {
                 <div className="flex items-center justify-between mb-2">
                   <Badge className={`mb-1 ${(item as any).type === 'event' ? 'bg-blue-500/80' :
                     (item as any).type === 'tnp' ? 'bg-green-500/80' :
-                      (item as any).type === 'study' ? 'bg-purple-500/80' : 'bg-primary/80'
+                      (item as any).type === 'study' ? 'bg-silver/80' : 'bg-primary/80'
                     }`}>
                     {(item as any).type === 'event' ? 'Event' :
                       (item as any).type === 'tnp' ? 'TNP' :
@@ -245,12 +247,12 @@ export default function FeedCard({ item }: FeedCardProps) {
       {/* Default header for posts without images */}
       {!hasImages && (
         <div className={`p-4 border-b bg-gradient-to-r ${item.type === 'tnp' ? 'from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20' :
-          item.type === 'study' ? 'from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20' :
+          item.type === 'study' ? 'from-silver/10 to-silver/20 dark:from-silver/5 dark:to-silver/10' :
             'from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20'
           }`}>
           <div className="flex items-center justify-between mb-2">
             <Badge className={`${item.type === 'tnp' ? 'bg-green-500' :
-              item.type === 'study' ? 'bg-purple-500' :
+              item.type === 'study' ? 'bg-silver' :
                 'bg-blue-500'
               }`}>
               {item.type === 'tnp' ? 'TNP' :

@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import {
   CalendarDays,
   Users,
-  Briefcase,
   Shield,
   Zap,
   Globe,
@@ -104,59 +103,176 @@ export default function LandingPage() {
       <LandingNavbar />
 
       {/* Hero Section */}
-      <section className="pt-24 pb-12 px-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10"></div>
-        <div className="container mx-auto text-center relative z-10">
-          <div className="max-w-5xl mx-auto">
-            <Badge variant="secondary" className="mb-6 text-sm px-4 py-2">
-              💻 Coding मतलब Coding Thinker
-            </Badge>
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-              <span className="bg-gradient-to-r from-primary via-blue-500 to-purple-600 bg-clip-text text-transparent">
-                Unlock Your
-              </span>
-              <br />
-              <span className="bg-gradient-to-r from-purple-600 via-primary to-blue-500 bg-clip-text text-transparent">
-                Coding Potential
-              </span>
-            </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed">
-              Transform your future with our innovative coding education platform.
-              Learn from industry experts and join a community of passionate developers.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+      <section className="min-h-screen bg-black relative overflow-hidden">
+        {/* Background Pattern - More subtle diagonal lines like in the image */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 2px,
+                rgba(255, 255, 255, 0.03) 2px,
+                rgba(255, 255, 255, 0.03) 4px
+              )
+            `
+          }}></div>
+        </div>
+
+        {/* Top Banner */}
+        <div className="absolute top-0 left-0 right-0 bg-black/80 backdrop-blur-sm border-b border-white/10 z-20">
+          <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+            <div className="flex items-center gap-2 text-white/80 text-sm">
+              <span>Our startup program is live — enjoy 50% off today!</span>
+            </div>
+            <button className="text-white/60 hover:text-white">
+              <ArrowRight className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* Navigation */}
+        <div className="absolute top-16 left-0 right-0 z-20">
+          <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">C</span>
+              </div>
+              <span className="text-white font-semibold text-lg">CodingThinker</span>
+            </div>
+
+            <nav className="hidden md:flex items-center gap-8">
+              <div className="flex items-center gap-1 text-white/80 hover:text-white cursor-pointer">
+                <span>Courses</span>
+                <span className="text-xs">+</span>
+              </div>
+              <div className="flex items-center gap-1 text-white/80 hover:text-white cursor-pointer">
+                <span>Programs</span>
+                <span className="text-xs">+</span>
+              </div>
+              <span className="text-white/80 hover:text-white cursor-pointer">Mentors</span>
+              <span className="text-white/80 hover:text-white cursor-pointer">Pricing</span>
+            </nav>
+
+            <div className="flex items-center gap-4">
               {session ? (
-                <Button size="lg" asChild className="text-lg px-8 py-4 rounded-full">
-                  <Link href="/home">
-                    Enter Platform <ArrowRight className="ml-2 h-5 w-5" />
-                  </Link>
+                <Button asChild className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
+                  <Link href="/home">Enter Platform</Link>
                 </Button>
               ) : (
                 <>
-                  <Button size="lg" asChild className="text-lg px-8 py-4 rounded-full bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90">
-                    <Link href="/auth/signup">
-                      Start Learning <ArrowRight className="ml-2 h-5 w-5" />
-                    </Link>
-                  </Button>
-                  <Button size="lg" variant="outline" asChild className="text-lg px-8 py-4 rounded-full border-2">
-                    <Link href="/auth/signin">Sign In</Link>
+                  <Link href="/auth/signin" className="text-white/80 hover:text-white">Login</Link>
+                  <Button asChild className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
+                    <Link href="/auth/signup">Request a Demo</Link>
                   </Button>
                 </>
               )}
             </div>
+          </div>
+        </div>
 
-            {/* Trust indicators */}
-            <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-              <div className="flex -space-x-2">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 border-2 border-background"></div>
-                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-blue-500 border-2 border-background"></div>
-                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 border-2 border-background"></div>
-                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-500 to-red-500 border-2 border-background"></div>
+        {/* Main Content - Centered like in the image */}
+        <div className="container mx-auto px-4 relative z-10 flex flex-col items-center justify-center min-h-screen text-center pt-32">
+          {/* NEW Badge */}
+          <Badge className="mb-8 bg-blue-600/20 text-blue-400 border-blue-600/30 px-4 py-2 text-sm font-medium">
+            NEW v1.2 Beta is available
+          </Badge>
+
+          {/* Main Heading - Larger and more prominent */}
+          <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-12 leading-tight max-w-5xl">
+            Simplify and optimize
+            <br />
+            your <span className="italic text-white/90 font-light">coding journey.</span>
+          </h1>
+
+          {/* Code Editor Icons Row */}
+          <div className="flex items-center justify-center gap-3 mb-12">
+            <div className="w-10 h-10 bg-white/5 rounded-lg border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors cursor-pointer">
+              <span className="text-white/60 text-sm font-mono">P</span>
+            </div>
+            <div className="w-10 h-10 bg-white/5 rounded-lg border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors cursor-pointer">
+              <span className="text-white/60 text-sm">◀</span>
+            </div>
+            <div className="w-10 h-10 bg-white/5 rounded-lg border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors cursor-pointer">
+              <span className="text-white/60 text-sm">▶</span>
+            </div>
+            <div className="w-10 h-10 bg-white/5 rounded-lg border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors cursor-pointer">
+              <span className="text-white/60 text-sm">⚙</span>
+            </div>
+            <div className="w-10 h-10 bg-white/5 rounded-lg border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors cursor-pointer">
+              <span className="text-white/60 text-sm">V</span>
+            </div>
+            <div className="w-10 h-10 bg-white/5 rounded-lg border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors cursor-pointer">
+              <span className="text-white/60 text-sm">⌘</span>
+            </div>
+          </div>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 mb-16">
+            {session ? (
+              <Button size="lg" asChild className="bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-lg text-lg font-medium transition-all hover:scale-105">
+                <Link href="/home">Try for Free</Link>
+              </Button>
+            ) : (
+              <Button size="lg" asChild className="bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-lg text-lg font-medium transition-all hover:scale-105">
+                <Link href="/auth/signup">Try for Free</Link>
+              </Button>
+            )}
+            <Button size="lg" variant="ghost" className="text-white/80 hover:text-white hover:bg-white/5 px-10 py-4 rounded-lg text-lg font-medium transition-all">
+              Learn More
+            </Button>
+          </div>
+
+          {/* Company Logos - Positioned at bottom like in image */}
+          <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2">
+            <div className="flex items-center justify-center gap-12 opacity-30">
+              <span className="text-white/60 text-lg font-medium">Evernote</span>
+              <span className="text-white/60 text-lg font-medium">PayPal</span>
+              <span className="text-white/60 text-lg font-medium">amazon</span>
+              <span className="text-white/60 text-lg font-medium">Framer</span>
+              <span className="text-white/60 text-lg font-medium">XXX</span>
+            </div>
+          </div>
+
+          {/* Side Code Editor - Positioned like in the image */}
+          <div className="absolute left-8 top-1/2 transform -translate-y-1/2 hidden xl:block">
+            <div className="bg-black/40 backdrop-blur-sm rounded-lg border border-white/5 p-4 font-mono text-xs max-w-xs">
+              <div className="space-y-1 text-white/60">
+                <div className="flex">
+                  <span className="text-white/30 w-6 text-right mr-3">1</span>
+                  <span className="text-purple-400">const</span>
+                  <span className="text-white/80 ml-2">learn = () =&gt; {'{'}</span>
+                </div>
+                <div className="flex">
+                  <span className="text-white/30 w-6 text-right mr-3">2</span>
+                  <span className="text-white/80 ml-4">console.log(</span>
+                  <span className="text-green-400">'Start coding!'</span>
+                  <span className="text-white/80">)</span>
+                </div>
+                <div className="flex">
+                  <span className="text-white/30 w-6 text-right mr-3">3</span>
+                  <span className="text-white/80">{'}'}</span>
+                </div>
               </div>
-              <span className="ml-3">Join over 5,000+ students</span>
+            </div>
+          </div>
+
+          {/* Right side stats */}
+          <div className="absolute right-8 top-1/2 transform -translate-y-1/2 hidden xl:block">
+            <div className="space-y-4">
+              <div className="bg-black/40 backdrop-blur-sm rounded-lg border border-white/5 p-4 text-center">
+                <div className="text-2xl font-bold text-white mb-1">5K+</div>
+                <div className="text-white/60 text-xs">Students</div>
+              </div>
+              <div className="bg-black/40 backdrop-blur-sm rounded-lg border border-white/5 p-4 text-center">
+                <div className="text-2xl font-bold text-white mb-1">95%</div>
+                <div className="text-white/60 text-xs">Success Rate</div>
+              </div>
             </div>
           </div>
         </div>
+
+
       </section>
 
       {/* Stats Section */}
@@ -315,7 +431,7 @@ export default function LandingPage() {
               </div>
             </div>
             <div className="relative">
-              <div className="bg-gradient-to-br from-primary/20 via-blue-500/10 to-purple-600/20 rounded-2xl p-8 h-96 flex items-center justify-center backdrop-blur-sm">
+              <div className="bg-gradient-to-br from-primary/20 via-muted/10 to-silver/20 rounded-2xl p-8 h-96 flex items-center justify-center backdrop-blur-sm">
                 <div className="text-center">
                   <div className="text-6xl mb-4">💻</div>
                   <h3 className="text-2xl font-bold mb-2">Ready to Code?</h3>
@@ -340,7 +456,7 @@ export default function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-gradient-to-r from-primary/10 via-blue-500/10 to-purple-600/10">
+      <section className="py-20 px-4 bg-gradient-to-r from-primary/10 via-muted/10 to-silver/10">
         <div className="container mx-auto text-center">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-5xl font-bold mb-6">

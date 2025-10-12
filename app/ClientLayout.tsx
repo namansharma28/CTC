@@ -9,9 +9,7 @@ import Navbar from '@/components/layout/navbar';
 import BottomNavbar from '@/components/layout/bottom-navbar';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { Search } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -33,7 +31,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       <ThemeProvider attribute="class" defaultTheme="dark">
         <AuthProvider>
           <NotificationProvider>
-            <div className="min-h-screen w-full bg-background sci-fi-background">
+            <div className="min-h-screen w-full bg-background modern-gradient">
               <main className="w-full">
                 {children}
                 <Toaster />
@@ -49,7 +47,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     <ThemeProvider attribute="class" defaultTheme="dark">
       <AuthProvider>
         <NotificationProvider>
-          <div className="flex min-h-screen w-full bg-background sci-fi-background">
+          <div className="flex min-h-screen w-full bg-background modern-gradient">
             <Navbar />
             <div className="flex w-full mt-16 md:mt-14">
               {/* Desktop sidebar - always visible on large screens */}
@@ -61,7 +59,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
               
               {/* Main content area */}
               <main className="flex-1 w-full overflow-auto pb-16 md:pb-0">
-                <div className="mx-auto w-full h-full border-x border-primary/10">
+                <div className="mx-auto w-full h-full border-x border-border/20">
                   {children}
                 </div>
               </main>

@@ -11,10 +11,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import dynamic from "next/dynamic";
-
-// Dynamically import QR scanner to avoid SSR issues
-const QrScanner = dynamic(() => import("react-qr-scanner"), { ssr: false });
+import QRScanner from "@/components/qr-scanner/qr-scanner";
 
 interface ScanResult {
   participantId: string;
@@ -152,9 +149,9 @@ export default function QRScanPage({ params }: { params: { id: string } }) {
     }
   };
 
-  const handleScan = (data: any) => {
+  const handleScan = (data: string) => {
     if (data && !isProcessing) {
-      processQRCode(data.text || data);
+      processQRCode(data);
       setIsScanning(false);
     }
   };
@@ -163,7 +160,7 @@ export default function QRScanPage({ params }: { params: { id: string } }) {
     console.error('QR Scanner error:', err);
     toast({
       title: "Scanner Error",
-      description: "Failed to access camera. Please check permissions.",
+      description: err.message || "Failed to access camera. Please check permissions.",
       variant: "destructive",
     });
   };
@@ -223,46 +220,22 @@ export default function QRScanPage({ params }: { params: { id: string } }) {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {!isScanning ? (
-                <div className="text-center space-y-4">
-                  <div className="w-full h-64 bg-muted rounded-lg flex items-center justify-center">
-                    <div className="text-center">
-                      <Camera className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                      <p className="text-muted-foreground">Camera not active</p>
+              <div className="relative">
+                <QRScanner
+                  onScan={handleScan}
+                  onError={handleError}
+                  isActive={isScanning}
+                  onToggle={() => setIsScanning(!isScanning)}
+                />
+                {isProcessing && (
+                  <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-lg">
+                    <div className="text-white text-center">
+                      <div className="h-8 w-8 animate-spin rounded-full border-4 border-white border-t-transparent mx-auto mb-2"></div>
+                      <p>Processing...</p>
                     </div>
                   </div>
-                  <Button onClick={() => setIsScanning(true)} className="w-full">
-                    <Camera className="mr-2 h-4 w-4" />
-                    Start Camera
-                  </Button>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  <div className="relative">
-                    <QrScanner
-                      delay={300}
-                      onError={handleError}
-                      onScan={handleScan}
-                      style={{ width: '100%', height: '300px' }}
-                    />
-                    {isProcessing && (
-                      <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                        <div className="text-white text-center">
-                          <div className="h-8 w-8 animate-spin rounded-full border-4 border-white border-t-transparent mx-auto mb-2"></div>
-                          <p>Processing...</p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  <Button 
-                    onClick={() => setIsScanning(false)} 
-                    variant="outline" 
-                    className="w-full"
-                  >
-                    Stop Camera
-                  </Button>
-                </div>
-              )}
+                )}
+              </div>
             </CardContent>
           </Card>
 

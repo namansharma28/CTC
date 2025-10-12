@@ -60,6 +60,11 @@ const config: Config = {
           '4': 'hsl(var(--chart-4))',
           '5': 'hsl(var(--chart-5))',
         },
+        silver: {
+          DEFAULT: 'hsl(var(--silver))',
+          light: 'hsl(var(--silver-light))',
+          dark: 'hsl(var(--silver-dark))',
+        },
       },
       keyframes: {
         'accordion-down': {
