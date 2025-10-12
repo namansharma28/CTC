@@ -55,7 +55,7 @@ const SidebarLink = ({
   <Link
     href={href}
     className={cn(
-      "flex items-center gap-3 rounded-full px-4 py-3 text-base font-medium transition-all hover:bg-accent/50",
+      "flex items-center gap-3 rounded-full px-4 py-3 text-base font-medium  hover:bg-accent/50",
       active ? "font-bold text-foreground" : "text-muted-foreground"
     )}
     onClick={onClick}
@@ -188,7 +188,7 @@ export default function Sidebar() {
       {/* Community creation button removed - only available for operators/admins */}
 
       {session && !isSmallScreen && (
-        <div className="mt-3 flex items-center gap-3 p-3 rounded-full silver-hover cursor-pointer">
+        <div className="mt-3 flex items-center gap-3 p-3 rounded-full cursor-pointer">
           <Avatar>
             <AvatarImage src={session.user?.image || ""} />
             <AvatarFallback>

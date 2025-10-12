@@ -39,7 +39,8 @@ import {
 } from "@/components/ui/alert-dialog";
 
 interface Event {
-  id: string;
+  id?: string;
+  _id?: string;
   title: string;
   description: string;
   date: string;
@@ -50,7 +51,8 @@ interface Event {
   eventType?: 'online' | 'offline' | 'hybrid';
   creatorId: string;
   community: {
-    id: string;
+    id?: string;
+    _id?: string;
     name: string;
     handle: string;
     avatar: string;
