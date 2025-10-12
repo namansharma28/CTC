@@ -188,7 +188,7 @@ export default function Sidebar() {
       {/* Community creation button removed - only available for operators/admins */}
 
       {session && !isSmallScreen && (
-        <div className="mt-3 flex items-center gap-3 p-3 rounded-full modern-card-hover cursor-pointer">
+        <div className="mt-3 flex items-center gap-3 p-3 rounded-full silver-hover cursor-pointer">
           <Avatar>
             <AvatarImage src={session.user?.image || ""} />
             <AvatarFallback>

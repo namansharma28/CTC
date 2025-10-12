@@ -106,9 +106,9 @@ export default function FeedCard({ item }: FeedCardProps) {
                   <AvatarImage src={communityAvatar} />
                   <AvatarFallback>{communityInitials}</AvatarFallback>
                 </Avatar>
-                <Link href={`/communities/${communityHandle}`} className="text-sm font-medium hover:underline">
+                <span className="text-sm font-medium text-muted-foreground">
                   {communityName}
-                </Link>
+                </span>
               </div>
             )}
 
@@ -176,7 +176,8 @@ export default function FeedCard({ item }: FeedCardProps) {
 
   // Regular layout for other content types
   return (
-    <Card className="overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 silver-border-hover min-h-[500px]">
+    <Link href={`/${item.type}/${item.id}`} className="block">
+      <Card className="overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 modern-card-hover min-h-[500px]">
       {/* Image Section - Full height image display */}
       {hasImages && (
         <div className="relative w-full h-80 bg-gray-100">
@@ -276,13 +277,7 @@ export default function FeedCard({ item }: FeedCardProps) {
                 </AvatarFallback>
               </Avatar>
               <div>
-                {item.community.handle && item.community.handle !== 'unknown' ? (
-                  <Link href={`/communities/${item.community.handle}`}>
-                    <p className="text-sm font-medium hover:underline">{item.community.name}</p>
-                  </Link>
-                ) : (
-                  <p className="text-sm font-medium text-muted-foreground">{item.community.name || 'Community'}</p>
-                )}
+                <p className="text-sm font-medium text-muted-foreground">{item.community.name || 'Community'}</p>
                 <p className="text-xs text-muted-foreground">@{item.community.handle || 'unknown'}</p>
               </div>
             </div>
@@ -299,13 +294,7 @@ export default function FeedCard({ item }: FeedCardProps) {
               </AvatarFallback>
             </Avatar>
             <div>
-              {item.community.handle && item.community.handle !== 'unknown' ? (
-                <Link href={`/communities/${item.community.handle}`}>
-                  <p className="text-sm font-medium hover:underline">{item.community.name}</p>
-                </Link>
-              ) : (
-                <p className="text-sm font-medium text-muted-foreground">{item.community.name || 'Community'}</p>
-              )}
+              <p className="text-sm font-medium text-muted-foreground">{item.community.name || 'Community'}</p>
               <p className="text-xs text-muted-foreground">@{item.community.handle || 'unknown'}</p>
             </div>
           </div>
@@ -316,12 +305,10 @@ export default function FeedCard({ item }: FeedCardProps) {
         <p className="text-sm leading-relaxed">{item.content}</p>
 
         {item.eventId && item.type === "update" && (
-          <Link href={`/events/${item.eventId}`}>
-            <div className="mt-3 rounded-md border p-3">
-              <p className="text-xs font-medium text-muted-foreground">Related to event:</p>
-              <p className="text-sm font-medium">{item.eventTitle}</p>
-            </div>
-          </Link>
+          <div className="mt-3 rounded-md border p-3">
+            <p className="text-xs font-medium text-muted-foreground">Related to event:</p>
+            <p className="text-sm font-medium">{item.eventTitle}</p>
+          </div>
         )}
 
         {/* Display non-image attachments with download buttons */}
@@ -458,26 +445,21 @@ export default function FeedCard({ item }: FeedCardProps) {
       </CardContent>
 
       <CardFooter className="border-t bg-muted/20 p-2 px-3">
-        <div className="flex w-full items-center justify-between">
-          {(item.type === 'tnp' || item.type === 'study') && (
-            <Link href={`/${item.type}/${item.id}`}>
-              <Button variant="ghost" size="sm" className="h-8 text-primary">
-                View More
-              </Button>
-            </Link>
-          )}
-          <div className="flex items-center gap-1 ml-auto">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-8 text-muted-foreground"
-              onClick={handleShare}
-            >
-              <Share2 size={16} />
-            </Button>
-          </div>
+        <div className="flex w-full items-center justify-end">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-8 text-muted-foreground"
+            onClick={(e) => {
+              e.preventDefault(); // Prevent the Link from triggering
+              handleShare();
+            }}
+          >
+            <Share2 size={16} />
+          </Button>
         </div>
       </CardFooter>
     </Card>
+    </Link>
   );
 }
