@@ -40,7 +40,7 @@ import {
 
 interface Event {
   id?: string;
-  _id?: string;
+  _id: string;
   title: string;
   description: string;
   date: string;
@@ -317,7 +317,7 @@ export default function EventPage({ params }: { params: { id: string } }) {
                 {/* Registration Control */}
                 {rsvpStatus && (
                   <RegistrationControl 
-                    eventId={event.id} 
+                    eventId={event._id} 
                     registrationEnabled={rsvpStatus.registrationEnabled}
                     onRegistrationChange={handleRegistrationChange}
                   />
@@ -434,7 +434,7 @@ export default function EventPage({ params }: { params: { id: string } }) {
                   <UpdateCard 
                     key={update.id} 
                     update={update} 
-                    eventId={event.id}
+                    eventId={event._id}
                     userPermissions={userPermissions}
                   />
                 ))
@@ -471,7 +471,7 @@ export default function EventPage({ params }: { params: { id: string } }) {
               <div className="mt-4 space-y-4">
                 {rsvpStatus && (
                   <RegisterButton 
-                    eventId={event.id}
+                    eventId={event._id}
                     rsvpStatus={rsvpStatus}
                     onRegistrationChange={handleRegistrationChange}
                   />
