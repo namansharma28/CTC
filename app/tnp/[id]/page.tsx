@@ -14,15 +14,15 @@ import Link from "next/link";
 interface TNPPost {
   _id: string;
   title: string;
-  content: string;
+  content?: string;
   company: string;
   location: string;
   type: 'internship' | 'job' | 'both';
   salary?: string;
   deadline: string;
-  requirements: string[];
+  requirements?: string[];
   applicationLink?: string;
-  tags: string[];
+  tags?: string[];
   createdAt: string;
   updatedAt: string;
 }
@@ -171,17 +171,19 @@ export default function TNPPostPage() {
             </CardHeader>
             <CardContent>
               <div className="prose max-w-none">
-                {post.content.split('\n').map((paragraph, index) => (
+                {post.content ? post.content.split('\n').map((paragraph, index) => (
                   <p key={index} className="mb-4 text-sm leading-relaxed">
                     {paragraph}
                   </p>
-                ))}
+                )) : (
+                  <p className="text-muted-foreground">No content available.</p>
+                )}
               </div>
             </CardContent>
           </Card>
 
           {/* Requirements */}
-          {post.requirements && post.requirements.length > 0 && (
+          {post.requirements && Array.isArray(post.requirements) && post.requirements.length > 0 && (
             <Card>
               <CardHeader>
                 <CardTitle>Requirements</CardTitle>
@@ -266,7 +268,7 @@ export default function TNPPostPage() {
           </Card>
 
           {/* Tags */}
-          {post.tags && post.tags.length > 0 && (
+          {post.tags && Array.isArray(post.tags) && post.tags.length > 0 && (
             <Card>
               <CardHeader>
                 <CardTitle>Tags</CardTitle>

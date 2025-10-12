@@ -12,9 +12,9 @@ import { formatDistanceToNow } from "date-fns";
 interface StudyPost {
   _id: string;
   title: string;
-  content: string;
-  tags: string[];
-  attachments: Array<{
+  content?: string;
+  tags?: string[];
+  attachments?: Array<{
     name: string;
     url: string;
     type: string;
@@ -130,7 +130,7 @@ export default function StudyPostPage() {
             </div>
             
             {/* Tags */}
-            {post.tags && post.tags.length > 0 && (
+            {post.tags && Array.isArray(post.tags) && post.tags.length > 0 && (
               <div className="flex gap-2 flex-wrap mb-4">
                 {post.tags.map(tag => (
                   <Badge key={tag} variant="secondary" className="flex items-center gap-1">
@@ -153,11 +153,13 @@ export default function StudyPostPage() {
             </CardHeader>
             <CardContent>
               <div className="prose max-w-none">
-                {post.content.split('\n').map((paragraph, index) => (
+                {post.content ? post.content.split('\n').map((paragraph, index) => (
                   <p key={index} className="mb-4 text-sm leading-relaxed">
                     {paragraph}
                   </p>
-                ))}
+                )) : (
+                  <p className="text-muted-foreground">No content available.</p>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -166,7 +168,7 @@ export default function StudyPostPage() {
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Attachments */}
-          {post.attachments && post.attachments.length > 0 && (
+          {post.attachments && Array.isArray(post.attachments) && post.attachments.length > 0 && (
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
