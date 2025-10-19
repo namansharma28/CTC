@@ -105,10 +105,42 @@ export async function GET(
       return NextResponse.json({ error: 'Community not found' }, { status: 404 });
     }
 
-    // Get events
+    // Get events using aggregation with registration count
     const events = await db.collection('events')
-      .find({ communityId: community._id.toString() })
-      .sort({ date: 1, time: 1 })
+      .aggregate([
+        { $match: { communityId: community._id.toString() } },
+        {
+          $lookup: {
+            from: 'eventRegistrations',
+            let: { eventId: '$_id' },
+            pipeline: [
+              { $match: { $expr: { $eq: ['$eventId', '$$eventId'] } } },
+              { $count: 'count' }
+            ],
+            as: 'registrationCount'
+          }
+        },
+        ...(userId ? [{
+          $lookup: {
+            from: 'eventRegistrations',
+            let: { eventId: '$_id' },
+            pipeline: [
+              { 
+                $match: { 
+                  $expr: { 
+                    $and: [
+                      { $eq: ['$eventId', '$$eventId'] },
+                      { $eq: ['$userId', { $toObjectId: userId }] }
+                    ]
+                  }
+                }
+              }
+            ],
+            as: 'userRegistration'
+          }
+        }] : []),
+        { $sort: { date: 1, time: 1 } }
+      ])
       .toArray();
 
     return NextResponse.json(events.map(event => ({
@@ -133,6 +165,8 @@ export async function GET(
         handle: community.handle,
         avatar: community.avatar || ''
       },
+      registrationCount: event.registrationCount[0]?.count || 0,
+      userRegistered: userId ? (event.userRegistration?.[0] ? true : false) : false,
       attendeesCount: (event.attendees || []).length
     })));
   } catch (error: any) {

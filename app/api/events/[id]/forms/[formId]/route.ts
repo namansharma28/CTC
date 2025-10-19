@@ -20,7 +20,7 @@ export async function GET(
     }
 
     const client = await clientPromise;
-    const db = client.db("gravitas");
+    const db = client.db("CTC");
 
     // Verify that the event exists
     const event = await db.collection("events").findOne({
@@ -95,7 +95,7 @@ export async function PATCH(
     }
 
     const client = await clientPromise;
-    const db = client.db("gravitas");
+    const db = client.db("CTC");
 
     // Verify that the event exists and user has permission
     const event = await db.collection("events").findOne({
@@ -187,7 +187,7 @@ export async function DELETE(
     }
 
     const client = await clientPromise;
-    const db = client.db("gravitas");
+    const db = client.db("CTC");
 
     // Verify that the event exists and user has permission
     const event = await db.collection("events").findOne({
