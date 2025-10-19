@@ -321,9 +321,9 @@ export default function ProfilePage() {
                             <div className="flex items-center gap-2 mb-2">
                               <Avatar className="h-6 w-6">
                                 <AvatarImage src={event.community.avatar} />
-                                <AvatarFallback>{event.community.name.substring(0, 2)}</AvatarFallback>
+                                <AvatarFallback>{event.community?.name ? event.community.name.substring(0, 2) : 'CO'}</AvatarFallback>
                               </Avatar>
-                              <span className="text-sm font-medium">{event.community.name}</span>
+                              <span className="text-sm font-medium">{event.community?.name || 'Community'}</span>
                             </div>
                             <div className="text-sm text-muted-foreground space-y-1">
                               <div className="flex items-center gap-1">
@@ -383,9 +383,9 @@ export default function ProfilePage() {
                             <div className="flex items-center gap-2 mb-2">
                               <Avatar className="h-5 w-5">
                                 <AvatarImage src={event.community.avatar} />
-                                <AvatarFallback>{event.community.name.substring(0, 2)}</AvatarFallback>
+                                <AvatarFallback>{event.community?.name ? event.community.name.substring(0, 2) : 'CO'}</AvatarFallback>
                               </Avatar>
-                              <span className="text-xs font-medium">{event.community.name}</span>
+                              <span className="text-xs font-medium">{event.community?.name || 'Community'}</span>
                             </div>
                             <div className="text-xs text-muted-foreground">
                               {event.date}

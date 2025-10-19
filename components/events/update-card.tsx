@@ -176,8 +176,8 @@ export default function UpdateCard({ update, eventId, userPermissions }: UpdateC
                 <AvatarFallback>{update.community.name?.charAt(0) || 'C'}</AvatarFallback>
               </Avatar>
               <div>
-                <Link href={`/communities/${update.community.handle}`} className="font-medium hover:underline">
-                  {update.community.name}
+                <Link href={`/communities/${update.community?.handle || 'unknown'}`} className="font-medium hover:underline">
+                  {update.community?.name || 'Community'}
                 </Link>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <span>{timeAgo}</span>

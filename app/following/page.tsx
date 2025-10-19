@@ -326,10 +326,10 @@ export default function FollowingPage() {
                       <div className="flex items-center gap-2 mb-3">
                         <Avatar className="h-6 w-6">
                           <AvatarImage src={event.community.avatar} />
-                          <AvatarFallback>{event.community.name.substring(0, 2)}</AvatarFallback>
+                          <AvatarFallback>{event.community?.name ? event.community.name.substring(0, 2) : 'CO'}</AvatarFallback>
                         </Avatar>
-                        <Link href={`/communities/${event.community.handle}`} className="text-sm font-medium hover:underline">
-                          {event.community.name}
+                        <Link href={`/communities/${event.community?.handle || 'unknown'}`} className="text-sm font-medium hover:underline">
+                          {event.community?.name || 'Community'}
                         </Link>
                       </div>
 

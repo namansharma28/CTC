@@ -106,7 +106,7 @@ export default function OperatorEvents() {
   const getEventStatus = (event: Event) => {
     const eventDate = new Date(event.date);
     const now = new Date();
-    
+
     if (eventDate < now) {
       return { status: 'past', label: 'Past', variant: 'secondary' as const };
     } else if (eventDate.toDateString() === now.toDateString()) {
@@ -230,8 +230,8 @@ export default function OperatorEvents() {
                         <TableCell className="hidden xl:table-cell">
                           {event.community ? (
                             <div className="text-sm">
-                              <p className="font-medium truncate max-w-[100px]">{event.community.name}</p>
-                              <p className="text-muted-foreground">@{event.community.handle}</p>
+                              <p className="font-medium truncate max-w-[100px]">{event.community?.name || 'Community'}</p>
+                              <p className="text-muted-foreground">@{event.community?.handle || 'unknown'}</p>
                             </div>
                           ) : (
                             <span className="text-muted-foreground">-</span>

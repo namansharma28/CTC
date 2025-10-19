@@ -167,7 +167,7 @@ export default function TechnicalLeadDashboard() {
     const filteredEvents = events.filter(event =>
         event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         event.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        event.community.name.toLowerCase().includes(searchQuery.toLowerCase())
+        (event.community?.name || '').toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     const getEventStatus = (event: Event) => {
@@ -329,7 +329,7 @@ export default function TechnicalLeadDashboard() {
                                                                 {new Date(event.date).toLocaleDateString()} • {event.time}
                                                             </p>
                                                             <p className="text-xs text-muted-foreground lg:hidden">
-                                                                {event.community.name}
+                                                                {event.community?.name || 'Community'}
                                                             </p>
                                                         </div>
                                                     </div>
@@ -347,8 +347,8 @@ export default function TechnicalLeadDashboard() {
                                                 </TableCell>
                                                 <TableCell className="hidden lg:table-cell">
                                                     <div className="text-sm">
-                                                        <p className="font-medium">{event.community.name}</p>
-                                                        <p className="text-muted-foreground">@{event.community.handle}</p>
+                                                        <p className="font-medium">{event.community?.name || 'Community'}</p>
+                                                        <p className="text-muted-foreground">@{event.community?.handle || 'unknown'}</p>
                                                     </div>
                                                 </TableCell>
                                                 <TableCell className="text-right">

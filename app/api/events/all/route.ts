@@ -143,6 +143,7 @@ export async function GET() {
       // Transform events to match frontend expectations
       const transformedEvents = events.map(event => ({
         _id: event._id.toString(),
+        id: event._id.toString(),
         title: event.title,
         description: event.description,
         date: event.date,

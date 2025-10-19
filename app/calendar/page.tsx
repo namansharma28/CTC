@@ -795,7 +795,7 @@ export default function CalendarPage() {
                             />
                             <div className="flex-1 min-w-0">
                               <h4 className="font-medium truncate">{event.title}</h4>
-                              <p className="text-sm text-muted-foreground">{event.community.name}</p>
+                              <p className="text-sm text-muted-foreground">{event.community?.name || 'Community'}</p>
                             </div>
                           </div>
                           <div className="flex items-center justify-between text-sm text-muted-foreground">

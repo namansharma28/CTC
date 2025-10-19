@@ -97,9 +97,9 @@ export default function UpcomingEvents() {
                     <div className="flex items-center gap-2">
                       <Avatar className="h-4 w-4">
                         <AvatarImage src={event.community.avatar} />
-                        <AvatarFallback>{event.community.name.substring(0, 2)}</AvatarFallback>
+                        <AvatarFallback>{event.community?.name ? event.community.name.substring(0, 2) : 'CO'}</AvatarFallback>
                       </Avatar>
-                      <p className="text-xs text-muted-foreground">{event.community.name}</p>
+                      <p className="text-xs text-muted-foreground">{event.community?.name || 'Community'}</p>
                     </div>
                     <div className="flex items-center gap-4 text-xs text-muted-foreground">
                       <div className="flex items-center gap-1">
