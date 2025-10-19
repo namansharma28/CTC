@@ -10,7 +10,7 @@ export async function GET(
   try {
     const session = await getServerSession(authOptions);
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
 
     // Get the community
     const community = await db.collection('communities').findOne({ handle: params.handle });

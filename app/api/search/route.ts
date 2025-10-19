@@ -19,7 +19,7 @@ export async function GET(request: Request) {
     }
 
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
 
     // Search in events
     const events = await db.collection('events')

@@ -7,7 +7,7 @@ export async function GET() {
   try {
     const session = await getServerSession(authOptions);
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
 
     // Get all communities with additional data, filtering out pending and rejected communities
     const communities = await db.collection('communities')

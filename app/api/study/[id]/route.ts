@@ -10,7 +10,7 @@ export async function GET(
 ) {
   try {
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
     
     const post = await db.collection('study_posts')
       .findOne({ _id: new ObjectId(params.id) });
@@ -98,7 +98,7 @@ export async function PUT(
     }
 
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
 
     const updateData = {
       title,
@@ -169,7 +169,7 @@ export async function DELETE(
     }
 
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
 
     const result = await db.collection('study_posts').deleteOne({
       _id: new ObjectId(params.id)

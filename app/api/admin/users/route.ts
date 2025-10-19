@@ -44,7 +44,7 @@ export async function GET(req: NextRequest) {
 
     // Fetch users from database
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
     const usersCollection = db.collection('users');
     
     // Find users with search and pagination

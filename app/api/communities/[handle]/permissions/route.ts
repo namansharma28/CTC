@@ -11,7 +11,7 @@ export async function GET(
     const session = await getServerSession(authOptions);
     
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
 
     console.log(`[PERMISSIONS] Looking for community with handle: ${params.handle}`);
     

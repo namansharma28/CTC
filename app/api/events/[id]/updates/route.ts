@@ -25,7 +25,7 @@ export async function POST(
     } = data;
 
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
 
     // Verify event exists and user has permission
     const event = await db.collection('events').findOne({ 
@@ -144,7 +144,7 @@ export async function GET(
     const session = await getServerSession(authOptions);
     
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
 
     // Validate ObjectId format
     if (!ObjectId.isValid(params.id)) {

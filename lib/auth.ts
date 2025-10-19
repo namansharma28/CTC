@@ -40,7 +40,7 @@ export const authOptions: NextAuthOptions = {
 
           // Regular user login
           const client = await clientPromise;
-          const db = client.db('CTC');
+          const db = client.db('new');
           
           const user = await db.collection('users').findOne({
             email: credentials.email.toLowerCase()
@@ -101,7 +101,7 @@ export const authOptions: NextAuthOptions = {
       // For OAuth providers, auto-verify email
       if (account?.provider === "google") {
         const client = await clientPromise;
-        const db = client.db('CTC');
+        const db = client.db('new');
         
         await db.collection('users').updateOne(
           { email: user.email },
@@ -133,7 +133,7 @@ export const authOptions: NextAuthOptions = {
         // Refresh user data from database to get latest role
         try {
           const client = await clientPromise;
-          const db = client.db('CTC');
+          const db = client.db('new');
           
           // Skip database lookup for admin user
           if (token.sub === "admin") {

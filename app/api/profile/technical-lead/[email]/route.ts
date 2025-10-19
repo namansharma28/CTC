@@ -9,7 +9,7 @@ export async function GET(
     const email = decodeURIComponent(params.email);
     
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
     
     // First, verify this user exists and is a technical lead
     const user = await db.collection('users').findOne({ 

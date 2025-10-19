@@ -17,7 +17,7 @@ export async function GET(request: Request) {
     }
 
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
 
     // Find verification token
     const verificationToken = await db.collection('verification_tokens').findOne({

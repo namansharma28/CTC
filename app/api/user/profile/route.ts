@@ -12,7 +12,7 @@ export async function GET() {
     }
 
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
 
     // Get user profile with stats
     const user = await db.collection('users').findOne(
@@ -86,7 +86,7 @@ export async function PATCH(request: Request) {
     const { name, bio, location, website, image } = data;
 
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
 
     const result = await db.collection('users').updateOne(
       { _id: new ObjectId(session.user.id) },

@@ -23,7 +23,7 @@ export async function POST(
     const { action, registrationType } = data;
 
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
 
     // Get event
     const event = await db.collection('events').findOne({ _id: new ObjectId(params.id) });
@@ -211,7 +211,7 @@ export async function GET(
     // Allow non-logged-in users to fetch RSVP status
     
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
 
     // Get event
     const event = await db.collection('events').findOne({ _id: new ObjectId(params.id) });
@@ -263,7 +263,7 @@ export async function PATCH(
     const { action, formId } = data;
 
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
 
     if (action === 'setRSVPForm') {
       // Update event with RSVP form ID

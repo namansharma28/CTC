@@ -11,7 +11,7 @@ export async function GET() {
     }
 
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
 
     // Get communities where user is admin or member
     const communities = await db.collection('communities')

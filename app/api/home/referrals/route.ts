@@ -4,7 +4,7 @@ import clientPromise from '@/lib/mongodb';
 export async function GET() {
   try {
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
 
     // Calculate this month's date range
     const currentMonth = new Date();

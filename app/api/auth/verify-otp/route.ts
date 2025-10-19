@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     }
 
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
 
     // Find valid OTP
     const otpRecord = await db.collection('email_otps').findOne({

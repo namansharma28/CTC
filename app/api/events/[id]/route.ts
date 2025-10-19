@@ -19,7 +19,7 @@ export async function GET(
     }
 
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
 
     // Get event
     const event = await db.collection('events').findOne({ _id: new ObjectId(params.id) });
@@ -90,7 +90,7 @@ export async function PATCH(
     const { title, description, date, time, location, capacity, image, eventType } = data;
 
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
 
     // Get event
     const event = await db.collection('events').findOne({ _id: new ObjectId(params.id) });
@@ -161,7 +161,7 @@ export async function DELETE(
     }
 
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
 
     // Get event
     const event = await db.collection('events').findOne({ _id: new ObjectId(params.id) });

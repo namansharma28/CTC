@@ -9,7 +9,7 @@ export async function GET() {
     
     // Connect to MongoDB
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
 
     // Fetch trending communities (sorted by member count and recent activity)
     const communities = await db.collection('communities')

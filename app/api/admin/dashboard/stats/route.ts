@@ -24,7 +24,7 @@ export async function GET() {
     }
 
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
 
     // Get platform stats - handle missing collections gracefully
     const [

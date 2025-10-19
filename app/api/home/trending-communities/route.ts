@@ -7,7 +7,7 @@ export async function GET() {
   try {
     const session = await getServerSession(authOptions);
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
 
     // Get trending communities (by member count, follower count, and recent activity)
     const trendingCommunities = await db.collection('communities')

@@ -5,7 +5,7 @@ export async function GET() {
   try {
     // Connect to MongoDB
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
 
     // Fetch all events with community information
     const events = await db.collection('events').aggregate([

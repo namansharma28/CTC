@@ -18,7 +18,7 @@ export async function GET(request: Request) {
     const communityId = searchParams.get('community');
 
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
 
     // Get user's communities (member and admin)
     const userCommunities = await db.collection('communities').find({

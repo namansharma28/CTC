@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
 
     // Connect to MongoDB
     const client = await clientPromise;
-    const db = client.db('CTC');
+    const db = client.db('new');
     const usersCollection = db.collection('users');
 
     // Check if user exists
