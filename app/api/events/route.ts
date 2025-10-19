@@ -7,20 +7,27 @@ export async function GET() {
     const client = await clientPromise;
     const db = client.db('CTC');
 
-    // Fetch all events with community information
+    // Fetch all events with community information using the same method as calendar events
     const events = await db.collection('events').aggregate([
       {
         $lookup: {
           from: 'communities',
-          localField: 'communityId',
-          foreignField: '_id',
+          let: { communityId: { $toObjectId: '$communityId' } },
+          pipeline: [
+            { $match: { $expr: { $eq: ['$_id', '$$communityId'] } } }
+          ],
           as: 'community'
         }
       },
       {
-        $unwind: {
-          path: '$community',
-          preserveNullAndEmptyArrays: true
+        $lookup: {
+          from: 'eventRegistrations',
+          let: { eventId: '$_id' },
+          pipeline: [
+            { $match: { $expr: { $eq: ['$eventId', '$$eventId'] } } },
+            { $count: 'count' }
+          ],
+          as: 'registrationCount'
         }
       },
       {
@@ -29,32 +36,35 @@ export async function GET() {
     ]).toArray();
 
     // Transform the data for the frontend
-    const transformedEvents = events.map(event => ({
-      _id: event._id.toString(),
-      id: event._id.toString(),
-      title: event.title,
-      description: event.description,
-      date: event.date,
-      time: event.time,
-      location: event.location,
-      image: event.image,
-      capacity: event.maxCapacity,
-      maxAttendees: event.maxCapacity,
-      registrations: event.registrations?.length || 0,
-      status: event.status || 'active',
-      createdAt: event.createdAt,
-      eventType: event.eventType || 'offline',
-      creatorId: event.creatorId,
-      community: event.community ? {
-        id: event.community._id?.toString(),
-        name: event.community.name,
-        handle: event.community.handle,
-        avatar: event.community.avatar
-      } : null,
-      tags: event.tags || [],
-      attendees: event.attendees || [],
-      interested: event.interested || []
-    }));
+    const transformedEvents = events.map(event => {
+      const community = event.community[0];
+      return {
+        _id: event._id.toString(),
+        id: event._id.toString(),
+        title: event.title,
+        description: event.description,
+        date: event.date,
+        time: event.time,
+        location: event.location,
+        image: event.image,
+        capacity: event.maxCapacity,
+        maxAttendees: event.maxCapacity,
+        registrations: event.registrationCount[0]?.count || 0,
+        status: event.status || 'active',
+        createdAt: event.createdAt,
+        eventType: event.eventType || 'offline',
+        creatorId: event.creatorId,
+        community: community ? {
+          id: community._id?.toString(),
+          name: community.name,
+          handle: community.handle,
+          avatar: community.avatar
+        } : null,
+        tags: event.tags || [],
+        attendees: event.attendees || [],
+        interested: event.interested || []
+      };
+    });
 
     return NextResponse.json({ events: transformedEvents });
   } catch (error) {

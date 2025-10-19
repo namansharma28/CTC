@@ -59,11 +59,15 @@ export default function Home() {
             ...item,
             type: 'event'
           })));
-          // Set upcoming events for sidebar with proper filtering
-          const validEvents = eventsData.events.filter((event: any) =>
-            event && event._id && event.title
-          );
-          setUpcomingEvents(validEvents.slice(0, 5));
+        }
+
+        // Fetch upcoming events using the new API
+        const upcomingResponse = await fetch('/api/events/upcoming?limit=5');
+        if (upcomingResponse.ok) {
+          const upcomingData = await upcomingResponse.json();
+          if (Array.isArray(upcomingData)) {
+            setUpcomingEvents(upcomingData);
+          }
         }
 
         // Fetch study posts
