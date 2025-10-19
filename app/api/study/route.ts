@@ -7,7 +7,7 @@ import { ObjectId } from 'mongodb';
 export async function GET() {
   try {
     const client = await clientPromise;
-    const db = client.db('new');
+    const db = client.db('CTC');
 
     const studyPosts = await db.collection('study_posts')
       .find({})
@@ -96,7 +96,7 @@ export async function POST(req: NextRequest) {
     }
 
     const client = await clientPromise;
-    const db = client.db('new');
+    const db = client.db('CTC');
 
     const newPost = {
       title,

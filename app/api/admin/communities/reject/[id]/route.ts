@@ -27,7 +27,7 @@ export async function POST(
     }
 
     const client = await clientPromise;
-    const db = client.db('new');
+    const db = client.db('CTC');
 
     // Find the community
     const community = await db.collection('communities').findOne({

@@ -61,7 +61,7 @@ export async function POST(
       await client.connect();
       console.log('Connected to database in approve'); // Debug log
 
-      const db = client.db();
+      const db = client.db('CTC');
       const community = await db.collection('communities').findOne({ _id: new ObjectId(id) });
       console.log('Found community in approve:', community); // Debug log
 

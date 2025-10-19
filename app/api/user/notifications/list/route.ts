@@ -12,7 +12,7 @@ export async function GET() {
     }
 
     const client = await clientPromise;
-    const db = client.db('new');
+    const db = client.db('CTC');
 
     // Get user's notifications
     const notifications = await db.collection('notifications')

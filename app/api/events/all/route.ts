@@ -99,7 +99,7 @@ export async function GET() {
     try {
       // Connect to the database using clientPromise
       const client = await clientPromise;
-      const db = client.db('new');
+      const db = client.db('CTC');
       
       // Fetch events from the database
       const events = await db.collection('events')

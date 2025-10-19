@@ -78,7 +78,7 @@ export async function POST(request: Request) {
 
     // Connect to MongoDB
     const client = await clientPromise;
-    const db = client.db('new');
+    const db = client.db('CTC');
 
     // Verify event exists and user has permission
     const event = await db.collection('events').findOne({ _id: new ObjectId(eventId) });
@@ -151,7 +151,7 @@ export async function GET(
     // }
 
     const client = await clientPromise;
-    const db = client.db('new');
+    const db = client.db('CTC');
 
     // Validate ObjectId format
     if (!ObjectId.isValid(params.id)) {
@@ -247,7 +247,7 @@ export async function DELETE(
     }
 
     const client = await clientPromise;
-    const db = client.db('new');
+    const db = client.db('CTC');
 
     // Get the form ID from the URL
     const formId = request.url.split("/forms/")[1];

@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     }
 
     const client = await clientPromise;
-    const db = client.db('new');
+    const db = client.db('CTC');
 
     // Create a test notification
     const notification = {

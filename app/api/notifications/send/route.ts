@@ -42,7 +42,7 @@ export async function POST(request: Request) {
     }
 
     const client = await clientPromise;
-    const db = client.db('new');
+    const db = client.db('CTC');
 
     let targetUsers: any[] = [];
 
@@ -107,7 +107,7 @@ export async function POST(request: Request) {
 export async function sendNotification(data: NotificationData) {
   try {
     const client = await clientPromise;
-    const db = client.db('new');
+    const db = client.db('CTC');
 
     let targetUsers: any[] = [];
 

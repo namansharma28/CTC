@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     }
 
     const client = await clientPromise;
-    const db = client.db('new');
+    const db = client.db('CTC');
 
     // Store the subscription in the database
     await db.collection('pushSubscriptions').updateOne(
@@ -65,7 +65,7 @@ export async function DELETE(request: Request) {
     }
 
     const client = await clientPromise;
-    const db = client.db('new');
+    const db = client.db('CTC');
 
     // Remove the subscription from the database
     await db.collection('pushSubscriptions').deleteOne({

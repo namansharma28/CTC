@@ -9,7 +9,7 @@ export async function GET() {
   try {
     // Connect to MongoDB
     const client = await clientPromise;
-    const db = client.db('new');
+    const db = client.db('CTC');
 
     // Fetch all communities
     const communities = await db.collection('communities')
@@ -60,7 +60,7 @@ export async function POST(request: Request) {
 
     // Connect to MongoDB
     const client = await clientPromise;
-    const db = client.db('new');
+    const db = client.db('CTC');
 
     // Check if handle already exists
     const existingCommunity = await db.collection('communities').findOne({ handle });

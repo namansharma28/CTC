@@ -20,7 +20,7 @@ export async function GET() {
     }
 
     const client = await clientPromise;
-    const db = client.db('new');
+    const db = client.db('CTC');
 
     // Calculate this month's date range
     const currentMonth = new Date();

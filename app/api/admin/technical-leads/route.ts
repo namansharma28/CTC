@@ -17,7 +17,7 @@ export async function GET() {
     }
 
     const client = await clientPromise;
-    const db = client.db('new');
+    const db = client.db('CTC');
     
     // Get all technical leads
     const technicalLeads = await db.collection('users')

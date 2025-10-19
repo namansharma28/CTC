@@ -8,7 +8,7 @@ import { sendNotification } from '@/app/api/notifications/send/route';
 export async function GET() {
   try {
     const client = await clientPromise;
-    const db = client.db('new');
+    const db = client.db('CTC');
 
     const tnpPosts = await db.collection('tnp_posts')
       .find({})
@@ -85,7 +85,7 @@ export async function POST(req: NextRequest) {
     }
 
     const client = await clientPromise;
-    const db = client.db('new');
+    const db = client.db('CTC');
 
     const newPost = {
       title,

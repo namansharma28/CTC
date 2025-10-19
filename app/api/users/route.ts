@@ -36,7 +36,7 @@ export async function GET(req: NextRequest) {
 
     // Connect to MongoDB
     const client = await clientPromise;
-    const db = client.db('new');
+    const db = client.db('CTC');
     const usersCollection = db.collection('users');
 
     // Build the search filter

@@ -20,7 +20,7 @@ export async function GET() {
     }
 
     const client = await clientPromise;
-    const db = client.db('new');
+    const db = client.db('CTC');
 
     // Get all Technical Leads with their profile information
     const technicalLeads = await db.collection('users')

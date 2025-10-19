@@ -15,7 +15,7 @@ export async function POST(
     }
 
     const client = await clientPromise;
-    const db = client.db('new');
+    const db = client.db('CTC');
 
     const community = await db.collection('communities').findOne({ handle: params.handle });
     if (!community) {
@@ -72,7 +72,7 @@ export async function GET(
     }
 
     const client = await clientPromise;
-    const db = client.db('new');
+    const db = client.db('CTC');
 
     const community = await db.collection('communities').findOne({ handle: params.handle });
     if (!community) {
