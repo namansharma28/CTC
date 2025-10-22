@@ -485,7 +485,9 @@ export default function CommunityPage({ params }: { params: { handle: string } }
                 <Card>
                   <CardContent className="p-4 sm:p-6">
                     <h3 className="mb-4 font-semibold">About {community.name}</h3>
-                    <p className="text-sm">{community.description}</p>
+                    <p className="text-sm text-muted-foreground break-words whitespace-pre-wrap overflow-hidden">
+                      {community.description}
+                    </p>
                     <div className="mt-4">
                       <h4 className="mb-2 text-sm font-medium">Created</h4>
                       <p className="text-sm text-muted-foreground">
@@ -528,7 +530,7 @@ export default function CommunityPage({ params }: { params: { handle: string } }
                             }}
                           />
                           <div className="flex-1 space-y-1">
-                            <h3 className="font-semibold">{event.title}</h3>
+                            <h3 className="font-semibold truncate">{event.title}</h3>
                             <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
                               <div className="flex items-center gap-1">
                                 <Calendar className="h-4 w-4" />
@@ -540,7 +542,7 @@ export default function CommunityPage({ params }: { params: { handle: string } }
                               </div>
                               <div className="flex items-center gap-1">
                                 <MapPin className="h-4 w-4" />
-                                <span>{event.location}</span>
+                                <span className="truncate">{event.location}</span>
                               </div>
                               <div className="flex items-center gap-1">
                                 <Users className="h-4 w-4" />
