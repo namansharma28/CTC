@@ -15,7 +15,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import Link from "next/link";
 import { motion } from "framer-motion";
 import { CalendarEventCard } from "@/components/events/calendar-event-card";
 import { Event } from "@/types/event";
@@ -184,9 +183,7 @@ export default function EventsPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
                   >
-                    <Link href={`/events/${event._id}`}>
-                      <CalendarEventCard event={event} />
-                    </Link>
+                    <CalendarEventCard event={event} />
                   </motion.div>
                 ))}
               </div>

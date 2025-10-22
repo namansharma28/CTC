@@ -39,10 +39,10 @@ export async function GET() {
     currentWeek.setDate(currentWeek.getDate() - currentWeek.getDay());
     currentWeek.setHours(0, 0, 0, 0);
 
-    // Get all referrals
-    const allReferrals = await db.collection('form_responses')
+    // Get all referrals using the new data structure
+    const allReferrals = await db.collection('form_submissions')
       .find({ 
-        referredBy: { $ne: 'none' }
+        technicalLeadId: { $exists: true, $ne: null }
       })
       .sort({ createdAt: -1 })
       .toArray();
@@ -50,10 +50,10 @@ export async function GET() {
     // Process each Technical Lead
     const processedTLs = await Promise.all(
       technicalLeads.map(async (tl) => {
-        const tlEmail = tl.email;
+        const tlId = tl._id.toString();
         
-        // Get referrals for this TL
-        const tlReferrals = allReferrals.filter(referral => referral.referredBy === tlEmail);
+        // Get referrals for this TL using the new structure
+        const tlReferrals = allReferrals.filter(referral => referral.technicalLeadId === tlId);
         
         // Calculate time-based stats
         const thisMonthReferrals = tlReferrals.filter(referral => 
@@ -89,7 +89,7 @@ export async function GET() {
             id: referral._id.toString(),
             eventTitle: referral.eventTitle || 'Unknown Event',
             eventId: referral.eventId,
-            userName: referral.userName || 'Anonymous',
+            userName: referral.name || referral.userName || 'Anonymous',
             createdAt: referral.createdAt,
             formTitle: referral.formTitle || 'Registration Form'
           }));

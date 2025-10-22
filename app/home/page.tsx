@@ -91,11 +91,11 @@ export default function Home() {
             ...item,
             type: 'tnp'
           }));
-          
+
           // Filter TNP posts based on user role
           const userRole = session?.user?.role;
           const hasPlacementAccess = userRole === 'ctc_student' || userRole === 'technical_lead' || userRole === 'operator' || userRole === 'admin';
-          
+
           filteredTnpItems = allTnpItems.filter((item: any) => {
             // If it's a placement-related post and user doesn't have access, filter it out
             if (item.category === 'placement' && !hasPlacementAccess) {
@@ -103,7 +103,7 @@ export default function Home() {
             }
             return true;
           });
-          
+
           setTnpFeedItems(filteredTnpItems);
         }
 
@@ -122,13 +122,13 @@ export default function Home() {
           ...item,
           type: 'study'
         })) : [];
-        
+
         const combinedFeed = [
           ...(eventsData.events || []),
           ...studyItems,
           ...filteredTnpItems
         ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-        
+
         setAllFeedItems(combinedFeed);
       } catch (error) {
         console.error('Error fetching feed data:', error);
@@ -241,7 +241,7 @@ export default function Home() {
                                     <CalendarDays className="h-5 w-5 text-white dark:text-white" />
                                     Upcoming Events
                                   </h3>
-                                  <Link href="/calendar">
+                                  <Link href="/events">
                                     <Button variant="ghost" size="sm" className="text-white dark:text-white hover:text-silver dark:hover:text-silver silver-hover">
                                       View All
                                     </Button>
@@ -436,7 +436,7 @@ export default function Home() {
                                     <CalendarDays className="h-5 w-5 text-white dark:text-white" />
                                     Upcoming Events
                                   </h3>
-                                  <Link href="/calendar">
+                                  <Link href="/events">
                                     <Button variant="ghost" size="sm" className="text-white dark:text-white hover:text-silver dark:hover:text-silver silver-hover">
                                       View All
                                     </Button>
@@ -654,44 +654,44 @@ export default function Home() {
             </TabsContent>
 
             <TabsContent value="tnp" className="mt-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-semibold">Training & Placement</h2>
-                  {((session?.user as any)?.role === 'operator' || (session?.user as any)?.role === 'admin') && (
-                    <Link href="/tnp/create">
-                      <Button size="sm" className="silver-hover">
-                        <Plus className="mr-2 h-4 w-4" />
-                        Create TNP Post
-                      </Button>
-                    </Link>
-                  )}
-                </div>
-                <div className="space-y-6">
-                  {isLoading ? (
-                    <div className="text-center py-8">
-                      <p className="text-muted-foreground">Loading TNP updates...</p>
-                    </div>
-                  ) : tnpFeedItems.length > 0 ? (
-                    <div className="grid gap-6">
-                      {tnpFeedItems.map((item) => (
-                        <motion.div
-                          key={item.id}
-                          className="w-full"
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          <FeedCard item={item} />
-                        </motion.div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center py-12">
-                      <Briefcase className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                      <p className="text-muted-foreground">No TNP updates found.</p>
-                    </div>
-                  )}
-                </div>
-              </TabsContent>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-semibold">Training & Placement</h2>
+                {((session?.user as any)?.role === 'operator' || (session?.user as any)?.role === 'admin') && (
+                  <Link href="/tnp/create">
+                    <Button size="sm" className="silver-hover">
+                      <Plus className="mr-2 h-4 w-4" />
+                      Create TNP Post
+                    </Button>
+                  </Link>
+                )}
+              </div>
+              <div className="space-y-6">
+                {isLoading ? (
+                  <div className="text-center py-8">
+                    <p className="text-muted-foreground">Loading TNP updates...</p>
+                  </div>
+                ) : tnpFeedItems.length > 0 ? (
+                  <div className="grid gap-6">
+                    {tnpFeedItems.map((item) => (
+                      <motion.div
+                        key={item.id}
+                        className="w-full"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <FeedCard item={item} />
+                      </motion.div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <Briefcase className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                    <p className="text-muted-foreground">No TNP updates found.</p>
+                  </div>
+                )}
+              </div>
+            </TabsContent>
           </Tabs>
         </div>
 
@@ -713,7 +713,7 @@ export default function Home() {
                       <CalendarDays className="h-5 w-5 text-white dark:text-silver" />
                       Upcoming Events
                     </CardTitle>
-                    <Link href="/calendar">
+                    <Link href="/events">
                       <Button variant="ghost" size="sm" className="text-white dark:text-white hover:text-silver dark:hover:text-silver silver-hover">
                         View All
                       </Button>

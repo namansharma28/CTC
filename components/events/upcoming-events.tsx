@@ -124,7 +124,7 @@ export default function UpcomingEvents() {
       
       <div className="flex justify-center">
         <Button variant="outline" size="sm" asChild>
-          <Link href="/calendar">View all</Link>
+          <Link href="/events">View more events</Link>
         </Button>
       </div>
     </div>

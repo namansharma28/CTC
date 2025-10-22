@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { Bell, Calendar, Users, CheckCircle, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { useNotifications } from "@/components/notifications/notification-provider";
+
 import Link from "next/link";
 
 interface NotificationListProps {
@@ -14,12 +14,68 @@ interface NotificationListProps {
 }
 
 export default function NotificationList({ onClose }: NotificationListProps) {
-  const { notifications, unreadCount, fetchNotifications, markAsRead, markAllAsRead } = useNotifications();
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Fetch notifications when component mounts
   useEffect(() => {
     fetchNotifications();
   }, []);
+
+  const fetchNotifications = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch('/api/user/notifications/list');
+      
+      if (response.ok) {
+        const data = await response.json();
+        // Show only 5 most recent notifications in the overlay
+        setNotifications(data.slice(0, 5));
+      }
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const markAsRead = async (notificationId: string) => {
+    try {
+      const response = await fetch(`/api/user/notifications/${notificationId}/read`, {
+        method: 'POST'
+      });
+      
+      if (response.ok) {
+        setNotifications(prev => 
+          prev.map(notif => 
+            notif.id === notificationId 
+              ? { ...notif, read: true }
+              : notif
+          )
+        );
+      }
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+    }
+  };
+
+  const markAllAsRead = async () => {
+    try {
+      const response = await fetch('/api/user/notifications/read-all', {
+        method: 'POST'
+      });
+      
+      if (response.ok) {
+        setNotifications(prev => 
+          prev.map(notif => ({ ...notif, read: true }))
+        );
+      }
+    } catch (error) {
+      console.error('Error marking all notifications as read:', error);
+    }
+  };
+
+  const unreadCount = notifications.filter(n => !n.read).length;
 
   // Format notification time
   const formatNotificationTime = (dateString: string) => {
@@ -64,7 +120,11 @@ export default function NotificationList({ onClose }: NotificationListProps) {
       </div>
       
       <ScrollArea className="max-h-[70vh] md:max-h-[400px]">
-        {notifications.length === 0 ? (
+        {isLoading ? (
+          <div className="flex items-center justify-center py-8">
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+          </div>
+        ) : notifications.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-8">
             <Bell className="h-10 w-10 text-muted-foreground mb-2" />
             <p className="text-muted-foreground">No notifications yet</p>
@@ -101,7 +161,10 @@ export default function NotificationList({ onClose }: NotificationListProps) {
       
       <Separator />
       
-      <div className="p-3 text-center">
+      <div className="p-3 space-y-2">
+        <Button variant="outline" size="sm" className="w-full text-xs" asChild>
+          <Link href="/notifications">View All Notifications</Link>
+        </Button>
         <Button variant="ghost" size="sm" className="w-full text-xs" asChild>
           <Link href="/settings">Manage notifications</Link>
         </Button>

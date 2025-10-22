@@ -8,16 +8,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 interface Notification {
-  _id: string;
+  id: string;
   title: string;
-  message: string;
-  type: 'info' | 'success' | 'warning' | 'error';
+  description: string;
+  type: 'info' | 'success' | 'warning' | 'error' | 'system';
   read: boolean;
   createdAt: string;
-  actionUrl?: string;
-  actionText?: string;
+  linkUrl?: string;
 }
 
 export default function NotificationBell() {
@@ -39,7 +39,8 @@ export default function NotificationBell() {
       
       if (response.ok) {
         const data = await response.json();
-        setNotifications(data);
+        // Show only 5 most recent notifications in the overlay
+        setNotifications(data.slice(0, 5));
       }
     } catch (error) {
       console.error('Error fetching notifications:', error);
@@ -57,7 +58,7 @@ export default function NotificationBell() {
       if (response.ok) {
         setNotifications(prev => 
           prev.map(notif => 
-            notif._id === notificationId 
+            notif.id === notificationId 
               ? { ...notif, read: true }
               : notif
           )
@@ -170,16 +171,16 @@ export default function NotificationBell() {
                 <div className="space-y-1">
                   {notifications.map((notification) => (
                     <div
-                      key={notification._id}
+                      key={notification.id}
                       className={`p-4 border-b hover:bg-muted/50 cursor-pointer transition-colors ${
                         !notification.read ? 'bg-primary/5 border-l-4 border-l-primary' : ''
                       }`}
                       onClick={() => {
                         if (!notification.read) {
-                          markAsRead(notification._id);
+                          markAsRead(notification.id);
                         }
-                        if (notification.actionUrl) {
-                          window.open(notification.actionUrl, '_blank');
+                        if (notification.linkUrl) {
+                          window.open(notification.linkUrl, '_blank');
                         }
                       }}
                     >
@@ -193,15 +194,15 @@ export default function NotificationBell() {
                             )}
                           </div>
                           <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
-                            {notification.message}
+                            {notification.description}
                           </p>
                           <div className="flex items-center justify-between">
                             <span className="text-xs text-muted-foreground">
                               {getTimeAgo(notification.createdAt)}
                             </span>
-                            {notification.actionText && (
+                            {notification.linkUrl && (
                               <span className="text-xs text-primary font-medium">
-                                {notification.actionText}
+                                View Details
                               </span>
                             )}
                           </div>
@@ -212,6 +213,20 @@ export default function NotificationBell() {
                 </div>
               )}
             </ScrollArea>
+            {notifications.length > 0 && (
+              <div className="p-4 border-t">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="w-full"
+                  asChild
+                >
+                  <Link href="/notifications" onClick={() => setIsOpen(false)}>
+                    View All Notifications
+                  </Link>
+                </Button>
+              </div>
+            )}
           </CardContent>
         </Card>
       </PopoverContent>

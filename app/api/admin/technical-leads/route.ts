@@ -28,9 +28,9 @@ export async function GET() {
     // Get referral statistics for each TL
     const tlsWithStats = await Promise.all(
       technicalLeads.map(async (tl) => {
-        // Get all form responses where this TL was the referrer
-        const referralResponses = await db.collection('form_responses')
-          .find({ referredBy: tl.email })
+        // Get all form submissions where this TL was the referrer (using new structure)
+        const referralResponses = await db.collection('form_submissions')
+          .find({ technicalLeadId: tl._id.toString() })
           .sort({ createdAt: -1 })
           .toArray();
 
@@ -85,7 +85,7 @@ export async function GET() {
             id: response._id.toString(),
             eventTitle: response.eventTitle || 'Unknown Event',
             eventId: response.eventId,
-            userName: response.userName || 'Anonymous',
+            userName: response.name || response.userName || 'Anonymous',
             createdAt: response.createdAt,
             formTitle: response.formTitle || 'Registration Form'
           }));

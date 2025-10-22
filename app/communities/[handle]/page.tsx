@@ -425,7 +425,6 @@ export default function CommunityPage({ params }: { params: { handle: string } }
                               .filter(event => new Date(event.date) >= new Date())
                               .slice(0, 3)
                               .map(event => (
-                                  <Link key={event._id} href={`/events/${event._id}`}>
                                 <CalendarEventCard 
                                   key={event._id} 
                                   event={{
@@ -441,7 +440,6 @@ export default function CommunityPage({ params }: { params: { handle: string } }
                                   }} 
                                   variant="horizontal"
                                 />
-</Link>
                               ))
                             }
                           </div>

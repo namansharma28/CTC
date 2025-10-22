@@ -22,11 +22,11 @@ export async function GET(
       return NextResponse.json({ error: 'Technical Lead not found' }, { status: 404 });
     }
 
-    // Get referral statistics
+    // Get referral statistics using TL ID
     const referralStats = await db.collection('form_submissions').aggregate([
       {
         $match: {
-          technicalLeadEmail: email
+          technicalLeadId: user._id.toString()
         }
       },
       {
@@ -55,7 +55,7 @@ export async function GET(
     const topEvents = await db.collection('form_submissions').aggregate([
       {
         $match: {
-          technicalLeadEmail: email
+          technicalLeadId: user._id.toString()
         }
       },
       {
@@ -83,7 +83,7 @@ export async function GET(
 
     // Get recent referrals
     const recentReferrals = await db.collection('form_submissions').find({
-      technicalLeadEmail: email
+      technicalLeadId: user._id.toString()
     })
     .sort({ createdAt: -1 })
     .limit(10)
