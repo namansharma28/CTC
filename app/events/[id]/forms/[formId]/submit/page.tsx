@@ -75,7 +75,8 @@ export default function SubmitFormPage({
       
       // Initialize form data with default values
       const initialData: Record<string, any> = {};
-      const technicalLeadEmail = sessionStorage.getItem('technicalLeadEmail');
+      const technicalLeadId = sessionStorage.getItem('technicalLeadId');
+      const technicalLeadName = sessionStorage.getItem('technicalLeadName');
       const referralEventId = sessionStorage.getItem('referralEventId');
       
       data.fields.forEach((field: any) => {
@@ -88,9 +89,9 @@ export default function SubmitFormPage({
         } else if (field.type === "file") {
           initialData[field.id] = null; // File field
         } else if (field.label.toLowerCase().includes('referred')) {
-          // Auto-populate referral field
-          initialData[field.id] = (referralEventId === params.id && technicalLeadEmail) 
-            ? technicalLeadEmail 
+          // Auto-populate referral field with TL name
+          initialData[field.id] = (referralEventId === params.id && technicalLeadName) 
+            ? technicalLeadName 
             : 'none';
         } else {
           initialData[field.id] = "";
@@ -290,12 +291,14 @@ export default function SubmitFormPage({
 
       // Get referral information from sessionStorage
       const referralCode = sessionStorage.getItem('referralCode');
-      const technicalLeadEmail = sessionStorage.getItem('technicalLeadEmail');
+      const technicalLeadId = sessionStorage.getItem('technicalLeadId');
+      const technicalLeadName = sessionStorage.getItem('technicalLeadName');
       const referralEventId = sessionStorage.getItem('referralEventId');
       
       // Include referral info if this form is for the same event the user came from
-      const referralInfo = (referralEventId === params.id && technicalLeadEmail) ? {
-        referredBy: technicalLeadEmail,
+      const referralInfo = (referralEventId === params.id && technicalLeadId) ? {
+        referredBy: technicalLeadId,
+        referredByName: technicalLeadName,
         referralCode: referralCode
       } : {
         referredBy: 'none'
@@ -398,7 +401,7 @@ export default function SubmitFormPage({
                     id={field.id}
                     value={formData[field.id] || ""}
                     onChange={(e) => handleInputChange(field.id, e.target.value)}
-                    placeholder={field.label.toLowerCase().includes('referred') ? 'Auto-filled from referral link' : `Enter ${field.label.toLowerCase()}`}
+                    placeholder={field.label.toLowerCase().includes('referred') ? 'Auto-filled from referral link (TL name)' : `Enter ${field.label.toLowerCase()}`}
                     disabled={field.label.toLowerCase().includes('referred')}
                     className={field.label.toLowerCase().includes('referred') ? 'bg-muted' : ''}
                   />

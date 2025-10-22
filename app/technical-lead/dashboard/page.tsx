@@ -128,12 +128,12 @@ export default function TechnicalLeadDashboard() {
     };
 
     const generateReferralLink = (eventId: string) => {
-        const userEmail = session?.user?.email;
-        if (!userEmail) return "";
+        const userId = session?.user?.id;
+        if (!userId) return "";
 
         const baseUrl = window.location.origin;
-        const referralCode = btoa(userEmail).replace(/[^a-zA-Z0-9]/g, '').substring(0, 8);
-        return `${baseUrl}/events/${eventId}?ref=${referralCode}&tl=${encodeURIComponent(userEmail)}`;
+        const referralCode = btoa(userId).replace(/[^a-zA-Z0-9]/g, '').substring(0, 8);
+        return `${baseUrl}/events/${eventId}?ref=${referralCode}&tlId=${userId}`;
     };
 
     const copyReferralLink = (eventId: string, eventTitle: string) => {

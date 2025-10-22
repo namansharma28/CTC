@@ -19,7 +19,7 @@ export async function POST(
       );
     }
 
-    const { answers, referredBy, referralCode } = await request.json();
+    const { answers, referredBy, referredByName, referralCode } = await request.json();
 
     if (!Array.isArray(answers)) {
       return NextResponse.json(
@@ -79,6 +79,7 @@ export async function POST(
       checkedIn: false,
       // Referral tracking data
       referredBy: referredBy || 'none',
+      referredByName: referredByName || null,
       referralCode: referralCode || null,
       // Additional data for referral statistics
       userName: session.user.name,
@@ -91,15 +92,16 @@ export async function POST(
 
     // Store in separate collection for easier referral analytics
     if (referredBy && referredBy !== 'none') {
-      await db.collection("form_responses").insertOne({
+      await db.collection("form_submissions").insertOne({
         _id: response.insertedId,
         formId: new ObjectId(params.formId),
         eventId: params.id,
         userId: new ObjectId(session.user.id),
-        referredBy,
+        technicalLeadId: referredBy,
+        technicalLeadName: referredByName,
         referralCode,
-        userName: session.user.name,
-        userEmail: session.user.email,
+        name: session.user.name,
+        email: session.user.email,
         eventTitle: event?.title || 'Unknown Event',
         formTitle: form.title || 'Registration Form',
         createdAt: new Date(),
@@ -141,14 +143,17 @@ export async function POST(
 
       // If referred by a Technical Lead, notify them about the successful referral
       if (referredBy && referredBy !== 'none') {
-        await sendNotification({
-          userEmail: referredBy,
-          title: "Referral Success!",
-          message: `${session.user.name} has registered for "${event?.title || 'an event'}" through your referral link.`,
-          type: 'success',
-          actionUrl: `/technical-lead/dashboard`,
-          actionText: 'View Dashboard'
-        });
+        const technicalLead = await db.collection('users').findOne({ _id: new ObjectId(referredBy) });
+        if (technicalLead) {
+          await sendNotification({
+            userEmail: technicalLead.email,
+            title: "Referral Success!",
+            message: `${session.user.name} has registered for "${event?.title || 'an event'}" through your referral link.`,
+            type: 'success',
+            actionUrl: `/technical-lead/dashboard`,
+            actionText: 'View Dashboard'
+          });
+        }
       }
 
       // Notify event organizers about new registration

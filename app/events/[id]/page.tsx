@@ -114,13 +114,28 @@ export default function EventPage({ params }: { params: { id: string } }) {
     // Check for referral parameters and store them
     const urlParams = new URLSearchParams(window.location.search);
     const referralCode = urlParams.get('ref');
-    const technicalLeadEmail = urlParams.get('tl');
+    const technicalLeadId = urlParams.get('tlId');
     
-    if (referralCode && technicalLeadEmail) {
+    if (referralCode && technicalLeadId) {
+      // Fetch TL name for display purposes
+      const fetchTLName = async () => {
+        try {
+          const response = await fetch(`/api/users/by-id/${technicalLeadId}`);
+          if (response.ok) {
+            const tlData = await response.json();
+            sessionStorage.setItem('technicalLeadName', tlData.name || 'Technical Lead');
+          }
+        } catch (error) {
+          console.error('Error fetching TL name:', error);
+          sessionStorage.setItem('technicalLeadName', 'Technical Lead');
+        }
+      };
+      
       // Store referral info in sessionStorage for form submissions
       sessionStorage.setItem('referralCode', referralCode);
-      sessionStorage.setItem('technicalLeadEmail', technicalLeadEmail);
+      sessionStorage.setItem('technicalLeadId', technicalLeadId);
       sessionStorage.setItem('referralEventId', params.id);
+      fetchTLName();
     }
 
     const fetchEventData = async () => {

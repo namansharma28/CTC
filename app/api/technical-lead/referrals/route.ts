@@ -20,13 +20,13 @@ export async function GET(request: NextRequest) {
     const client = await clientPromise;
     const db = client.db('CTC');
     
-    const userEmail = session.user.email;
+    const userId = session.user.id;
 
     // Get referral statistics
     const referralStats = await db.collection('form_submissions').aggregate([
       {
         $match: {
-          technicalLeadEmail: userEmail
+          technicalLeadId: userId
         }
       },
       {
@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
     const topEvents = await db.collection('form_submissions').aggregate([
       {
         $match: {
-          technicalLeadEmail: userEmail
+          technicalLeadId: userId
         }
       },
       {
@@ -83,7 +83,7 @@ export async function GET(request: NextRequest) {
 
     // Get recent referrals
     const recentReferrals = await db.collection('form_submissions').find({
-      technicalLeadEmail: userEmail
+      technicalLeadId: userId
     })
     .sort({ createdAt: -1 })
     .limit(10)
@@ -107,7 +107,7 @@ export async function GET(request: NextRequest) {
         id: r._id,
         eventTitle: r.eventTitle,
         eventId: r.eventId,
-        userName: r.name,
+        userName: r.name || r.userName,
         createdAt: r.createdAt,
         formTitle: r.formTitle || 'Registration Form'
       }))

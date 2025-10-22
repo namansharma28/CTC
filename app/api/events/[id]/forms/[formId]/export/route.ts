@@ -27,7 +27,7 @@ export async function GET(
     }
 
     const client = await clientPromise;
-    const db = client.db("gravitas");
+    const db = client.db("CTC");
 
     // Verify that the event exists and user has permission
     const event = await db.collection("events").findOne({
@@ -101,6 +101,8 @@ export async function GET(
       'Participant Name',
       'Email',
       'Status',
+      'Check-in Status',
+      'Referred By (TL)',
       'Submitted At',
       ...form.fields.map((field: any) => field.label)
     ];
@@ -114,6 +116,8 @@ export async function GET(
         user?.name || 'Unknown',
         user?.email || 'No email',
         response.shortlisted ? 'Shortlisted' : 'Pending',
+        response.checkedIn ? 'Checked In' : 'Not Checked In',
+        response.referredByName || (response.referredBy && response.referredBy !== 'none' ? 'Technical Lead' : 'Direct Registration'),
         new Date(response.createdAt).toLocaleString(),
       ];
 

@@ -75,6 +75,9 @@ interface FormResponse {
   shortlisted?: boolean;
   checkedIn?: boolean;
   checkedInAt?: string;
+  referredBy?: string;
+  referredByName?: string;
+  referralCode?: string;
 }
 
 export default function FormPage({ params }: { params: { id: string; formId: string } }) {
@@ -436,9 +439,10 @@ export default function FormPage({ params }: { params: { id: string; formId: str
                       />
                     </TableHead>
                     <TableHead>Participant</TableHead>
-                    {form.fields.slice(0, 3).map((field) => (
+                    {form.fields.slice(0, 2).map((field) => (
                       <TableHead key={field.id}>{field.label}</TableHead>
                     ))}
+                    <TableHead>Referred By</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Check-in</TableHead>
                     <TableHead>Submitted</TableHead>
@@ -463,7 +467,7 @@ export default function FormPage({ params }: { params: { id: string; formId: str
                           </div>
                         </div>
                       </TableCell>
-                      {form.fields.slice(0, 3).map((field) => {
+                      {form.fields.slice(0, 2).map((field) => {
                         const answer = response.answers.find(
                           (a) => a.fieldId === field.id
                         );
@@ -473,6 +477,15 @@ export default function FormPage({ params }: { params: { id: string; formId: str
                           </TableCell>
                         );
                       })}
+                      <TableCell>
+                        {response.referredByName ? (
+                          <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">
+                            {response.referredByName}
+                          </span>
+                        ) : (
+                          <span className="text-sm text-muted-foreground">Direct</span>
+                        )}
+                      </TableCell>
                       <TableCell>
                         {response.shortlisted ? (
                           <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
