@@ -1,8 +1,9 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
+import { ObjectId } from 'mongodb';
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { email: string } }
 ) {
   try {
@@ -11,89 +12,111 @@ export async function GET(
     const client = await clientPromise;
     const db = client.db('CTC');
     
-    // First, verify this user exists and is a technical lead
+    // Find the technical lead user
     const user = await db.collection('users').findOne({ 
       email: email,
       role: 'technical_lead'
     });
-
+    
     if (!user) {
       return NextResponse.json({ error: 'Technical Lead not found' }, { status: 404 });
     }
 
-    // Get all form responses where this TL was the referrer
-    const referralResponses = await db.collection('form_responses')
-      .find({ referredBy: email })
-      .sort({ createdAt: -1 })
-      .toArray();
-
-    // Calculate statistics
-    const totalReferrals = referralResponses.length;
-    
-    // Calculate this month's referrals
-    const currentMonth = new Date();
-    currentMonth.setDate(1);
-    currentMonth.setHours(0, 0, 0, 0);
-    
-    const thisMonthReferrals = referralResponses.filter(response => 
-      new Date(response.createdAt) >= currentMonth
-    ).length;
-
-    // Group by event to get top performing events
-    const eventReferrals = referralResponses.reduce((acc, response) => {
-      const eventId = response.eventId;
-      if (!acc[eventId]) {
-        acc[eventId] = {
-          eventId,
-          count: 0,
-          eventTitle: response.eventTitle || 'Unknown Event'
-        };
+    // Get referral statistics
+    const referralStats = await db.collection('form_submissions').aggregate([
+      {
+        $match: {
+          technicalLeadEmail: email
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalReferrals: { $sum: 1 },
+          thisMonth: {
+            $sum: {
+              $cond: {
+                if: {
+                  $gte: [
+                    '$createdAt',
+                    new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+                  ]
+                },
+                then: 1,
+                else: 0
+              }
+            }
+          }
+        }
       }
-      acc[eventId].count++;
-      return acc;
-    }, {} as Record<string, { eventId: string; count: number; eventTitle: string }>);
+    ]).toArray();
 
-    // Get top 5 events
-    const topEvents = Object.values(eventReferrals)
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 5)
-      .map(event => ({
-        eventId: event.eventId,
-        eventTitle: event.eventTitle,
-        referrals: event.count
-      }));
+    // Get top events by referrals
+    const topEvents = await db.collection('form_submissions').aggregate([
+      {
+        $match: {
+          technicalLeadEmail: email
+        }
+      },
+      {
+        $group: {
+          _id: '$eventId',
+          referrals: { $sum: 1 },
+          eventTitle: { $first: '$eventTitle' }
+        }
+      },
+      {
+        $sort: { referrals: -1 }
+      },
+      {
+        $limit: 5
+      },
+      {
+        $project: {
+          eventId: '$_id',
+          eventTitle: 1,
+          referrals: 1,
+          _id: 0
+        }
+      }
+    ]).toArray();
 
-    // Get recent referrals with details (last 10)
-    const recentReferrals = referralResponses
-      .slice(0, 10)
-      .map(response => ({
-        id: response._id.toString(),
-        eventTitle: response.eventTitle || 'Unknown Event',
-        eventId: response.eventId,
-        userName: response.userName || 'Anonymous',
-        createdAt: response.createdAt,
-        formTitle: response.formTitle || 'Registration Form'
-      }));
+    // Get recent referrals
+    const recentReferrals = await db.collection('form_submissions').find({
+      technicalLeadEmail: email
+    })
+    .sort({ createdAt: -1 })
+    .limit(10)
+    .toArray();
 
-    // Build profile response
-    const profile = {
-      email: user.email,
+    const stats = referralStats[0] || { totalReferrals: 0, thisMonth: 0 };
+
+    const publicProfile = {
+      id: user._id,
       name: user.name,
-      avatar: user.image || null,
-      totalReferrals,
-      thisMonth: thisMonthReferrals,
-      topEvents,
-      recentReferrals,
-      joinedDate: user.createdAt || new Date().toISOString()
+      email: user.email,
+      image: user.image,
+      bio: user.bio || 'Technical Lead helping students discover amazing events',
+      role: user.role,
+      createdAt: user.createdAt,
+      stats: {
+        totalReferrals: stats.totalReferrals,
+        thisMonth: stats.thisMonth,
+        topEvents: topEvents,
+        recentReferrals: recentReferrals.map(r => ({
+          id: r._id,
+          eventTitle: r.eventTitle,
+          eventId: r.eventId,
+          userName: r.name,
+          createdAt: r.createdAt,
+          formTitle: r.formTitle || 'Registration Form'
+        }))
+      }
     };
 
-    return NextResponse.json(profile);
-
-  } catch (error: any) {
-    console.error('Error fetching TL profile:', error);
-    return NextResponse.json(
-      { error: error.message || 'Failed to fetch profile' },
-      { status: 500 }
-    );
+    return NextResponse.json(publicProfile);
+  } catch (error) {
+    console.error('Error fetching technical lead profile:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

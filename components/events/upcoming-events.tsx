@@ -34,7 +34,7 @@ export default function UpcomingEvents() {
 
   const fetchUpcomingEvents = async () => {
     try {
-      const response = await fetch('/api/events/upcoming?limit=5');
+      const response = await fetch('/api/events/upcoming?limit=4');
       if (response.ok) {
         const data = await response.json();
         setEvents(data);

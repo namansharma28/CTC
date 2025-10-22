@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -12,11 +13,21 @@ interface CalendarEventCardProps {
 }
 
 export function CalendarEventCard({ event, variant = "default" }: CalendarEventCardProps) {
+  const router = useRouter();
+  
   // Add null checks for community properties
   const communityName = event.community?.name || "Community";
   const communityInitials = communityName.substring(0, 2);
   const communityHandle = event.community?.handle || "";
   const communityAvatar = event.community?.avatar || "";
+  
+  const handleCommunityClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (communityHandle) {
+      router.push(`/communities/${communityHandle}`);
+    }
+  };
   
   // Get event type icon
   const getEventTypeIcon = () => {
@@ -65,8 +76,25 @@ export function CalendarEventCard({ event, variant = "default" }: CalendarEventC
                   backgroundPosition: "center",
                 }}
               />
-              <div className="flex-1 space-y-1">
+              <div className="flex-1 space-y-2">
+                <div className="flex items-center gap-2">
+                  <Avatar className="h-5 w-5">
+                    <AvatarImage src={communityAvatar} />
+                    <AvatarFallback className="text-xs">{communityInitials}</AvatarFallback>
+                  </Avatar>
+                  <button 
+                    onClick={handleCommunityClick}
+                    className="text-xs font-medium text-muted-foreground hover:text-primary transition-colors hover:underline"
+                  >
+                    {communityName}
+                  </button>
+                </div>
                 <h3 className="font-semibold">{event.title}</h3>
+                {event.description && (
+                  <p className="text-sm text-muted-foreground line-clamp-1">
+                    {event.description}
+                  </p>
+                )}
                 <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
                   <div className="flex items-center gap-1">
                     <Calendar className="h-4 w-4" />
@@ -80,7 +108,6 @@ export function CalendarEventCard({ event, variant = "default" }: CalendarEventC
                     {getEventTypeIcon()}
                     <span>{getEventTypeLabel()}</span>
                   </div>
-                  
                 </div>
               </div>
             </div>
@@ -120,12 +147,15 @@ export function CalendarEventCard({ event, variant = "default" }: CalendarEventC
               <AvatarImage src={communityAvatar} />
               <AvatarFallback>{communityInitials}</AvatarFallback>
             </Avatar>
-            <Link href={`/communities/${communityHandle}`} className="text-sm font-medium hover:underline">
+            <button 
+              onClick={handleCommunityClick}
+              className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors hover:underline"
+            >
               {communityName}
-            </Link>
+            </button>
           </div>
           
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3 mb-3">
             <div className="flex items-start gap-2 text-sm">
               <CalendarDays className="mt-0.5 h-4 w-4 text-muted-foreground" />
               <span>{event.date}</span>
@@ -148,12 +178,16 @@ export function CalendarEventCard({ event, variant = "default" }: CalendarEventC
               <span>{event.attendees?.length || 0} attendees</span>
             </div>
           </div>
+          
+          {/* Event Description */}
+          {event.description && (
+            <p className="text-sm text-muted-foreground line-clamp-2">
+              {event.description}
+            </p>
+          )}
         </CardContent>
         
-        <CardFooter className="flex gap-2 border-t px-4 py-3">
-          <Button className="w-full">View Details</Button>
-          <Button variant="outline" className="w-full">RSVP</Button>
-        </CardFooter>
+
       </Card>
     </Link>
   );

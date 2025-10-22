@@ -34,11 +34,19 @@ export async function GET(
       );
     }
 
-    // Get the form
-    const form = await db.collection("forms").findOne({
+    // Get the form - try both string and ObjectId eventId for compatibility
+    let form = await db.collection("forms").findOne({
       _id: new ObjectId(params.formId),
       eventId: params.id,
     });
+
+    // If not found with string eventId, try with ObjectId eventId
+    if (!form) {
+      form = await db.collection("forms").findOne({
+        _id: new ObjectId(params.formId),
+        eventId: new ObjectId(params.id),
+      });
+    }
 
     if (!form) {
       return NextResponse.json(
@@ -46,6 +54,45 @@ export async function GET(
         { status: 404 }
       );
     }
+
+    // Get form responses
+    const responses = await db.collection("formResponses").aggregate([
+      {
+        $match: {
+          formId: new ObjectId(params.formId)
+        }
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "user"
+        }
+      },
+      {
+        $unwind: {
+          path: "$user",
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          formId: 1,
+          userId: 1,
+          answers: 1,
+          shortlisted: 1,
+          checkedIn: 1,
+          checkedInAt: 1,
+          createdAt: 1,
+          user: {
+            name: "$user.name",
+            email: "$user.email"
+          }
+        }
+      }
+    ]).toArray();
 
     // Transform the form data to match the frontend interface
     const transformedForm = {
@@ -58,7 +105,21 @@ export async function GET(
         type: field.type,
         required: field.required,
         options: field.options,
+        fileTypes: field.fileTypes,
+        maxFileSize: field.maxFileSize,
       })),
+      responses: responses.map((response: any) => ({
+        id: response._id.toString(),
+        formId: response.formId.toString(),
+        userId: response.userId.toString(),
+        user: response.user || { name: "Unknown User", email: "No email" },
+        answers: response.answers,
+        shortlisted: response.shortlisted || false,
+        checkedIn: response.checkedIn || false,
+        checkedInAt: response.checkedInAt,
+        createdAt: response.createdAt,
+      })),
+      createdAt: form.createdAt,
     };
 
     return NextResponse.json(transformedForm);

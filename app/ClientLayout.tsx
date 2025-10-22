@@ -14,7 +14,7 @@ import { useState, useEffect } from 'react';
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [isMobile, setIsMobile] = useState(false);
-  
+
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
@@ -24,7 +24,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
-  
+
   // Don't render layout components for auth pages and landing page
   if (pathname?.startsWith('/auth') || pathname === '/') {
     return (
@@ -42,7 +42,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       </ThemeProvider>
     );
   }
-  
+
   return (
     <ThemeProvider attribute="class" defaultTheme="dark">
       <AuthProvider>
@@ -56,15 +56,15 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
                   <Sidebar />
                 </div>
               )}
-              
+
               {/* Main content area */}
-              <main className="flex-1 w-full overflow-auto pb-16 md:pb-0">
+              <main className="flex-1 min-w-0 overflow-auto pb-16 md:pb-0 hundred">
                 <div className="mx-auto w-full h-full border-x border-border/20">
                   {children}
                 </div>
               </main>
             </div>
-            
+
             {/* Mobile bottom navbar */}
             {isMobile && <BottomNavbar />}
             <Toaster />

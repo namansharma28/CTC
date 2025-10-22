@@ -1,87 +1,68 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 import clientPromise from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
-import { sendNotification } from '@/app/api/notifications/send/route';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const client = await clientPromise;
     const db = client.db('CTC');
-
-    const tnpPosts = await db.collection('tnp_posts')
-      .find({})
+    
+    // Get all TNP posts
+    const tnpPosts = await db.collection('tnp_posts').find({})
       .sort({ createdAt: -1 })
       .toArray();
 
-    // Transform data for frontend
-    const transformedPosts = tnpPosts.map(post => ({
-      id: post._id.toString(),
+    const formattedPosts = tnpPosts.map(post => ({
+      id: post._id,
       title: post.title,
       content: post.content,
-      type: post.type,
-      company: post.company,
-      deadline: post.deadline,
-      requirements: post.requirements,
-      applicationLink: post.applicationLink,
-      salary: post.salary,
-      location: post.location,
+      category: post.category || 'general', // 'placement', 'internship', 'general', etc.
+      tags: post.tags || [],
       attachments: post.attachments || [],
+      image: post.image,
       date: post.createdAt,
-      createdAt: post.createdAt,
-      updatedAt: post.updatedAt,
-      community: {
-        name: 'Training & Placement Cell',
-        handle: 'tnp-cell',
-        avatar: 'https://github.com/shadcn.png'
+      community: post.community || {
+        name: 'TNP Cell',
+        handle: 'tnp',
+        avatar: null
       },
-      tags: post.tags || ['tnp', post.type]
+      author: post.author
     }));
 
     return NextResponse.json({
       success: true,
-      data: transformedPosts
+      data: formattedPosts
     });
   } catch (error) {
     console.error('Error fetching TNP posts:', error);
-    return NextResponse.json(
-      { success: false, error: 'Failed to fetch TNP posts' },
-      { status: 500 }
-    );
+    return NextResponse.json({
+      success: false,
+      error: 'Failed to fetch TNP posts'
+    }, { status: 500 });
   }
 }
 
-export async function POST(req: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-
-    if (!session?.user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+    
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Check if user has permission to create TNP posts (only operators and admins)
-    const userRole = (session.user as any).role;
-    const canCreateTNP = userRole === 'operator' || userRole === 'admin';
-
-    if (!canCreateTNP) {
-      return NextResponse.json(
-        { error: 'Forbidden: Only operators and admins can create TNP posts' },
-        { status: 403 }
-      );
+    // Check if user has permission to create TNP posts
+    const userRole = (session.user as any)?.role;
+    if (userRole !== 'operator' && userRole !== 'admin') {
+      return NextResponse.json({ error: 'Access denied. Only operators and admins can create TNP posts.' }, { status: 403 });
     }
 
-    const body = await req.json();
-    const { title, content, type, company, deadline, requirements, applicationLink, salary, location, attachments } = body;
+    const body = await request.json();
+    const { title, content, category, tags, attachments, image } = body;
 
-    if (!title || !content || !type) {
-      return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
-      );
+    if (!title || !content) {
+      return NextResponse.json({ error: 'Title and content are required' }, { status: 400 });
     }
 
     const client = await clientPromise;
@@ -90,54 +71,38 @@ export async function POST(req: NextRequest) {
     const newPost = {
       title,
       content,
-      type,
-      company: company || null,
-      deadline: deadline || null,
-      requirements: requirements || null,
-      applicationLink: applicationLink || null,
-      salary: salary || null,
-      location: location || null,
+      category: category || 'general',
+      tags: tags || [],
       attachments: attachments || [],
-      createdBy: session.user.id,
+      image: image || null,
+      author: {
+        name: session.user.name,
+        email: session.user.email,
+        id: session.user.id
+      },
+      community: {
+        name: 'TNP Cell',
+        handle: 'tnp',
+        avatar: null
+      },
       createdAt: new Date(),
-      updatedAt: new Date(),
-      tags: [type, 'tnp']
+      updatedAt: new Date()
     };
 
     const result = await db.collection('tnp_posts').insertOne(newPost);
 
-    const createdPost = {
-      id: result.insertedId.toString(),
-      ...newPost,
-      date: newPost.createdAt,
-      community: {
-        name: 'Training & Placement Cell',
-        handle: 'tnp-cell',
-        avatar: 'https://github.com/shadcn.png'
+    return NextResponse.json({
+      success: true,
+      data: {
+        id: result.insertedId,
+        ...newPost
       }
-    };
-
-    // Send notification to all CTC students about new TNP opportunity
-    try {
-      await sendNotification({
-        role: 'ctc_student',
-        title: `New ${type === 'job' ? 'Job' : type === 'internship' ? 'Internship' : 'TNP'} Opportunity`,
-        message: `${title} at ${company || 'a company'} has been posted. ${deadline ? `Application deadline: ${new Date(deadline).toLocaleDateString()}` : ''}`,
-        type: 'info',
-        actionUrl: '/tnp',
-        actionText: 'View Opportunity'
-      });
-    } catch (notificationError) {
-      console.error('Error sending TNP notification:', notificationError);
-      // Don't fail the post creation if notifications fail
-    }
-
-    return NextResponse.json(createdPost);
+    });
   } catch (error) {
     console.error('Error creating TNP post:', error);
-    return NextResponse.json(
-      { error: 'Failed to create TNP post' },
-      { status: 500 }
-    );
+    return NextResponse.json({
+      success: false,
+      error: 'Failed to create TNP post'
+    }, { status: 500 });
   }
 }

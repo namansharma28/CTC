@@ -101,15 +101,10 @@ export default function FormPage({ params }: { params: { id: string; formId: str
         throw new Error("Failed to fetch form");
       }
       
-      // Get form details
       const formData = await response.json();
       
-      // Get form responses
-      const responsesResponse = await fetch(`/api/events/${params.id}/forms/${params.formId}/responses`);
-      if (responsesResponse.ok) {
-        const responsesData = await responsesResponse.json();
-        formData.responses = responsesData;
-      } else {
+      // The form API should include responses, but if not, initialize empty array
+      if (!formData.responses) {
         formData.responses = [];
       }
       

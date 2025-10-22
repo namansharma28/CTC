@@ -1,82 +1,101 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import clientPromise from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    
+    if (!session?.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const client = await clientPromise;
     const db = client.db('CTC');
+    
+    // Handle admin user
+    if (session.user.id === 'admin') {
+      return NextResponse.json([]);
+    }
 
-    // Get events user is registered for
-    const userEvents = await db.collection('eventRegistrations')
-      .aggregate([
-        { $match: { userId: new ObjectId(session.user.id) } },
-        {
-          $lookup: {
-            from: 'events',
-            localField: 'eventId',
-            foreignField: '_id',
-            as: 'event'
-          }
-        },
-        { $unwind: '$event' },
-        {
-          $lookup: {
-            from: 'communities',
-            let: { communityId: { $toObjectId: '$event.communityId' } },
-            pipeline: [
-              { $match: { $expr: { $eq: ['$_id', '$$communityId'] } } }
-            ],
-            as: 'community'
-          }
-        },
-        { $unwind: '$community' },
-        {
-          $addFields: {
-            status: {
-              $cond: {
-                if: { $gte: ['$event.date', new Date().toISOString().split('T')[0]] },
-                then: 'upcoming',
-                else: 'past'
-              }
-            }
-          }
-        },
-        { $sort: { 'event.date': 1 } }
-      ])
-      .toArray();
+    // Get user
+    const user = await db.collection('users').findOne({ 
+      $or: [
+        { email: session.user.email },
+        { _id: new ObjectId(session.user.id) }
+      ]
+    });
+    
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
 
-    // Transform the data
-    const transformedEvents = userEvents.map(item => ({
-      _id: item.event._id.toString(),
-      title: item.event.title,
-      description: item.event.description,
-      date: item.event.date,
-      time: item.event.time,
-      location: item.event.location,
-      image: item.event.image,
-      community: {
-        name: item.community.name,
-        handle: item.community.handle,
-        avatar: item.community.avatar,
+    // Get events where user is registered/attending
+    const events = await db.collection('events').aggregate([
+      {
+        $match: {
+          $or: [
+            { attendees: user._id },
+            { createdBy: user._id }
+          ]
+        }
       },
-      status: item.status,
-      userRegistered: true,
-    }));
+      {
+        $lookup: {
+          from: 'communities',
+          localField: 'communityId',
+          foreignField: '_id',
+          as: 'community'
+        }
+      },
+      {
+        $unwind: {
+          path: '$community',
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $addFields: {
+          status: {
+            $cond: {
+              if: { $gte: [{ $dateFromString: { dateString: '$date' } }, new Date()] },
+              then: 'upcoming',
+              else: 'past'
+            }
+          },
+          userRegistered: {
+            $in: [user._id, { $ifNull: ['$attendees', []] }]
+          }
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          title: 1,
+          description: 1,
+          date: 1,
+          time: 1,
+          location: 1,
+          image: 1,
+          status: 1,
+          userRegistered: 1,
+          community: {
+            name: '$community.name',
+            handle: '$community.handle',
+            avatar: '$community.avatar'
+          }
+        }
+      },
+      {
+        $sort: { date: -1 }
+      }
+    ]).toArray();
 
-    return NextResponse.json(transformedEvents);
-  } catch (error: any) {
+    return NextResponse.json(events);
+  } catch (error) {
     console.error('Error fetching user events:', error);
-    return NextResponse.json(
-      { error: error.message || 'Failed to fetch user events' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

@@ -11,7 +11,7 @@ export async function GET(request: Request) {
     }
 
     const { searchParams } = new URL(request.url);
-    const limit = parseInt(searchParams.get('limit') || '5');
+    const limit = parseInt(searchParams.get('limit') || '4'); // Changed default to 4
 
     const client = await clientPromise;
     const db = client.db('CTC');
@@ -33,13 +33,13 @@ export async function GET(request: Request) {
 
     const followedCommunityIds = followedCommunities.map(f => f.communityId);
 
-    // Get upcoming events
+    // Get upcoming events (closest first)
     const today = new Date().toISOString().split('T')[0];
-    
+
     const events = await db.collection('events')
       .aggregate([
-        { 
-          $match: { 
+        {
+          $match: {
             $or: [
               { date: { $gte: today } },
               {
@@ -52,9 +52,24 @@ export async function GET(request: Request) {
         {
           $lookup: {
             from: 'communities',
-            let: { communityId: { $toObjectId: '$communityId' } },
+            let: { communityId: '$communityId' },
             pipeline: [
-              { $match: { $expr: { $eq: ['$_id', '$$communityId'] } } }
+              {
+                $match: {
+                  $expr: {
+                    $eq: [
+                      '$_id',
+                      {
+                        $cond: {
+                          if: { $type: '$$communityId' },
+                          then: { $toObjectId: '$$communityId' },
+                          else: '$$communityId'
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
             ],
             as: 'community'
           }
@@ -75,9 +90,9 @@ export async function GET(request: Request) {
             from: 'eventRegistrations',
             let: { eventId: '$_id' },
             pipeline: [
-              { 
-                $match: { 
-                  $expr: { 
+              {
+                $match: {
+                  $expr: {
                     $and: [
                       { $eq: ['$eventId', '$$eventId'] },
                       { $eq: ['$userId', { $toObjectId: session.user.id }] }
@@ -89,10 +104,13 @@ export async function GET(request: Request) {
             as: 'userRegistration'
           }
         },
-        { $sort: { date: 1, time: 1 } },
-        { $limit: limit * 3 } // Get more events to filter from
+        { $sort: { date: 1, time: 1 } }, // Sort by date ascending to get closest events first
+        { $limit: limit * 5 } // Get more events to filter from
       ])
       .toArray();
+
+    // If user has no communities or follows, show all upcoming events
+    const allRelevantCommunityIds = Array.from(new Set([...userCommunityIds, ...followedCommunityIds]));
 
     // Filter events based on user's relationship and transform
     const filteredEvents = events
@@ -100,10 +118,13 @@ export async function GET(request: Request) {
         const community = event.community[0];
         if (!community) return false;
 
+        // If user has no communities or follows, show all events
+        if (allRelevantCommunityIds.length === 0) return true;
+
         const communityId = community._id.toString();
         const isMember = userCommunityIds.includes(communityId);
         const isFollower = followedCommunityIds.includes(communityId);
-        const isAdmin = community.admins.includes(session.user.id);
+        const isAdmin = community.admins && community.admins.includes(session.user.id);
         const userRegistered = event.userRegistration.length > 0;
 
         return isMember || isFollower || isAdmin || userRegistered;

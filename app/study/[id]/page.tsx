@@ -1,11 +1,13 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { BookOpen, Calendar, Tag, Download, ArrowLeft } from "lucide-react";
+import { Calendar, Download, ArrowLeft, FileText, User, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSession } from "next-auth/react";
 import { formatDistanceToNow } from "date-fns";
 
@@ -14,10 +16,12 @@ interface StudyPost {
   title: string;
   content?: string;
   tags?: string[];
+  image?: string;
   attachments?: Array<{
     name: string;
     url: string;
     type: string;
+    originalName: string;
   }>;
   createdAt: string;
   updatedAt: string;
@@ -25,6 +29,10 @@ interface StudyPost {
   subject?: string;
   semester?: string;
   difficulty?: string;
+  author?: {
+    name: string;
+    email: string;
+  };
 }
 
 export default function StudyPostPage() {
@@ -76,7 +84,9 @@ export default function StudyPostPage() {
     return (
       <div className="container mx-auto py-8 px-4">
         <div className="text-center">
-          <BookOpen className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+          <div className="w-24 h-24 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+            <FileText className="h-12 w-12 text-muted-foreground" />
+          </div>
           <h1 className="text-2xl font-bold mb-2">Study Post Not Found</h1>
           <p className="text-muted-foreground mb-4">
             {error || 'The study post you are looking for does not exist.'}
@@ -96,95 +106,140 @@ export default function StudyPostPage() {
       <div className="mb-6">
         <Button variant="ghost" onClick={() => router.back()} className="mb-4">
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
+          Back to Study Posts
         </Button>
-        
-        <div className="flex items-start gap-4">
-          <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center">
-            <BookOpen className="h-6 w-6 text-white" />
-          </div>
-          
-          <div className="flex-1">
-            <h1 className="text-3xl font-bold mb-2">{post.title}</h1>
-            
-            <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-              <div className="flex items-center gap-1">
-                <Calendar className="h-4 w-4" />
-                <span>{formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}</span>
-              </div>
-              {post.subject && (
-                <Badge variant="outline">
-                  {post.subject}
-                </Badge>
-              )}
-              {post.semester && (
-                <Badge variant="outline">
-                  Semester {post.semester}
-                </Badge>
-              )}
-              {post.difficulty && (
-                <Badge variant="outline">
-                  {post.difficulty}
-                </Badge>
-              )}
+
+        {/* Cover Image */}
+        {post.image && (
+          <div className="relative w-full h-64 md:h-80 rounded-lg overflow-hidden mb-6 modern-card-hover">
+            <img
+              src={post.image}
+              alt={post.title}
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+            <div className="absolute bottom-4 left-4 right-4">
+              <Badge className="mb-2 bg-silver">
+                Study Material
+              </Badge>
+              <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">{post.title}</h1>
             </div>
-            
-            {/* Tags */}
-            {post.tags && Array.isArray(post.tags) && post.tags.length > 0 && (
-              <div className="flex gap-2 flex-wrap mb-4">
-                {post.tags.map(tag => (
-                  <Badge key={tag} variant="secondary" className="flex items-center gap-1">
-                    <Tag className="h-3 w-3" />
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            )}
           </div>
-        </div>
+        )}
+
+        {/* Header without image */}
+        {!post.image && (
+          <div className="mb-6">
+            <Badge className="mb-3 bg-silver">
+              Study Material
+            </Badge>
+            <h1 className="text-2xl md:text-3xl font-bold mb-4">{post.title}</h1>
+          </div>
+        )}
+
+        {/* Author and Meta Info */}
+        <Card className="mb-6 modern-card modern-card-hover">
+          <CardContent className="p-4">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <Avatar className="h-10 w-10">
+                  <AvatarImage src="" />
+                  <AvatarFallback>
+                    <User className="h-5 w-5" />
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="font-medium">
+                    {post.author?.name || 'Study Team'}
+                  </p>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Clock className="h-3 w-3" />
+                    <span>{formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                {post.subject && (
+                  <Badge variant="outline">
+                    {post.subject}
+                  </Badge>
+                )}
+                {post.semester && (
+                  <Badge variant="outline">
+                    Semester {post.semester}
+                  </Badge>
+                )}
+                {post.difficulty && (
+                  <Badge variant="outline">
+                    {post.difficulty}
+                  </Badge>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Content */}
         <div className="lg:col-span-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>Content</CardTitle>
-            </CardHeader>
-            <CardContent>
+          <Card className="modern-card modern-card-hover">
+            <CardContent className="p-6">
               <div className="prose max-w-none">
                 {post.content ? post.content.split('\n').map((paragraph, index) => (
                   <p key={index} className="mb-4 text-sm leading-relaxed">
                     {paragraph}
                   </p>
                 )) : (
-                  <p className="text-muted-foreground">No content available.</p>
+                  <div className="text-center py-8">
+                    <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                    <p className="text-muted-foreground">No content available for this study material.</p>
+                  </div>
                 )}
               </div>
+
+              {/* Tags */}
+              {post.tags && Array.isArray(post.tags) && post.tags.length > 0 && (
+                <div className="mt-6 pt-4 border-t">
+                  <h3 className="text-sm font-semibold mb-3">Tags</h3>
+                  <div className="flex gap-2 flex-wrap">
+                    {post.tags.map(tag => (
+                      <Badge key={tag} variant="secondary">
+                        #{tag}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
 
         {/* Sidebar */}
         <div className="space-y-6">
-          {/* Attachments */}
-          {post.attachments && Array.isArray(post.attachments) && post.attachments.length > 0 && (
-            <Card>
+          {/* Attachments - Exclude cover image */}
+          {post.attachments && Array.isArray(post.attachments) && post.attachments.filter(att => att.url !== post.image).length > 0 && (
+            <Card className="modern-card modern-card-hover">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Download className="h-5 w-5" />
-                  Attachments ({post.attachments.length})
+                  Downloads ({post.attachments.filter(att => att.url !== post.image).length})
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  {post.attachments.map((attachment, index) => (
-                    <div key={index} className="flex items-center justify-between p-2 border rounded-lg">
+                  {post.attachments.filter(att => att.url !== post.image).map((attachment, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 border rounded-lg transition-all hover:shadow-md hover:border-primary/30 bg-card">
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium truncate">{attachment.name}</p>
-                        <p className="text-xs text-muted-foreground">{attachment.type}</p>
+                        <p className="text-sm font-medium truncate">
+                          {attachment.originalName || attachment.name}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {attachment.type.split('/')[1]?.toUpperCase() || 'File'}
+                        </p>
                       </div>
-                      <Button size="sm" variant="outline" asChild>
+                      <Button size="sm" variant="outline" asChild className="ml-3 silver-hover">
                         <a href={attachment.url} target="_blank" rel="noopener noreferrer">
                           <Download className="h-4 w-4" />
                         </a>
@@ -197,69 +252,43 @@ export default function StudyPostPage() {
           )}
 
           {/* Study Information */}
-          <Card>
+          <Card className="modern-card modern-card-hover">
             <CardHeader>
               <CardTitle>Study Information</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Type:</span>
-                <Badge variant="outline">{post.type}</Badge>
-              </div>
+            <CardContent className="space-y-3">
               {post.subject && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Subject:</span>
-                  <span>{post.subject}</span>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-muted-foreground">Subject</span>
+                  <Badge variant="outline">{post.subject}</Badge>
                 </div>
               )}
               {post.semester && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Semester:</span>
-                  <span>{post.semester}</span>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-muted-foreground">Semester</span>
+                  <span className="font-medium">{post.semester}</span>
                 </div>
               )}
               {post.difficulty && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Difficulty:</span>
-                  <span>{post.difficulty}</span>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-muted-foreground">Difficulty</span>
+                  <Badge variant="outline">{post.difficulty}</Badge>
                 </div>
               )}
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Created:</span>
-                <span>{new Date(post.createdAt).toLocaleDateString()}</span>
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-muted-foreground">Published</span>
+                <span className="font-medium">
+                  {new Date(post.createdAt).toLocaleDateString()}
+                </span>
               </div>
               {post.updatedAt !== post.createdAt && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Updated:</span>
-                  <span>{new Date(post.updatedAt).toLocaleDateString()}</span>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-muted-foreground">Last Updated</span>
+                  <span className="font-medium">
+                    {new Date(post.updatedAt).toLocaleDateString()}
+                  </span>
                 </div>
               )}
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Tags:</span>
-                <span>{post.tags?.length || 0}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Attachments:</span>
-                <span>{post.attachments?.length || 0}</span>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Study Resources */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Study Resources</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center">
-                  <BookOpen className="h-6 w-6 text-white" />
-                </div>
-                <div>
-                  <p className="font-medium">Study Materials</p>
-                  <p className="text-sm text-muted-foreground">Academic Resources</p>
-                </div>
-              </div>
             </CardContent>
           </Card>
         </div>

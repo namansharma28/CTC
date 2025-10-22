@@ -1,69 +1,72 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import clientPromise from '@/lib/mongodb';
+import { ObjectId } from 'mongodb';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    
+    if (!session?.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const client = await clientPromise;
     const db = client.db('CTC');
+    
+    // Handle admin user
+    if (session.user.id === 'admin') {
+      return NextResponse.json([]);
+    }
 
-    // Get communities where user is admin or member
-    const communities = await db.collection('communities')
-      .aggregate([
-        {
-          $match: {
-            $or: [
-              { admins: session.user.id },
-              { members: session.user.id },
-              // Include rejected communities only for their creators
-              {
-                $and: [
-                  { status: 'rejected' },
-                  { creatorId: session.user.id }
-                ]
-              }
-            ]
-          }
-        },
-        {
-          $addFields: {
-            membersCount: { $size: '$members' },
-            userRole: {
-              $cond: {
-                if: { $in: [session.user.id, '$admins'] },
-                then: 'admin',
-                else: 'member'
-              }
-            }
-          }
-        },
-        {
-          $project: {
-            name: 1,
-            handle: 1,
-            description: 1,
-            avatar: 1,
-            membersCount: 1,
-            isVerified: 1,
-            userRole: 1
-          }
-        },
-        { $sort: { userRole: 1, name: 1 } } // Admins first, then alphabetical
-      ])
-      .toArray();
+    // Get user
+    const user = await db.collection('users').findOne({ 
+      $or: [
+        { email: session.user.email },
+        { _id: new ObjectId(session.user.id) }
+      ]
+    });
+    
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+
+    // Get communities where user is admin/owner
+    const ownedCommunities = await db.collection('communities').find({
+      $or: [
+        { createdBy: user._id },
+        { admins: user._id }
+      ]
+    }).toArray();
+
+    // Get communities where user is a member (but not admin)
+    const joinedCommunities = await db.collection('communities').find({
+      members: user._id,
+      createdBy: { $ne: user._id },
+      admins: { $ne: user._id }
+    }).toArray();
+
+    // Format the response
+    const formatCommunity = (community: any, userRole: 'admin' | 'member') => ({
+      _id: community._id,
+      name: community.name,
+      handle: community.handle,
+      description: community.description,
+      avatar: community.avatar,
+      membersCount: community.members?.length || 0,
+      isVerified: community.isVerified || false,
+      userRole
+    });
+
+    const communities = [
+      ...ownedCommunities.map(c => formatCommunity(c, 'admin')),
+      ...joinedCommunities.map(c => formatCommunity(c, 'member'))
+    ];
 
     return NextResponse.json(communities);
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error fetching user communities:', error);
-    return NextResponse.json(
-      { error: error.message || 'Failed to fetch user communities' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

@@ -18,6 +18,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Upload, X, FileText } from "lucide-react";
+import Link from "next/link";
 
 interface Form {
   id: string;
@@ -63,9 +64,12 @@ export default function SubmitFormPage({
   async function fetchForm() {
     try {
       const response = await fetch(`/api/events/${params.id}/forms/${params.formId}`);
+      
       if (!response.ok) {
-        throw new Error("Failed to fetch form");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to fetch form");
       }
+      
       const data = await response.json();
       setForm(data);
       
@@ -93,10 +97,11 @@ export default function SubmitFormPage({
         }
       });
       setFormData(initialData);
-    } catch (error) {
+    } catch (error: any) {
+      console.error("Form fetch error:", error);
       toast({
         title: "Error",
-        description: "Failed to load form",
+        description: error.message || "Failed to load form",
         variant: "destructive",
       });
     } finally {
@@ -349,11 +354,23 @@ export default function SubmitFormPage({
       <div className="container mx-auto py-8">
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
+            <FileText className="mb-4 h-12 w-12 text-muted-foreground" />
             <h3 className="mb-2 text-lg font-medium">Form Not Found</h3>
             <p className="mb-4 text-center text-muted-foreground">
-              The form you&apos;re looking for doesn&apos;t exist or has been removed
+              The registration form you&apos;re looking for doesn&apos;t exist or has been removed.
+              <br />
+              This might happen if the form hasn&apos;t been created yet or the link is incorrect.
             </p>
-            <Button onClick={() => router.back()}>Go Back</Button>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => router.back()}>
+                Go Back
+              </Button>
+              <Button asChild>
+                <Link href={`/events/${params.id}`}>
+                  View Event
+                </Link>
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>

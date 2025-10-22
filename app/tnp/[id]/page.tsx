@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Briefcase, Calendar, MapPin, DollarSign, Clock, Building, ArrowLeft, ExternalLink } from "lucide-react";
+import { Calendar, MapPin, DollarSign, Clock, Building, ArrowLeft, ExternalLink, FileText, User, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -17,14 +17,19 @@ interface TNPPost {
   content?: string;
   company: string;
   location: string;
-  type: 'internship' | 'job' | 'both';
+  type: 'internship' | 'job' | 'both' | 'placement';
   salary?: string;
   deadline: string;
   requirements?: string[];
   applicationLink?: string;
   tags?: string[];
+  image?: string;
   createdAt: string;
   updatedAt: string;
+  author?: {
+    name: string;
+    email: string;
+  };
 }
 
 export default function TNPPostPage() {
@@ -58,10 +63,11 @@ export default function TNPPostPage() {
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case 'internship': return 'bg-blue-100 text-blue-800';
-      case 'job': return 'bg-green-100 text-green-800';
-      case 'both': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'internship': return 'bg-blue-500 hover:bg-blue-600 text-white';
+      case 'job': return 'bg-green-500 hover:bg-green-600 text-white';
+      case 'placement': return 'bg-purple-500 hover:bg-purple-600 text-white';
+      case 'both': return 'bg-orange-500 hover:bg-orange-600 text-white';
+      default: return 'bg-gray-500 hover:bg-gray-600 text-white';
     }
   };
 
@@ -89,10 +95,12 @@ export default function TNPPostPage() {
     return (
       <div className="container mx-auto py-8 px-4">
         <div className="text-center">
-          <Briefcase className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-          <h1 className="text-2xl font-bold mb-2">Job Posting Not Found</h1>
+          <div className="w-24 h-24 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+            <Briefcase className="h-12 w-12 text-muted-foreground" />
+          </div>
+          <h1 className="text-2xl font-bold mb-2">TNP Post Not Found</h1>
           <p className="text-muted-foreground mb-4">
-            {error || 'The job posting you are looking for does not exist.'}
+            {error || 'The TNP post you are looking for does not exist.'}
           </p>
           <Button onClick={() => router.back()}>
             <ArrowLeft className="h-4 w-4 mr-2" />
@@ -111,63 +119,99 @@ export default function TNPPostPage() {
       <div className="mb-6">
         <Button variant="ghost" onClick={() => router.back()} className="mb-4">
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
+          Back to TNP Posts
         </Button>
-        
-        <div className="flex items-start gap-4">
-          <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center">
-            <Briefcase className="h-6 w-6 text-white" />
-          </div>
           
-          <div className="flex-1">
-            <div className="flex items-start justify-between mb-2">
-              <h1 className="text-3xl font-bold">{post.title}</h1>
+        {/* Cover Image */}
+        {post.image && (
+          <div className="relative w-full h-64 md:h-80 rounded-lg overflow-hidden mb-6 modern-card-hover">
+            <img
+              src={post.image}
+              alt={post.title}
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+            <div className="absolute bottom-4 left-4 right-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Badge className={getTypeColor(post.type)}>
+                  {post.type === 'both' ? 'Job & Internship' : 
+                   post.type === 'placement' ? 'Placement' :
+                   post.type.charAt(0).toUpperCase() + post.type.slice(1)}
+                </Badge>
+                {deadlinePassed && (
+                  <Badge variant="destructive">Deadline Passed</Badge>
+                )}
+              </div>
+              <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">{post.title}</h1>
+              <p className="text-white/90">{post.company} • {post.location}</p>
+            </div>
+          </div>
+        )}
+        
+        {/* Header without image */}
+        {!post.image && (
+          <div className="mb-6">
+            <div className="flex items-center gap-2 mb-3">
+              <Badge className={getTypeColor(post.type)}>
+                {post.type === 'both' ? 'Job & Internship' : 
+                 post.type === 'placement' ? 'Placement' :
+                 post.type.charAt(0).toUpperCase() + post.type.slice(1)}
+              </Badge>
               {deadlinePassed && (
                 <Badge variant="destructive">Deadline Passed</Badge>
               )}
             </div>
-            
-            <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-              <div className="flex items-center gap-1">
-                <Building className="h-4 w-4" />
-                <span className="font-medium">{post.company}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <MapPin className="h-4 w-4" />
-                <span>{post.location}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Calendar className="h-4 w-4" />
-                <span>Posted {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}</span>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-2 mb-4">
-              <Badge className={getTypeColor(post.type)}>
-                {post.type === 'both' ? 'Job & Internship' : post.type.charAt(0).toUpperCase() + post.type.slice(1)}
-              </Badge>
-              {post.salary && (
-                <Badge variant="outline" className="flex items-center gap-1">
-                  <DollarSign className="h-3 w-3" />
-                  {post.salary}
-                </Badge>
-              )}
-              <Badge variant={deadlinePassed ? "destructive" : "secondary"} className="flex items-center gap-1">
-                <Clock className="h-3 w-3" />
-                Deadline: {new Date(post.deadline).toLocaleDateString()}
-              </Badge>
-            </div>
+            <h1 className="text-2xl md:text-3xl font-bold mb-2">{post.title}</h1>
+            <p className="text-lg text-muted-foreground">{post.company} • {post.location}</p>
           </div>
-        </div>
+        )}
+        
+        {/* Author and Meta Info */}
+        <Card className="mb-6 modern-card modern-card-hover">
+          <CardContent className="p-4">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <Avatar className="h-10 w-10">
+                  <AvatarImage src="" />
+                  <AvatarFallback>
+                    <User className="h-5 w-5" />
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="font-medium">
+                    {post.author?.name || 'TNP Team'}
+                  </p>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Clock className="h-3 w-3" />
+                    <span>Posted {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex flex-wrap gap-2">
+                {post.salary && (
+                  <Badge variant="outline" className="flex items-center gap-1">
+                    <DollarSign className="h-3 w-3" />
+                    {post.salary}
+                  </Badge>
+                )}
+                <Badge variant={deadlinePassed ? "destructive" : "outline"} className="flex items-center gap-1">
+                  <Clock className="h-3 w-3" />
+                  Deadline: {new Date(post.deadline).toLocaleDateString()}
+                </Badge>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
           {/* Description */}
-          <Card>
+          <Card className="modern-card modern-card-hover">
             <CardHeader>
-              <CardTitle>Job Description</CardTitle>
+              <CardTitle>Description</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="prose max-w-none">
@@ -176,7 +220,10 @@ export default function TNPPostPage() {
                     {paragraph}
                   </p>
                 )) : (
-                  <p className="text-muted-foreground">No content available.</p>
+                  <div className="text-center py-8">
+                    <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                    <p className="text-muted-foreground">No description available for this opportunity.</p>
+                  </div>
                 )}
               </div>
             </CardContent>
@@ -184,12 +231,12 @@ export default function TNPPostPage() {
 
           {/* Requirements */}
           {post.requirements && Array.isArray(post.requirements) && post.requirements.length > 0 && (
-            <Card>
+            <Card className="modern-card modern-card-hover">
               <CardHeader>
                 <CardTitle>Requirements</CardTitle>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-2">
+                <ul className="space-y-3">
                   {post.requirements.map((requirement, index) => (
                     <li key={index} className="flex items-start gap-2 text-sm">
                       <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
@@ -203,7 +250,7 @@ export default function TNPPostPage() {
 
           {/* Application */}
           {!deadlinePassed && (
-            <Card>
+            <Card className="modern-card modern-card-hover border-primary/20">
               <CardHeader>
                 <CardTitle>Apply Now</CardTitle>
                 <CardDescription>
@@ -212,7 +259,7 @@ export default function TNPPostPage() {
               </CardHeader>
               <CardContent>
                 {post.applicationLink ? (
-                  <Button asChild className="w-full">
+                  <Button asChild className="w-full silver-hover">
                     <a href={post.applicationLink} target="_blank" rel="noopener noreferrer">
                       <ExternalLink className="h-4 w-4 mr-2" />
                       Apply on Company Website
@@ -233,34 +280,36 @@ export default function TNPPostPage() {
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Quick Info */}
-          <Card>
+          <Card className="modern-card modern-card-hover">
             <CardHeader>
               <CardTitle>Quick Information</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Company:</span>
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-muted-foreground">Company</span>
                 <span className="font-medium">{post.company}</span>
               </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Location:</span>
-                <span>{post.location}</span>
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-muted-foreground">Location</span>
+                <span className="font-medium">{post.location}</span>
               </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Type:</span>
-                <Badge className={getTypeColor(post.type)} variant="outline">
-                  {post.type === 'both' ? 'Job & Internship' : post.type.charAt(0).toUpperCase() + post.type.slice(1)}
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-muted-foreground">Type</span>
+                <Badge className={getTypeColor(post.type)}>
+                  {post.type === 'both' ? 'Job & Internship' : 
+                   post.type === 'placement' ? 'Placement' :
+                   post.type.charAt(0).toUpperCase() + post.type.slice(1)}
                 </Badge>
               </div>
               {post.salary && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Salary:</span>
-                  <span className="font-medium">{post.salary}</span>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-muted-foreground">Salary</span>
+                  <Badge variant="outline">{post.salary}</Badge>
                 </div>
               )}
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Deadline:</span>
-                <span className={deadlinePassed ? "text-red-600 font-medium" : ""}>
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-muted-foreground">Deadline</span>
+                <span className={`font-medium ${deadlinePassed ? "text-destructive" : ""}`}>
                   {new Date(post.deadline).toLocaleDateString()}
                 </span>
               </div>
@@ -269,7 +318,7 @@ export default function TNPPostPage() {
 
           {/* Tags */}
           {post.tags && Array.isArray(post.tags) && post.tags.length > 0 && (
-            <Card>
+            <Card className="modern-card modern-card-hover">
               <CardHeader>
                 <CardTitle>Tags</CardTitle>
               </CardHeader>
@@ -286,21 +335,24 @@ export default function TNPPostPage() {
           )}
 
           {/* Company Information */}
-          <Card>
+          <Card className="modern-card modern-card-hover">
             <CardHeader>
-              <CardTitle>Company</CardTitle>
+              <CardTitle>Company Details</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center">
-                  <Building className="h-6 w-6 text-white" />
-                </div>
+              <div className="flex items-center gap-3 mb-3">
+                <Avatar className="h-10 w-10">
+                  <AvatarImage src="" />
+                  <AvatarFallback>
+                    <Building className="h-5 w-5" />
+                  </AvatarFallback>
+                </Avatar>
                 <div>
                   <p className="font-medium">{post.company}</p>
                   <p className="text-sm text-muted-foreground">{post.location}</p>
                 </div>
               </div>
-              <div className="mt-3 pt-3 border-t text-xs text-muted-foreground">
+              <div className="pt-3 border-t text-xs text-muted-foreground space-y-1">
                 <p>Posted: {new Date(post.createdAt).toLocaleDateString()}</p>
                 {post.updatedAt !== post.createdAt && (
                   <p>Updated: {new Date(post.updatedAt).toLocaleDateString()}</p>

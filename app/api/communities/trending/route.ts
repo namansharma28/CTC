@@ -39,11 +39,10 @@ export async function GET() {
           } else {
             // Check if user is following
             const isFollowing = await db.collection('follows').findOne({
-              followerId: userId,
-              followingId: community._id.toString(),
-              type: 'community'
+              userId: userId,
+              communityId: community._id.toString()
             });
-            userRelation = isFollowing ? 'following' : null;
+            userRelation = isFollowing ? 'follower' : null;
           }
         }
 

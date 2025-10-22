@@ -30,27 +30,6 @@ export default function EventsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("date");
   const [filterBy, setFilterBy] = useState("all");
-
-  interface Event {
-  _id: string;
-  title: string;
-  description: string;
-  date: string;
-  time: string;
-  location: string;
-  capacity: number;
-  image?: string;
-  attendees: string[];
-  interested: string[];
-  eventType: 'offline' | 'online' | 'hybrid';
-  creatorId: string;
-  community: {
-    id: string;
-    handle: string;
-    name: string;
-    avatar: string;
-  }
-}
   useEffect(() => {
     fetchEvents();
   }, []);

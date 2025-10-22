@@ -27,15 +27,7 @@ interface Event {
   };
 }
 
-interface Community {
-  _id: string;
-  name: string;
-  handle: string;
-  avatar?: string;
-  isVerified?: boolean;
-  membersCount: number;
-  userRelation?: string;
-}
+
 
 export default function FeedCard({ item }: FeedCardProps) {
   const { toast } = useToast();
@@ -104,7 +96,7 @@ export default function FeedCard({ item }: FeedCardProps) {
 
     return (
       <Link href={`/events/${event._id || event.id || item.id}`}>
-        <Card className="overflow-hidden transition-all duration-300 modern-card-hover min-h-[450px]">
+        <Card className="overflow-hidden transition-all duration-300 modern-card-hover min-h-[420px]">
           <div className="relative">
             <div className="h-64 w-full bg-gradient-to-r relative">
               {item.image ? (
@@ -188,20 +180,20 @@ export default function FeedCard({ item }: FeedCardProps) {
             )}
           </CardContent>
 
-          <CardFooter className="flex gap-2 border-t px-4 py-3">
-            <Button className="w-full">View Details</Button>
-            <Button variant="outline" className="w-full">RSVP</Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-muted-foreground hover:text-foreground"
-              onClick={(e) => {
-                e.preventDefault();
-                handleShare();
-              }}
-            >
-              <Share2 size={16} />
-            </Button>
+          <CardFooter className="border-t bg-muted/20 p-2 px-3">
+            <div className="flex w-full items-center justify-end">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 text-muted-foreground"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleShare();
+                }}
+              >
+                <Share2 size={16} />
+              </Button>
+            </div>
           </CardFooter>
         </Card>
       </Link>
@@ -211,7 +203,7 @@ export default function FeedCard({ item }: FeedCardProps) {
   // Regular layout for other content types
   return (
     <Link href={`/${item.type}/${item.id}`} className="block">
-      <Card className="overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 modern-card-hover min-h-[500px]">
+      <Card className={`overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 modern-card-hover ${hasImages ? 'min-h-[500px]' : 'min-h-fit'}`}>
         {/* Image Section - Full height image display */}
         {hasImages && (
           <div className="relative w-full h-80 bg-gray-100">
@@ -279,42 +271,36 @@ export default function FeedCard({ item }: FeedCardProps) {
           </div>
         )}
 
-        {/* Default header for posts without images */}
-        {!hasImages && (
-          <div className={`p-4 border-b bg-gradient-to-r ${item.type === 'tnp' ? 'from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20' :
-            item.type === 'study' ? 'from-silver/10 to-silver/20 dark:from-silver/5 dark:to-silver/10' :
-              'from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20'
-            }`}>
-            <div className="flex items-center justify-between mb-2">
-              <Badge className={`${item.type === 'tnp' ? 'bg-green-500' :
-                item.type === 'study' ? 'bg-silver' :
-                  'bg-blue-500'
-                }`}>
-                {item.type === 'tnp' ? 'TNP' :
-                  item.type === 'study' ? 'Study' : item.type}
-              </Badge>
-              <p className="text-xs text-muted-foreground">{timeAgo}</p>
-            </div>
-            <h3 className="text-lg font-bold">{item.title}</h3>
-          </div>
-        )}
 
-        <CardContent className="p-3">
-          {/* Community info and title for posts with images (already shown in overlay) */}
-          {!hasImages && item.community && (
-            <div className="mb-3 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src={item.community.avatar || ''} />
-                  <AvatarFallback>
-                    {item.community.name ? item.community.name.substring(0, 2) : 'CO'}
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">{item.community.name || 'Community'}</p>
-                  <p className="text-xs text-muted-foreground">@{item.community.handle || 'unknown'}</p>
-                </div>
+
+        <CardContent className={hasImages ? "p-4" : "p-4 pb-3"}>
+          {/* Header for posts without images */}
+          {!hasImages && (
+            <div className="mb-3">
+              <div className="flex items-center justify-between mb-2">
+                <Badge className={`${item.type === 'tnp' ? 'bg-green-500' :
+                  item.type === 'study' ? 'bg-silver' :
+                    'bg-blue-500'
+                  }`}>
+                  {item.type === 'tnp' ? 'TNP' :
+                    item.type === 'study' ? 'Study' : item.type}
+                </Badge>
+                <p className="text-xs text-muted-foreground">{timeAgo}</p>
               </div>
+              <h3 className="text-lg font-bold mb-2">{item.title}</h3>
+              {item.community && (
+                <div className="flex items-center gap-2 mb-1">
+                  <Avatar className="h-5 w-5">
+                    <AvatarImage src={item.community.avatar || ''} />
+                    <AvatarFallback className="text-xs">
+                      {item.community.name ? item.community.name.substring(0, 2) : 'CO'}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">{item.community.name || 'Community'}</p>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -334,8 +320,6 @@ export default function FeedCard({ item }: FeedCardProps) {
             </div>
           )}
 
-          {item.type === "update" && <h4 className="mb-2 font-semibold">{item.title}</h4>}
-
           <p className="text-sm leading-relaxed">{item.content}</p>
 
           {item.eventId && item.type === "update" && (
@@ -347,7 +331,7 @@ export default function FeedCard({ item }: FeedCardProps) {
 
           {/* Display non-image attachments with download buttons */}
           {(item as any).attachments && (item as any).attachments.length > 0 && (
-            <div className="mt-2">
+            <div className={hasImages ? "mt-2" : "mt-3"}>
               {/* Show non-image attachments */}
               {(item as any).attachments.filter((file: any) => !file.type.startsWith('image/')).length > 0 && (
                 <div>
@@ -468,7 +452,7 @@ export default function FeedCard({ item }: FeedCardProps) {
           )}
 
           {item.tags && item.tags.length > 0 && (
-            <div className="mt-3 flex flex-wrap gap-1">
+            <div className={`${hasImages ? "mt-3" : "mt-2"} flex flex-wrap gap-1`}>
               {item.tags.map((tag) => (
                 <Badge key={tag} variant="secondary" className="text-xs">
                   #{tag}
