@@ -136,7 +136,7 @@ export default function TNPPostPage() {
                 <Badge className={getTypeColor(post.type)}>
                   {post.type === 'both' ? 'Job & Internship' : 
                    post.type === 'placement' ? 'Placement' :
-                   post.type.charAt(0).toUpperCase() + post.type.slice(1)}
+                   post.type ? post.type.charAt(0).toUpperCase() + post.type.slice(1) : 'Job'}
                 </Badge>
                 {deadlinePassed && (
                   <Badge variant="destructive">Deadline Passed</Badge>
@@ -155,7 +155,7 @@ export default function TNPPostPage() {
               <Badge className={getTypeColor(post.type)}>
                 {post.type === 'both' ? 'Job & Internship' : 
                  post.type === 'placement' ? 'Placement' :
-                 post.type.charAt(0).toUpperCase() + post.type.slice(1)}
+                 post.type ? post.type.charAt(0).toUpperCase() + post.type.slice(1) : 'Job'}
               </Badge>
               {deadlinePassed && (
                 <Badge variant="destructive">Deadline Passed</Badge>
@@ -298,7 +298,7 @@ export default function TNPPostPage() {
                 <Badge className={getTypeColor(post.type)}>
                   {post.type === 'both' ? 'Job & Internship' : 
                    post.type === 'placement' ? 'Placement' :
-                   post.type.charAt(0).toUpperCase() + post.type.slice(1)}
+                   post.type ? post.type.charAt(0).toUpperCase() + post.type.slice(1) : 'Job'}
                 </Badge>
               </div>
               {post.salary && (

@@ -123,11 +123,27 @@ export default function Home() {
           type: 'study'
         })) : [];
 
+        // Filter out past events and updates
+        const now = new Date();
+        const filteredEvents = (eventsData.events || []).filter((event: any) => {
+          // For events, check if the event date hasn't passed
+          if (event.date) {
+            const eventDate = new Date(event.date);
+            return eventDate >= now;
+          }
+          return true; // Keep events without dates
+        });
+
         const combinedFeed = [
-          ...(eventsData.events || []),
+          ...filteredEvents,
           ...studyItems,
           ...filteredTnpItems
-        ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        ].sort((a, b) => {
+          // Sort by creation date (latest first)
+          const dateA = new Date(a.createdAt || a.date || 0);
+          const dateB = new Date(b.createdAt || b.date || 0);
+          return dateB.getTime() - dateA.getTime();
+        });
 
         setAllFeedItems(combinedFeed);
       } catch (error) {
@@ -150,7 +166,36 @@ export default function Home() {
       const data = await response.json();
 
       if (data.events && Array.isArray(data.events)) {
-        setEventsFeedItems(prev => [...prev, ...data.events]);
+        setEventsFeedItems(prev => {
+          const newEvents = [...prev, ...data.events];
+
+          // Filter out past events and updates
+          const now = new Date();
+          const filteredEvents = newEvents.filter((event: any) => {
+            // For events, check if the event date hasn't passed
+            if (event.date) {
+              const eventDate = new Date(event.date);
+              return eventDate >= now;
+            }
+            return true; // Keep events without dates
+          });
+
+          // Update the combined feed for "All Posts" tab
+          const combinedFeed = [
+            ...filteredEvents,
+            ...studyFeedItems,
+            ...tnpFeedItems
+          ].sort((a, b) => {
+            // Sort by creation date (latest first)
+            const dateA = new Date(a.createdAt || a.date || 0);
+            const dateB = new Date(b.createdAt || b.date || 0);
+            return dateB.getTime() - dateA.getTime();
+          });
+
+          setAllFeedItems(combinedFeed);
+          return newEvents;
+        });
+
         setEventsPage(nextPage);
         setEventsHasMore(data.pagination?.hasNext || false);
       }
