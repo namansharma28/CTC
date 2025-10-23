@@ -117,7 +117,7 @@ export default function TechnicalLeadProfilePage() {
           <CardContent className="text-center py-8">
             <Shield className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
             <p className="text-muted-foreground mb-4">{error || "Profile not found"}</p>
-            <Link href="/">
+            <Link href="/home">
               <Button variant="outline">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Home
@@ -133,7 +133,7 @@ export default function TechnicalLeadProfilePage() {
     <div className="container mx-auto py-4 px-4 sm:py-8 space-y-6 sm:space-y-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <Link href="/">
+        <Link href="/home">
           <Button variant="ghost" className="self-start">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Home

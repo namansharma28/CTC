@@ -112,18 +112,21 @@ export default function StudyPostPage() {
 
         {/* Cover Image */}
         {post.image && (
-          <div className="relative w-full h-64 md:h-80 rounded-lg overflow-hidden mb-6 modern-card-hover">
+          <div className="relative w-full h-64 md:h-80 lg:h-96 rounded-xl overflow-hidden mb-6 shadow-lg">
             <img
               src={post.image}
               alt={post.title}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-            <div className="absolute bottom-4 left-4 right-4">
-              <Badge className="mb-2 bg-silver">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+            <div className="absolute bottom-6 left-6 right-6">
+              <Badge className="mb-3 bg-silver shadow-lg">
                 Study Material
               </Badge>
-              <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">{post.title}</h1>
+              <h1 className="text-2xl md:text-4xl font-bold text-white mb-2 drop-shadow-lg">{post.title}</h1>
+              {post.subject && (
+                <p className="text-white/90 text-lg drop-shadow-md">{post.subject}</p>
+              )}
             </div>
           </div>
         )}

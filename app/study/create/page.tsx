@@ -72,7 +72,7 @@ export default function CreateStudyPost() {
           title: "Success",
           description: "Study post created successfully",
         });
-        router.push('/');
+        router.push('/home');
       } else {
         throw new Error('Failed to create post');
       }
@@ -119,7 +119,7 @@ export default function CreateStudyPost() {
   return (
     <div className="container mx-auto py-8 max-w-4xl">
       <div className="mb-6">
-        <Link href="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground">
+        <Link href="/home" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Home
         </Link>

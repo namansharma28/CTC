@@ -33,7 +33,7 @@ export default function OperatorSettings() {
           description: "You don't have permission to access this page",
           variant: "destructive",
         });
-        router.push("/");
+        router.push("/home");
         return;
       }
       setIsLoading(false);

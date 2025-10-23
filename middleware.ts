@@ -9,7 +9,7 @@ export async function middleware(request: NextRequest) {
 
   if (isAuthPage) {
     if (isAuth) {
-      return NextResponse.redirect(new URL('/', request.url));
+      return NextResponse.redirect(new URL('/home', request.url));
     }
     return null;
   }

@@ -44,7 +44,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           description: "You don't have permission to access this page",
           variant: "destructive",
         });
-        router.push("/");
+        router.push("/home");
       }
     } else if (status === "unauthenticated") {
       router.push("/admin/login");

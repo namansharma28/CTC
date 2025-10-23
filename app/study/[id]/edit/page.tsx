@@ -54,7 +54,7 @@ export default function EditStudyPost() {
         description: "Only operators and admins can edit study posts",
         variant: "destructive",
       });
-      router.push('/');
+      router.push('/home');
       return;
     }
 

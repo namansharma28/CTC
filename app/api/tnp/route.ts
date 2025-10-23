@@ -21,22 +21,39 @@ export async function GET(request: NextRequest) {
       .sort({ createdAt: -1 })
       .toArray();
 
-    const formattedPosts = tnpPosts.map(post => ({
-      id: post._id,
-      title: post.title,
-      content: post.content,
-      category: post.category || 'general', // 'placement', 'internship', 'general', etc.
-      tags: post.tags || [],
-      attachments: post.attachments || [],
-      image: post.image,
-      date: post.createdAt,
-      community: post.community || {
-        name: 'TNP Cell',
-        handle: 'tnp',
-        avatar: null
-      },
-      author: post.author
-    }));
+    const formattedPosts = tnpPosts.map(post => {
+      const attachments = post.attachments || [];
+      const imageAttachments = attachments.filter((file: any) => file.type && file.type.startsWith('image/'));
+      const coverImage = post.image || (imageAttachments.length > 0 ? imageAttachments[0].url : null);
+
+      return {
+        id: post._id,
+        title: post.title,
+        content: post.content,
+        company: post.company || '',
+        location: post.location || '',
+        type: post.type || post.category || 'announcement',
+        salary: post.salary || '',
+        deadline: post.deadline || '',
+        requirements: post.requirements || '',
+        applicationLink: post.applicationLink || '',
+        tags: post.tags || [],
+        attachments: attachments,
+        image: coverImage,
+        date: post.createdAt,
+        createdAt: post.createdAt,
+        updatedAt: post.updatedAt,
+        community: post.community || {
+          name: 'TNP Cell',
+          handle: 'tnp',
+          avatar: null
+        },
+        author: post.author || {
+          name: 'TNP Team',
+          email: 'tnp@college.edu'
+        }
+      };
+    });
 
     return NextResponse.json({
       success: true,
@@ -66,7 +83,18 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { title, content, category, tags, attachments, image } = body;
+    const { 
+      title, 
+      content, 
+      type, 
+      company, 
+      location, 
+      salary, 
+      deadline, 
+      requirements, 
+      applicationLink, 
+      attachments 
+    } = body;
 
     if (!title || !content) {
       return NextResponse.json({ error: 'Title and content are required' }, { status: 400 });
@@ -75,22 +103,27 @@ export async function POST(request: NextRequest) {
     const client = await clientPromise;
     const db = client.db('CTC');
 
+    // Find the cover image from attachments
+    const imageFiles = (attachments || []).filter((file: any) => file.type.startsWith('image/'));
+    const coverImage = imageFiles.length > 0 ? imageFiles[0].url : null;
+
     const newPost = {
       title,
       content,
-      category: category || 'general',
-      tags: tags || [],
+      type: type || 'announcement',
+      company: company || '',
+      location: location || '',
+      salary: salary || '',
+      deadline: deadline ? new Date(deadline) : null,
+      requirements: requirements || '',
+      applicationLink: applicationLink || '',
+      tags: [],
       attachments: attachments || [],
-      image: image || null,
+      image: coverImage,
       author: {
         name: session.user.name,
         email: session.user.email,
         id: session.user.id
-      },
-      community: {
-        name: 'TNP Cell',
-        handle: 'tnp',
-        avatar: null
       },
       createdAt: new Date(),
       updatedAt: new Date()

@@ -20,27 +20,35 @@ export async function GET(
       return NextResponse.json({ error: 'TNP post not found' }, { status: 404 });
     }
 
+    // Extract cover image from attachments if not directly set
+    const attachments = post.attachments || [];
+    const imageAttachments = attachments.filter((file: any) => file.type && file.type.startsWith('image/'));
+    const coverImage = post.image || (imageAttachments.length > 0 ? imageAttachments[0].url : null);
+
     const formattedPost = {
+      _id: post._id,
       id: post._id,
       title: post.title,
       content: post.content,
-      category: post.category || 'general',
+      company: post.company || '',
+      location: post.location || '',
+      type: post.type || post.category || 'announcement',
+      salary: post.salary || '',
+      deadline: post.deadline || '',
+      requirements: post.requirements ? (Array.isArray(post.requirements) ? post.requirements : post.requirements.split('\n').filter(Boolean)) : [],
+      applicationLink: post.applicationLink || '',
       tags: post.tags || [],
-      attachments: post.attachments || [],
-      image: post.image,
-      date: post.createdAt,
-      community: post.community || {
-        name: 'TNP Cell',
-        handle: 'tnp',
-        avatar: null
-      },
-      author: post.author
+      attachments: attachments,
+      image: coverImage,
+      createdAt: post.createdAt,
+      updatedAt: post.updatedAt,
+      author: post.author || {
+        name: 'TNP Team',
+        email: 'tnp@college.edu'
+      }
     };
 
-    return NextResponse.json({
-      success: true,
-      data: formattedPost
-    });
+    return NextResponse.json(formattedPost);
   } catch (error) {
     console.error('Error fetching TNP post:', error);
     return NextResponse.json({

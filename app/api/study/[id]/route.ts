@@ -22,8 +22,14 @@ export async function GET(
       );
     }
 
+    // Extract cover image from attachments
+    const attachments = post.attachments || [];
+    const imageAttachments = attachments.filter((file: any) => file.type && file.type.startsWith('image/'));
+    const coverImage = imageAttachments.length > 0 ? imageAttachments[0].url : null;
+
     // Transform data for frontend
     const transformedPost = {
+      _id: post._id,
       id: post._id.toString(),
       title: post.title,
       content: post.content,
@@ -35,9 +41,14 @@ export async function GET(
       estimatedTime: post.estimatedTime,
       prerequisites: post.prerequisites,
       learningOutcomes: post.learningOutcomes,
-      attachments: post.attachments || [],
+      attachments: attachments,
+      image: coverImage,
       createdAt: post.createdAt,
       updatedAt: post.updatedAt,
+      author: post.author || {
+        name: 'Study Team',
+        email: 'study@college.edu'
+      }
     };
 
     return NextResponse.json(transformedPost);

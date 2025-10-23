@@ -46,7 +46,7 @@ export default function OperatorTNP() {
           description: "You don't have permission to access this page",
           variant: "destructive",
         });
-        router.push("/");
+        router.push("/home");
         return;
       }
       fetchPosts();

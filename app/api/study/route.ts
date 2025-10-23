@@ -15,28 +15,35 @@ export async function GET() {
       .toArray();
 
     // Transform data for frontend
-    const transformedPosts = studyPosts.map(post => ({
-      id: post._id.toString(),
-      title: post.title || 'Untitled',
-      content: post.content || '',
-      type: post.type || 'announcement',
-      subject: post.subject,
-      semester: post.semester,
-      difficulty: post.difficulty,
-      estimatedTime: post.estimatedTime,
-      prerequisites: post.prerequisites,
-      learningOutcomes: post.learningOutcomes,
-      attachments: post.attachments || [],
-      date: post.createdAt || new Date().toISOString(),
-      createdAt: post.createdAt || new Date().toISOString(),
-      updatedAt: post.updatedAt || new Date().toISOString(),
-      community: {
-        name: 'Study Resources',
-        handle: 'study-resources',
-        avatar: 'https://github.com/shadcn.png'
-      },
-      tags: post.tags ? post.tags.split(',').map((tag: string) => tag.trim()) : ['study', post.type || 'announcement']
-    }));
+    const transformedPosts = studyPosts.map(post => {
+      const attachments = post.attachments || [];
+      const imageAttachments = attachments.filter((file: any) => file.type && file.type.startsWith('image/'));
+      const coverImage = imageAttachments.length > 0 ? imageAttachments[0].url : null;
+
+      return {
+        id: post._id.toString(),
+        title: post.title || 'Untitled',
+        content: post.content || '',
+        type: post.type || 'announcement',
+        subject: post.subject,
+        semester: post.semester,
+        difficulty: post.difficulty,
+        estimatedTime: post.estimatedTime,
+        prerequisites: post.prerequisites,
+        learningOutcomes: post.learningOutcomes,
+        attachments: attachments,
+        image: coverImage,
+        date: post.createdAt || new Date().toISOString(),
+        createdAt: post.createdAt || new Date().toISOString(),
+        updatedAt: post.updatedAt || new Date().toISOString(),
+        community: {
+          name: 'Study Resources',
+          handle: 'study-resources',
+          avatar: 'https://github.com/shadcn.png'
+        },
+        tags: post.tags ? post.tags.split(',').map((tag: string) => tag.trim()) : ['study', post.type || 'announcement']
+      };
+    });
 
     return NextResponse.json({
       success: true,
@@ -98,6 +105,11 @@ export async function POST(req: NextRequest) {
     const client = await clientPromise;
     const db = client.db('CTC');
 
+    // Extract cover image from attachments
+    const attachmentFiles = attachments || [];
+    const imageFiles = attachmentFiles.filter((file: any) => file.type && file.type.startsWith('image/'));
+    const coverImage = imageFiles.length > 0 ? imageFiles[0].url : null;
+
     const newPost = {
       title,
       content,
@@ -109,7 +121,13 @@ export async function POST(req: NextRequest) {
       estimatedTime: estimatedTime || null,
       prerequisites: prerequisites || null,
       learningOutcomes: learningOutcomes || null,
-      attachments: attachments || [],
+      attachments: attachmentFiles,
+      image: coverImage,
+      author: {
+        name: session.user.name,
+        email: session.user.email,
+        id: session.user.id
+      },
       createdBy: session.user.id,
       createdAt: new Date(),
       updatedAt: new Date()

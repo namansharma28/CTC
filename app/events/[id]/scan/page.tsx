@@ -65,7 +65,7 @@ export default function QRScanPage({ params }: { params: { id: string } }) {
         description: "Failed to load event details",
         variant: "destructive",
       });
-      router.push('/');
+      router.push('/home');
     } finally {
       setIsLoading(false);
     }
@@ -188,7 +188,7 @@ export default function QRScanPage({ params }: { params: { id: string } }) {
         <h1 className="text-3xl font-bold">Event Not Found</h1>
         <p className="mb-6 text-muted-foreground">The event you're looking for doesn't exist.</p>
         <Button asChild>
-          <Link href="/">Go Home</Link>
+          <Link href="/home">Go Home</Link>
         </Button>
       </div>
     );

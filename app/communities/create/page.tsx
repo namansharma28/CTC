@@ -69,7 +69,7 @@ export default function CreateCommunityPage() {
           description: "Only operators can create communities.",
           variant: "destructive",
         });
-        router.push("/");
+        router.push("/home");
       }
     }
   }, [status, session, router, toast]);

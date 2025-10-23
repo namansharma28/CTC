@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Calendar, MapPin, DollarSign, Clock, Building, ArrowLeft, ExternalLink, FileText, User, Briefcase } from "lucide-react";
+import { DollarSign, Clock, Building, ArrowLeft, ExternalLink, FileText, User, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useSession } from "next-auth/react";
+
 import { formatDistanceToNow } from "date-fns";
 import { formatDateWithFallback } from "@/lib/date-utils";
 
@@ -35,7 +35,6 @@ interface TNPPost {
 export default function TNPPostPage() {
   const params = useParams();
   const router = useRouter();
-  const { data: session } = useSession();
   const [post, setPost] = useState<TNPPost | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -49,7 +48,11 @@ export default function TNPPostPage() {
       const response = await fetch(`/api/tnp/${params.id}`);
       if (response.ok) {
         const data = await response.json();
-        setPost(data);
+        if (data.success === false) {
+          setError(data.error || 'Job posting not found');
+        } else {
+          setPost(data);
+        }
       } else {
         setError('Job posting not found');
       }
@@ -126,26 +129,28 @@ export default function TNPPostPage() {
 
         {/* Cover Image */}
         {post.image && (
-          <div className="relative w-full h-64 md:h-80 rounded-lg overflow-hidden mb-6 modern-card-hover">
+          <div className="relative w-full h-64 md:h-80 lg:h-96 rounded-xl overflow-hidden mb-6 shadow-lg">
             <img
               src={post.image}
               alt={post.title}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-            <div className="absolute bottom-4 left-4 right-4">
-              <div className="flex items-center gap-2 mb-2">
-                <Badge className={getTypeColor(post.type)}>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+            <div className="absolute bottom-6 left-6 right-6">
+              <div className="flex items-center gap-2 mb-3">
+                <Badge className={`${getTypeColor(post.type)} shadow-lg`}>
                   {post.type === 'both' ? 'Job & Internship' :
                     post.type === 'placement' ? 'Placement' :
                       post.type ? post.type.charAt(0).toUpperCase() + post.type.slice(1) : 'Job'}
                 </Badge>
                 {deadlinePassed && (
-                  <Badge variant="destructive">Deadline Passed</Badge>
+                  <Badge variant="destructive" className="shadow-lg">
+                    Deadline Passed
+                  </Badge>
                 )}
               </div>
-              <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">{post.title}</h1>
-              <p className="text-white/90">{post.company} • {post.location}</p>
+              <h1 className="text-2xl md:text-4xl font-bold text-white mb-2 drop-shadow-lg">{post.title}</h1>
+              <p className="text-white/90 text-lg drop-shadow-md">{post.company} • {post.location}</p>
             </div>
           </div>
         )}

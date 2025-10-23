@@ -3,12 +3,12 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
-import { 
-  Share2, 
-  FileText, 
-  Download, 
-  Eye, 
-  Users, 
+import {
+  Share2,
+  FileText,
+  Download,
+  Eye,
+  Users,
   Pencil,
   ChevronLeft,
   ChevronRight,
@@ -100,7 +100,7 @@ export default function UpdatePage({ params }: { params: { id: string } }) {
           description: "Failed to load update",
           variant: "destructive",
         });
-        router.push('/');
+        router.push('/home');
       } finally {
         setIsLoading(false);
       }
@@ -137,7 +137,7 @@ export default function UpdatePage({ params }: { params: { id: string } }) {
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(downloadUrl);
-      
+
       toast({
         title: "Download started",
         description: `${filename} is being downloaded`,
@@ -153,7 +153,7 @@ export default function UpdatePage({ params }: { params: { id: string } }) {
 
   const navigateMedia = (direction: 'prev' | 'next') => {
     if (!update || selectedMediaIndex === null) return;
-    
+
     if (direction === 'prev') {
       const newIndex = selectedMediaIndex > 0 ? selectedMediaIndex - 1 : update.media.length - 1;
       setSelectedMediaIndex(newIndex);
@@ -275,8 +275,8 @@ export default function UpdatePage({ params }: { params: { id: string } }) {
                 <h3 className="text-lg font-semibold">Media</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {update.media.map((item, index) => (
-                    <div 
-                      key={item.id} 
+                    <div
+                      key={item.id}
                       className="relative group cursor-pointer rounded-lg overflow-hidden"
                       onClick={() => {
                         setSelectedMediaIndex(index);
@@ -322,9 +322,9 @@ export default function UpdatePage({ params }: { params: { id: string } }) {
                           <p className="text-sm text-gray-500 dark:text-gray-400">{formatFileSize(doc.size)}</p>
                         </div>
                       </div>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
+                      <Button
+                        variant="outline"
+                        size="sm"
                         onClick={() => handleDownload(doc.url, doc.name)}
                       >
                         <Download className="h-4 w-4 mr-2" />
@@ -363,9 +363,9 @@ export default function UpdatePage({ params }: { params: { id: string } }) {
 
             {/* Share Action */}
             <div className="flex items-center justify-end pt-6 border-t">
-              <Button 
-                variant="outline" 
-                size="lg" 
+              <Button
+                variant="outline"
+                size="lg"
                 className="gap-2"
                 onClick={handleShare}
               >
@@ -399,14 +399,14 @@ export default function UpdatePage({ params }: { params: { id: string } }) {
                     Your browser does not support the video tag.
                   </video>
                 ) : (
-                  <img 
-                    src={update.media[selectedMediaIndex].url} 
+                  <img
+                    src={update.media[selectedMediaIndex].url}
                     alt={update.media[selectedMediaIndex].name}
                     className="max-w-full max-h-[70vh] object-contain"
                   />
                 )}
               </div>
-              
+
               {/* Navigation Buttons */}
               {update.media.length > 1 && (
                 <>
@@ -428,7 +428,7 @@ export default function UpdatePage({ params }: { params: { id: string } }) {
                   </Button>
                 </>
               )}
-              
+
               {/* Media Info */}
               <div className="mt-4 text-center">
                 <p className="text-sm text-muted-foreground">
