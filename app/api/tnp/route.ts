@@ -9,8 +9,15 @@ export async function GET(request: NextRequest) {
     const client = await clientPromise;
     const db = client.db('CTC');
     
-    // Get all TNP posts
-    const tnpPosts = await db.collection('tnp_posts').find({})
+    // Get all TNP posts (filter out posts with passed deadlines)
+    const today = new Date();
+    const tnpPosts = await db.collection('tnp_posts').find({
+      $or: [
+        { deadline: { $gte: today } },
+        { deadline: { $exists: false } },
+        { deadline: null }
+      ]
+    })
       .sort({ createdAt: -1 })
       .toArray();
 

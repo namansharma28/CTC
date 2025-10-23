@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import { formatDateWithFallback } from "@/lib/date-utils";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
@@ -266,7 +267,7 @@ export default function FollowingPage() {
                       </div>
 
                       <p className="text-xs text-muted-foreground mt-2">
-                        Following since {new Date(community.followedAt).toLocaleDateString()}
+                        Following since {formatDateWithFallback(community.followedAt, 'Unknown')}
                       </p>
                     </CardContent>
                   </Card>

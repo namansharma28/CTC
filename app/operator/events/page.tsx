@@ -12,6 +12,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 import { useDebounce } from "@/hooks/use-debounce";
+import { formatDateWithFallback } from "@/lib/date-utils";
 
 interface Event {
   id: string;
@@ -190,7 +191,7 @@ export default function OperatorEvents() {
                             <div className="flex flex-col gap-1 mt-1 sm:hidden">
                               <div className="flex items-center gap-1 text-xs text-muted-foreground">
                                 <Clock className="h-3 w-3" />
-                                <span>{new Date(event.date).toLocaleDateString()} • {event.time}</span>
+                                <span>{formatDateWithFallback(event.date, 'TBD')} • {event.time}</span>
                               </div>
                               <div className="flex items-center gap-1 text-xs text-muted-foreground md:hidden">
                                 <MapPin className="h-3 w-3" />
@@ -203,7 +204,7 @@ export default function OperatorEvents() {
                           <div className="flex items-center gap-1 text-sm">
                             <Clock className="h-3 w-3" />
                             <div>
-                              <p>{new Date(event.date).toLocaleDateString()}</p>
+                              <p>{formatDateWithFallback(event.date, 'TBD')}</p>
                               <p className="text-muted-foreground">{event.time}</p>
                             </div>
                           </div>

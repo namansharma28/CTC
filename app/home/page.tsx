@@ -101,6 +101,15 @@ export default function Home() {
             if (item.category === 'placement' && !hasPlacementAccess) {
               return false;
             }
+            
+            // Filter out TNP posts with passed deadlines
+            if (item.deadline) {
+              const deadlineDate = new Date(item.deadline);
+              if (!isNaN(deadlineDate.getTime()) && deadlineDate < new Date()) {
+                return false;
+              }
+            }
+            
             return true;
           });
 

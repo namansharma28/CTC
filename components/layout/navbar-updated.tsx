@@ -380,9 +380,9 @@ export default function Navbar() {
                               {notification.description}
                             </p>
                             <p className="mt-1 text-xs text-muted-foreground">
-                              {formatDistanceToNow(new Date(notification.createdAt), {
+                              {notification.createdAt ? formatDistanceToNow(new Date(notification.createdAt), {
                                 addSuffix: true,
-                              })}
+                              }) : 'recently'}
                             </p>
                             {notification.linkUrl && (
                               <Link

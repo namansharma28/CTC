@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { CalendarDays, Link as LinkIcon, MapPin, Pencil, Users, Calendar, Loader2, Settings, Shield } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { formatDateWithFallback } from "@/lib/date-utils";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -206,7 +207,7 @@ export default function ProfilePage() {
           </div>
           <div className="flex items-center gap-1">
             <CalendarDays size={16} />
-            <span>Joined {new Date(userProfile.createdAt).toLocaleDateString()}</span>
+            <span>Joined {formatDateWithFallback(userProfile.createdAt, 'Unknown')}</span>
           </div>
           {userProfile.location && (
             <div className="flex items-center gap-1">

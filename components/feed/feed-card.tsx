@@ -1,4 +1,5 @@
 import { formatDistanceToNow } from "date-fns";
+import { formatDateWithFallback } from "@/lib/date-utils";
 import Link from "next/link";
 import { CalendarDays, Share2, Download, ChevronLeft, ChevronRight, Clock, MapPin, Users } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -31,7 +32,7 @@ interface Event {
 
 export default function FeedCard({ item }: FeedCardProps) {
   const { toast } = useToast();
-  const timeAgo = formatDistanceToNow(new Date(item.date), { addSuffix: true });
+  const timeAgo = item.date ? formatDistanceToNow(new Date(item.date), { addSuffix: true }) : 'recently';
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const handleShare = () => {
@@ -142,7 +143,7 @@ export default function FeedCard({ item }: FeedCardProps) {
             <div className="grid grid-cols-2 gap-3">
               <div className="flex items-start gap-2 text-sm">
                 <CalendarDays className="mt-0.5 h-4 w-4 text-muted-foreground" />
-                <span>{(item as any).date ? new Date((item as any).date).toLocaleDateString() : 'TBD'}</span>
+                <span>{formatDateWithFallback((item as any).date, 'TBD')}</span>
               </div>
               <div className="flex items-start gap-2 text-sm">
                 <Clock className="mt-0.5 h-4 w-4 text-muted-foreground" />

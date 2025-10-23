@@ -42,9 +42,26 @@ export async function GET(request: Request) {
     const allRelevantCommunityIds = Array.from(new Set([...userCommunityIds, ...followedCommunityIds]));
 
     // If user has no communities or follows, show all events as a fallback
-    let matchQuery = {};
+    const today = new Date().toISOString().split('T')[0];
+    let matchQuery: any = {
+      $or: [
+        { date: { $gte: today } },
+        { date: { $exists: false } } // Include events without dates
+      ]
+    };
+    
     if (allRelevantCommunityIds.length > 0) {
-      matchQuery = { communityId: { $in: allRelevantCommunityIds } };
+      matchQuery = {
+        $and: [
+          { communityId: { $in: allRelevantCommunityIds } },
+          {
+            $or: [
+              { date: { $gte: today } },
+              { date: { $exists: false } }
+            ]
+          }
+        ]
+      };
     }
 
     // Get total count for pagination
@@ -54,7 +71,7 @@ export async function GET(request: Request) {
     // Get events from user's communities and followed communities (or all events if no communities)
     const events = await db.collection('events')
       .aggregate([
-        ...(Object.keys(matchQuery).length > 0 ? [{ $match: matchQuery }] : []),
+        { $match: matchQuery },
         {
           $lookup: {
             from: 'communities',

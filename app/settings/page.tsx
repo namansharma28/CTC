@@ -31,6 +31,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
+import { formatDateWithFallback } from "@/lib/date-utils";
 import { useTheme } from "next-themes";
 import {
   Form,
@@ -653,7 +654,7 @@ export default function SettingsPage() {
                 <div>
                   <h4 className="text-sm font-medium mb-2">Account Information</h4>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Member since {new Date(userProfile?.createdAt || "").toLocaleDateString()}
+                    Member since {formatDateWithFallback(userProfile?.createdAt, 'Unknown')}
                   </p>
                 </div>
 

@@ -70,7 +70,7 @@ export default function UpdateCard({ update, eventId, userPermissions }: UpdateC
   const { theme } = useTheme();
   const [selectedMedia, setSelectedMedia] = useState<string | null>(null);
 
-  const timeAgo = formatDistanceToNow(new Date(update.createdAt), { addSuffix: true });
+  const timeAgo = update.createdAt ? formatDistanceToNow(new Date(update.createdAt), { addSuffix: true }) : 'recently';
 
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes';

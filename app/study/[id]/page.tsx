@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSession } from "next-auth/react";
 import { formatDistanceToNow } from "date-fns";
+import { formatDateWithFallback } from "@/lib/date-utils";
 
 interface StudyPost {
   _id: string;
@@ -154,7 +155,7 @@ export default function StudyPostPage() {
                   </p>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Clock className="h-3 w-3" />
-                    <span>{formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}</span>
+                    <span>{post.createdAt ? formatDistanceToNow(new Date(post.createdAt), { addSuffix: true }) : 'recently'}</span>
                   </div>
                 </div>
               </div>
@@ -278,14 +279,14 @@ export default function StudyPostPage() {
               <div className="flex justify-between items-center text-sm">
                 <span className="text-muted-foreground">Published</span>
                 <span className="font-medium">
-                  {new Date(post.createdAt).toLocaleDateString()}
+                  {formatDateWithFallback(post.createdAt, 'Unknown')}
                 </span>
               </div>
               {post.updatedAt !== post.createdAt && (
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-muted-foreground">Last Updated</span>
                   <span className="font-medium">
-                    {new Date(post.updatedAt).toLocaleDateString()}
+                    {formatDateWithFallback(post.updatedAt, 'Unknown')}
                   </span>
                 </div>
               )}

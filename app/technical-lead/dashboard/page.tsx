@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
+import { formatDateWithFallback } from "@/lib/date-utils";
 import Link from "next/link";
 
 interface Event {
@@ -326,7 +327,7 @@ export default function TechnicalLeadDashboard() {
                                                         </p>
                                                         <div className="flex flex-col gap-1 mt-1 sm:hidden">
                                                             <p className="text-xs text-muted-foreground">
-                                                                {new Date(event.date).toLocaleDateString()} • {event.time}
+                                                                {formatDateWithFallback(event.date, 'TBD')} • {event.time}
                                                             </p>
                                                             <p className="text-xs text-muted-foreground lg:hidden">
                                                                 {event.community?.name || 'Community'}
@@ -336,7 +337,7 @@ export default function TechnicalLeadDashboard() {
                                                 </TableCell>
                                                 <TableCell className="hidden sm:table-cell">
                                                     <div className="text-sm">
-                                                        <p>{new Date(event.date).toLocaleDateString()}</p>
+                                                        <p>{formatDateWithFallback(event.date, 'TBD')}</p>
                                                         <p className="text-muted-foreground">{event.time}</p>
                                                     </div>
                                                 </TableCell>
@@ -423,7 +424,7 @@ export default function TechnicalLeadDashboard() {
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 <span className="text-sm text-muted-foreground">
-                                                    {new Date(referral.createdAt).toLocaleDateString()}
+                                                    {formatDateWithFallback(referral.createdAt, 'Unknown')}
                                                 </span>
                                             </TableCell>
                                         </TableRow>

@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSession } from "next-auth/react";
 import { formatDistanceToNow } from "date-fns";
-import Link from "next/link";
+import { formatDateWithFallback } from "@/lib/date-utils";
 
 interface TNPPost {
   _id: string;
@@ -72,7 +72,9 @@ export default function TNPPostPage() {
   };
 
   const isDeadlinePassed = (deadline: string) => {
-    return new Date(deadline) < new Date();
+    if (!deadline) return false;
+    const deadlineDate = new Date(deadline);
+    return !isNaN(deadlineDate.getTime()) && deadlineDate < new Date();
   };
 
   if (isLoading) {
@@ -121,7 +123,7 @@ export default function TNPPostPage() {
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to TNP Posts
         </Button>
-          
+
         {/* Cover Image */}
         {post.image && (
           <div className="relative w-full h-64 md:h-80 rounded-lg overflow-hidden mb-6 modern-card-hover">
@@ -134,9 +136,9 @@ export default function TNPPostPage() {
             <div className="absolute bottom-4 left-4 right-4">
               <div className="flex items-center gap-2 mb-2">
                 <Badge className={getTypeColor(post.type)}>
-                  {post.type === 'both' ? 'Job & Internship' : 
-                   post.type === 'placement' ? 'Placement' :
-                   post.type ? post.type.charAt(0).toUpperCase() + post.type.slice(1) : 'Job'}
+                  {post.type === 'both' ? 'Job & Internship' :
+                    post.type === 'placement' ? 'Placement' :
+                      post.type ? post.type.charAt(0).toUpperCase() + post.type.slice(1) : 'Job'}
                 </Badge>
                 {deadlinePassed && (
                   <Badge variant="destructive">Deadline Passed</Badge>
@@ -147,15 +149,15 @@ export default function TNPPostPage() {
             </div>
           </div>
         )}
-        
+
         {/* Header without image */}
         {!post.image && (
           <div className="mb-6">
             <div className="flex items-center gap-2 mb-3">
               <Badge className={getTypeColor(post.type)}>
-                {post.type === 'both' ? 'Job & Internship' : 
-                 post.type === 'placement' ? 'Placement' :
-                 post.type ? post.type.charAt(0).toUpperCase() + post.type.slice(1) : 'Job'}
+                {post.type === 'both' ? 'Job & Internship' :
+                  post.type === 'placement' ? 'Placement' :
+                    post.type ? post.type.charAt(0).toUpperCase() + post.type.slice(1) : 'Job'}
               </Badge>
               {deadlinePassed && (
                 <Badge variant="destructive">Deadline Passed</Badge>
@@ -165,7 +167,7 @@ export default function TNPPostPage() {
             <p className="text-lg text-muted-foreground">{post.company} • {post.location}</p>
           </div>
         )}
-        
+
         {/* Author and Meta Info */}
         <Card className="mb-6 modern-card modern-card-hover">
           <CardContent className="p-4">
@@ -183,11 +185,11 @@ export default function TNPPostPage() {
                   </p>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Clock className="h-3 w-3" />
-                    <span>Posted {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}</span>
+                    <span>Posted {post.createdAt ? formatDistanceToNow(new Date(post.createdAt), { addSuffix: true }) : 'recently'}</span>
                   </div>
                 </div>
               </div>
-              
+
               <div className="flex flex-wrap gap-2">
                 {post.salary && (
                   <Badge variant="outline" className="flex items-center gap-1">
@@ -197,7 +199,7 @@ export default function TNPPostPage() {
                 )}
                 <Badge variant={deadlinePassed ? "destructive" : "outline"} className="flex items-center gap-1">
                   <Clock className="h-3 w-3" />
-                  Deadline: {new Date(post.deadline).toLocaleDateString()}
+                  Deadline: {formatDateWithFallback(post.deadline, 'Not specified')}
                 </Badge>
               </div>
             </div>
@@ -296,9 +298,9 @@ export default function TNPPostPage() {
               <div className="flex justify-between items-center text-sm">
                 <span className="text-muted-foreground">Type</span>
                 <Badge className={getTypeColor(post.type)}>
-                  {post.type === 'both' ? 'Job & Internship' : 
-                   post.type === 'placement' ? 'Placement' :
-                   post.type ? post.type.charAt(0).toUpperCase() + post.type.slice(1) : 'Job'}
+                  {post.type === 'both' ? 'Job & Internship' :
+                    post.type === 'placement' ? 'Placement' :
+                      post.type ? post.type.charAt(0).toUpperCase() + post.type.slice(1) : 'Job'}
                 </Badge>
               </div>
               {post.salary && (
@@ -310,7 +312,7 @@ export default function TNPPostPage() {
               <div className="flex justify-between items-center text-sm">
                 <span className="text-muted-foreground">Deadline</span>
                 <span className={`font-medium ${deadlinePassed ? "text-destructive" : ""}`}>
-                  {new Date(post.deadline).toLocaleDateString()}
+                  {formatDateWithFallback(post.deadline, 'Not specified')}
                 </span>
               </div>
             </CardContent>
@@ -353,9 +355,9 @@ export default function TNPPostPage() {
                 </div>
               </div>
               <div className="pt-3 border-t text-xs text-muted-foreground space-y-1">
-                <p>Posted: {new Date(post.createdAt).toLocaleDateString()}</p>
-                {post.updatedAt !== post.createdAt && (
-                  <p>Updated: {new Date(post.updatedAt).toLocaleDateString()}</p>
+                <p>Posted: {formatDateWithFallback(post.createdAt, 'Unknown')}</p>
+                {post.updatedAt && post.updatedAt !== post.createdAt && (
+                  <p>Updated: {formatDateWithFallback(post.updatedAt, 'Unknown')}</p>
                 )}
               </div>
             </CardContent>

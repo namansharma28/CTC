@@ -18,6 +18,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useRouter } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
+import { formatDateWithFallback } from "@/lib/date-utils";
 import { Calendar as CalendarIcon, Clock as ClockIcon, MapPin as MapPinIcon, Users as UsersIcon, Share2, ArrowLeft, Pencil, FileText, Mail, Trash2, QrCode, Eye } from "lucide-react";
 import UpdateCard from "@/components/events/update-card";
 import dynamic from "next/dynamic";
@@ -491,7 +492,7 @@ export default function CommunityPage({ params }: { params: { handle: string } }
                     <div className="mt-4">
                       <h4 className="mb-2 text-sm font-medium">Created</h4>
                       <p className="text-sm text-muted-foreground">
-                        {new Date(community.createdAt).toLocaleDateString()}
+                        {formatDateWithFallback(community.createdAt, 'Unknown')}
                       </p>
                     </div>
                   </CardContent>

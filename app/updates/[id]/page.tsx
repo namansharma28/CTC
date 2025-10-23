@@ -185,7 +185,7 @@ export default function UpdatePage({ params }: { params: { id: string } }) {
     );
   }
 
-  const timeAgo = formatDistanceToNow(new Date(update.createdAt), { addSuffix: true });
+  const timeAgo = update.createdAt ? formatDistanceToNow(new Date(update.createdAt), { addSuffix: true }) : 'recently';
 
   return (
     <div className="container mx-auto py-8">
