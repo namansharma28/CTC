@@ -8,6 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import FeedCard from '@/components/feed/feed-card';
+import MobileTrendingCommunities from '@/components/home/mobile-trending-communities';
+import MobileUpcomingEvents from '@/components/home/mobile-upcoming-events';
 
 import { Button } from "@/components/ui/button";
 import { FeedItem } from '@/types/feed';
@@ -56,35 +58,60 @@ export default function Home() {
       setIsLoading(true);
       try {
         // Fetch events data using the feed API
-        const eventsResponse = await fetch('/api/events/feed?page=1&limit=15');
-        const eventsData = await eventsResponse.json();
-        if (eventsData.events && Array.isArray(eventsData.events)) {
-          setEventsFeedItems(eventsData.events);
-          setEventsHasMore(eventsData.pagination?.hasNext || false);
+        let eventsData: any = { events: [], pagination: null };
+        try {
+          const eventsResponse = await fetch('/api/events/feed?page=1&limit=15');
+          if (eventsResponse.ok) {
+            eventsData = await eventsResponse.json();
+            if (eventsData.events && Array.isArray(eventsData.events)) {
+              setEventsFeedItems(eventsData.events);
+              setEventsHasMore(eventsData.pagination?.hasNext || false);
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching events:', error);
         }
 
         // Fetch upcoming events using the new API
-        const upcomingResponse = await fetch('/api/events/upcoming?limit=4');
-        if (upcomingResponse.ok) {
-          const upcomingData = await upcomingResponse.json();
-          if (Array.isArray(upcomingData)) {
-            setUpcomingEvents(upcomingData);
+        try {
+          const upcomingResponse = await fetch('/api/events/upcoming?limit=4');
+          if (upcomingResponse.ok) {
+            const upcomingData = await upcomingResponse.json();
+            if (Array.isArray(upcomingData)) {
+              setUpcomingEvents(upcomingData);
+            }
           }
+        } catch (error) {
+          console.error('Error fetching upcoming events:', error);
         }
 
         // Fetch study posts
-        const studyResponse = await fetch('/api/study');
-        const studyData = await studyResponse.json();
-        if (studyData.success) {
-          setStudyFeedItems(studyData.data.map((item: any) => ({
-            ...item,
-            type: 'study'
-          })));
+        let studyData = { success: false, data: [] };
+        try {
+          const studyResponse = await fetch('/api/study');
+          if (studyResponse.ok) {
+            studyData = await studyResponse.json();
+            if (studyData.success) {
+              setStudyFeedItems(studyData.data.map((item: any) => ({
+                ...item,
+                type: 'study'
+              })));
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching study posts:', error);
         }
 
         // Fetch TNP posts with filtering
-        const tnpResponse = await fetch('/api/tnp');
-        const tnpData = await tnpResponse.json();
+        let tnpData = { success: false, data: [] };
+        try {
+          const tnpResponse = await fetch('/api/tnp');
+          if (tnpResponse.ok) {
+            tnpData = await tnpResponse.json();
+          }
+        } catch (error) {
+          console.error('Error fetching TNP posts:', error);
+        }
         let filteredTnpItems: FeedItem[] = [];
         if (tnpData.success) {
           const allTnpItems = tnpData.data.map((item: any) => ({
@@ -101,7 +128,7 @@ export default function Home() {
             if (item.category === 'placement' && !hasPlacementAccess) {
               return false;
             }
-            
+
             // Filter out TNP posts with passed deadlines
             if (item.deadline) {
               const deadlineDate = new Date(item.deadline);
@@ -109,7 +136,7 @@ export default function Home() {
                 return false;
               }
             }
-            
+
             return true;
           });
 
@@ -117,13 +144,19 @@ export default function Home() {
         }
 
         // Fetch trending communities
-        const communitiesResponse = await fetch('/api/communities/trending');
-        const communitiesData = await communitiesResponse.json();
-        if (communitiesData.success && Array.isArray(communitiesData.data)) {
-          const validCommunities = communitiesData.data.filter((community: any) =>
-            community && community._id && community.name && community.handle
-          );
-          setTrendingCommunities(validCommunities.slice(0, 5));
+        try {
+          const communitiesResponse = await fetch('/api/communities/trending');
+          if (communitiesResponse.ok) {
+            const communitiesData = await communitiesResponse.json();
+            if (communitiesData.success && Array.isArray(communitiesData.data)) {
+              const validCommunities = communitiesData.data.filter((community: any) =>
+                community && community._id && community.name && community.handle
+              );
+              setTrendingCommunities(validCommunities.slice(0, 5));
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching trending communities:', error);
         }
 
         // Create combined feed for "All Posts" tab
@@ -243,22 +276,22 @@ export default function Home() {
           <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
 
           <Tabs defaultValue="all" className="w-full">
-            <TabsList className="w-full flex-row justify-center gap-2">
-              <TabsTrigger value="all" className="flex items-center gap-2 flex-1">
-                <Plus className="h-4 w-4" />
-                All Posts
+            <TabsList className="w-full grid grid-cols-4 h-auto p-1">
+              <TabsTrigger value="all" className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 text-xs sm:text-sm">
+                <Plus className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                <span className="truncate">All</span>
               </TabsTrigger>
-              <TabsTrigger value="events" className="flex items-center gap-2 flex-1">
-                <CalendarDays className="h-4 w-4" />
-                Events
+              <TabsTrigger value="events" className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 text-xs sm:text-sm">
+                <CalendarDays className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                <span className="truncate">Events</span>
               </TabsTrigger>
-              <TabsTrigger value="study" className="flex items-center gap-2 flex-1">
-                <BookOpen className="h-4 w-4" />
-                Study
+              <TabsTrigger value="study" className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 text-xs sm:text-sm">
+                <BookOpen className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                <span className="truncate">Study</span>
               </TabsTrigger>
-              <TabsTrigger value="tnp" className="flex items-center gap-2 flex-1">
-                <Briefcase className="h-4 w-4" />
-                TNP
+              <TabsTrigger value="tnp" className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 text-xs sm:text-sm">
+                <Briefcase className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                <span className="truncate">TNP</span>
               </TabsTrigger>
             </TabsList>
 
@@ -367,81 +400,12 @@ export default function Home() {
                               </div>
 
                               {/* Mobile Trending Communities Section */}
-                              <div>
-                                <div className="flex items-center justify-between mb-4">
-                                  <h3 className="text-lg font-bold flex items-center gap-2">
-                                    <Compass className="h-5 w-5 text-silver" />
-                                    Trending Communities
-                                  </h3>
-                                  <Link href="/explore">
-                                    <Button variant="ghost" size="sm" className="text-silver hover:text-silver-light">
-                                      Explore
-                                    </Button>
-                                  </Link>
-                                </div>
-                                {trendingCommunities.length > 0 ? (
-                                  <div className="overflow-x-auto scrollbar-hide touch-pan-x w-screen -ml-4 -mr-4 sm:-ml-6 sm:-mr-6">
-                                    <div className="flex gap-3 pb-4 pl-4 pr-4 sm:pl-6 sm:pr-6">
-                                      {trendingCommunities.slice(0, 5).map((community, commIndex) => (
-                                        <motion.div
-                                          key={community._id}
-                                          initial={{ opacity: 0, x: 20 }}
-                                          animate={{ opacity: 1, x: 0 }}
-                                          transition={{ delay: 0.1 + commIndex * 0.1 }}
-                                          className="flex-shrink-0 w-56 sm:w-64"
-                                        >
-                                          <div className="flex items-center gap-3 rounded-lg border p-4 transition-all hover:shadow-md hover:border-primary/30 bg-card">
-                                            <Avatar className="ring-2 ring-primary/10">
-                                              <AvatarImage src={community.avatar} />
-                                              <AvatarFallback className="bg-gradient-to-br from-primary to-silver text-white">
-                                                {community.name.substring(0, 2)}
-                                              </AvatarFallback>
-                                            </Avatar>
-                                            <div className="flex-1 min-w-0">
-                                              <div className="flex items-center gap-2">
-                                                <Link
-                                                  href={`/communities/${community.handle}`}
-                                                  className="font-semibold hover:text-primary transition-colors truncate text-sm"
-                                                >
-                                                  {community.name}
-                                                </Link>
-                                                {community.isVerified && (
-                                                  <Badge variant="outline" className="h-3 border-blue-300 px-1 text-[8px] text-blue-500">
-                                                    ✓
-                                                  </Badge>
-                                                )}
-                                              </div>
-                                              <p className="text-xs text-muted-foreground">@{community.handle}</p>
-                                              <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
-                                                <Users size={10} />
-                                                <span>{community.membersCount} members</span>
-                                              </div>
-                                            </div>
-                                            {session && community.userRelation !== 'member' && community.userRelation !== 'admin' && community.userRelation !== 'follower' && (
-                                              <Button
-                                                size="sm"
-                                                variant={followingStates[community._id] ? "default" : "outline"}
-                                                onClick={(e) => {
-                                                  e.preventDefault();
-                                                  handleFollow(community._id, community.handle);
-                                                }}
-                                                className="h-6 text-xs px-2"
-                                              >
-                                                {followingStates[community._id] ? "Following" : "Follow"}
-                                              </Button>
-                                            )}
-                                          </div>
-                                        </motion.div>
-                                      ))}
-                                    </div>
-                                  </div>
-                                ) : (
-                                  <div className="text-center py-8">
-                                    <Users className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-                                    <p className="text-sm text-muted-foreground">No trending communities</p>
-                                  </div>
-                                )}
-                              </div>
+                              <MobileTrendingCommunities
+                                communities={trendingCommunities}
+                                session={session}
+                                followingStates={followingStates}
+                                onFollow={handleFollow}
+                              />
                             </div>
                           )}
                         </div>

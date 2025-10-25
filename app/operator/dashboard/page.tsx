@@ -53,41 +53,49 @@ export default function OperatorDashboard() {
   const fetchStats = async () => {
     try {
       setIsLoading(true);
-      const [usersResponse, communitiesResponse, eventsResponse, tnpResponse, studyResponse] = await Promise.all([
-        fetch('/api/users?limit=5'),
-        fetch('/api/communities'),
-        fetch('/api/events'),
-        fetch('/api/tnp'),
-        fetch('/api/study')
-      ]);
+      
+      // Fetch data with individual error handling
+      const fetchWithErrorHandling = async (url: string, name: string) => {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) {
+            console.error(`Failed to fetch ${name}:`, response.status, response.statusText);
+            return null;
+          }
+          return await response.json();
+        } catch (error) {
+          console.error(`Error fetching ${name}:`, error);
+          return null;
+        }
+      };
 
       const [usersData, communitiesData, eventsData, tnpData, studyData] = await Promise.all([
-        usersResponse.json(),
-        communitiesResponse.json(),
-        eventsResponse.json(),
-        tnpResponse.json(),
-        studyResponse.json()
+        fetchWithErrorHandling('/api/users?limit=5', 'users'),
+        fetchWithErrorHandling('/api/communities', 'communities'),
+        fetchWithErrorHandling('/api/events', 'events'),
+        fetchWithErrorHandling('/api/tnp', 'tnp'),
+        fetchWithErrorHandling('/api/study', 'study')
       ]);
 
-      // Safely handle different API response formats
-      const communitiesArray = Array.isArray(communitiesData) ? communitiesData : (communitiesData.data || communitiesData.communities || []);
-      const eventsArray = Array.isArray(eventsData) ? eventsData : (eventsData.data || eventsData.events || []);
-      const tnpArray = Array.isArray(tnpData) ? tnpData : (tnpData.data || tnpData.posts || []);
-      const studyArray = Array.isArray(studyData) ? studyData : (studyData.data || studyData.posts || []);
+      // Safely handle different API response formats with null checks
+      const communitiesArray = communitiesData ? (Array.isArray(communitiesData) ? communitiesData : (communitiesData.data || communitiesData.communities || [])) : [];
+      const eventsArray = eventsData ? (Array.isArray(eventsData) ? eventsData : (eventsData.data || eventsData.events || [])) : [];
+      const tnpArray = tnpData ? (Array.isArray(tnpData) ? tnpData : (tnpData.data || tnpData.posts || [])) : [];
+      const studyArray = studyData ? (Array.isArray(studyData) ? studyData : (studyData.data || studyData.posts || [])) : [];
 
       setStats({
-        totalUsers: usersData.total || 0,
+        totalUsers: usersData?.total || 0,
         totalCommunities: communitiesArray.length || 0,
         totalEvents: eventsArray.length || 0,
         totalTNPPosts: tnpArray.length || 0,
         totalStudyPosts: studyArray.length || 0,
-        recentUsers: usersData.users?.slice(0, 5) || []
+        recentUsers: usersData?.users?.slice(0, 5) || []
       });
     } catch (error) {
       console.error('Error fetching dashboard stats:', error);
       toast({
         title: "Error",
-        description: "Failed to load dashboard statistics",
+        description: `Failed to load dashboard statistics: ${error instanceof Error ? error.message : 'Unknown error'}`,
         variant: "destructive",
       });
       // Set default stats on error

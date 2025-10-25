@@ -161,7 +161,17 @@ export default function FeedCard({ item }: FeedCardProps) {
 
             {/* Description */}
             {item.content && (
-              <p className="text-sm text-muted-foreground mt-3 line-clamp-2">{item.content}</p>
+              <div className="mt-3">
+                <p className="text-sm text-muted-foreground line-clamp-2">{item.content}</p>
+                {item.content.length > 150 && (
+                  <Link 
+                    href={`/events/${item.id}`}
+                    className="text-primary hover:underline text-sm mt-1 inline-block"
+                  >
+                    Read more
+                  </Link>
+                )}
+              </div>
             )}
 
             {/* Tags */}
@@ -321,7 +331,17 @@ export default function FeedCard({ item }: FeedCardProps) {
             </div>
           )}
 
-          <p className="text-sm leading-relaxed">{item.content}</p>
+          <div>
+            <p className="text-sm leading-relaxed line-clamp-3">{item.content}</p>
+            {item.content && item.content.length > 200 && (
+              <Link 
+                href={`/${item.type}/${item.id}`}
+                className="text-primary hover:underline text-sm mt-1 inline-block"
+              >
+                Read more
+              </Link>
+            )}
+          </div>
 
           {item.eventId && item.type === "update" && (
             <div className="mt-3 rounded-md border p-3">

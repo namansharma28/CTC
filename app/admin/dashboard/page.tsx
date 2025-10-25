@@ -192,7 +192,7 @@ export default function AdminDashboardPage() {
         },
         redirectOnAuthError: true
       });
-      
+
       const statsData = await handleApiResponse<DashboardStats>(statsResponse, {
         router,
         toast,
@@ -202,7 +202,7 @@ export default function AdminDashboardPage() {
         },
         redirectOnAuthError: true
       });
-      
+
       const communityStatsData = await handleApiResponse<CommunityStats>(communityStatsResponse, {
         router,
         toast,
@@ -233,7 +233,7 @@ export default function AdminDashboardPage() {
   const handleApproveCommunity = async (id: string) => {
     setProcessingId(id);
     try {
-      const response = await fetch(`/api/admin/communities/approve/${id}`, { 
+      const response = await fetch(`/api/admin/communities/approve/${id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -253,11 +253,11 @@ export default function AdminDashboardPage() {
         },
         redirectOnAuthError: true
       });
-      
+
       if (success) {
         // Update the UI
         setPendingCommunities(prev => prev.filter(community => community.id !== id));
-        
+
         // Refresh stats
         fetchData();
       }
@@ -281,12 +281,12 @@ export default function AdminDashboardPage() {
 
   const handleRejectCommunity = async () => {
     if (!selectedCommunityId) return;
-    
+
     setProcessingId(selectedCommunityId);
     setIsRejectionDialogOpen(false);
-    
+
     try {
-      const response = await fetch(`/api/admin/communities/reject/${selectedCommunityId}`, { 
+      const response = await fetch(`/api/admin/communities/reject/${selectedCommunityId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -307,11 +307,11 @@ export default function AdminDashboardPage() {
         },
         redirectOnAuthError: true
       });
-      
+
       if (success) {
         // Update the UI
         setPendingCommunities(prev => prev.filter(community => community.id !== selectedCommunityId));
-        
+
         // Refresh stats
         fetchData();
       }
@@ -332,10 +332,10 @@ export default function AdminDashboardPage() {
     try {
       // Clear admin token
       localStorage.removeItem('adminToken');
-      
+
       // Call logout API to clear cookies
       const response = await fetch('/api/admin/logout', { method: 'POST' });
-      
+
       await handleApiResponse(response, {
         router,
         toast,
@@ -349,7 +349,7 @@ export default function AdminDashboardPage() {
         },
         redirectOnAuthError: false
       });
-      
+
       router.push('/admin/login');
     } catch (error) {
       console.error('Error logging out:', error);
@@ -376,32 +376,38 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="container mx-auto py-8">
-      <div className="mb-8 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Shield className="h-8 w-8 text-primary" />
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
-            <p className="text-muted-foreground">Manage community approvals and platform settings</p>
+      <div className="mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <Shield className="h-8 w-8 text-primary" />
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Admin Dashboard</h1>
+              <p className="text-muted-foreground text-sm sm:text-base">Manage community approvals and platform settings</p>
+            </div>
           </div>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={() => router.push('/admin/users')}>
-            <Users className="mr-2 h-4 w-4" />
-            Manage Users
-          </Button>
-          <Button variant="outline" onClick={() => router.push('/communities/create')}>
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Create Community
-          </Button>
-          <Button variant="outline" onClick={handleLogout}>
-            <LogOut className="mr-2 h-4 w-4" />
-            Logout
-          </Button>
+
+          {/* Mobile: Stack buttons vertically, Desktop: Horizontal */}
+          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+            <Button variant="outline" onClick={() => router.push('/admin/users')} className="w-full sm:w-auto">
+              <Users className="mr-2 h-4 w-4" />
+              <span className="hidden sm:inline">Manage Users</span>
+              <span className="sm:hidden">Users</span>
+            </Button>
+            <Button variant="outline" onClick={() => router.push('/communities/create')} className="w-full sm:w-auto">
+              <PlusCircle className="mr-2 h-4 w-4" />
+              <span className="hidden sm:inline">Create Community</span>
+              <span className="sm:hidden">Create</span>
+            </Button>
+            <Button variant="outline" onClick={handleLogout} className="w-full sm:w-auto">
+              <LogOut className="mr-2 h-4 w-4" />
+              Logout
+            </Button>
+          </div>
         </div>
       </div>
 
       {/* Stats Overview */}
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
         <Card>
           <CardContent className="flex flex-col items-center justify-center p-6">
             <Users className="h-8 w-8 text-blue-500 mb-2" />
@@ -434,85 +440,9 @@ export default function AdminDashboardPage() {
 
       <Tabs defaultValue="pending" className="w-full">
         <TabsList className="w-full flex-row mb-6 ">
-          <TabsTrigger value="pending" className="w-full">
-            Pending Approvals <Badge className="ml-2">{communityStats?.pendingCommunities || 0}</Badge>
-          </TabsTrigger>
           <TabsTrigger value="communities" className="w-full">Communities</TabsTrigger>
           <TabsTrigger value="technical-leads" className="w-full">Technical Leads</TabsTrigger>
         </TabsList>
-        <TabsContent value="pending">
-          <Card>
-            <CardHeader>
-              <CardTitle>Pending Community Approvals</CardTitle>
-              <CardDescription>
-                Review and approve community creation requests
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {pendingCommunities.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-8">
-                  <CheckCircle className="h-12 w-12 text-green-500 mb-4" />
-                  <h3 className="text-lg font-medium mb-2">No Pending Approvals</h3>
-                  <p className="text-muted-foreground text-center">
-                    All community requests have been processed
-                  </p>
-                </div>
-              ) : (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Handle</TableHead>
-                      <TableHead>Description</TableHead>
-                      <TableHead>Requested</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {pendingCommunities.map((community) => (
-                      <TableRow key={community.id}>
-                        <TableCell className="font-medium">{community.name}</TableCell>
-                        <TableCell>@{community.handle}</TableCell>
-                        <TableCell className="max-w-xs truncate">
-                          {community.description}
-                        </TableCell>
-                        <TableCell>
-                          {new Date(community.createdAt).toLocaleDateString()}
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex gap-2">
-                            <Button
-                              size="sm"
-                              onClick={() => handleApproveCommunity(community.id)}
-                              disabled={processingId === community.id}
-                            >
-                              {processingId === community.id ? (
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                              ) : (
-                                <CheckCircle className="h-4 w-4 mr-1" />
-                              )}
-                              Approve
-                            </Button>
-                            
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => openRejectDialog(community.id)}
-                              disabled={processingId === community.id}
-                            >
-                              <XCircle className="h-4 w-4 mr-1" />
-                              Reject
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
 
         <TabsContent value="communities">
           <Card>
@@ -558,21 +488,26 @@ export default function AdminDashboardPage() {
                 </Card>
               </div>
 
-              <div className="rounded-md border">
+              <div className="rounded-md border overflow-x-auto">
                 <Table>
                   <TableHeader>
                     <TableRow>
                       <TableHead>Name</TableHead>
-                      <TableHead>Handle</TableHead>
+                      <TableHead className="hidden sm:table-cell">Handle</TableHead>
                       <TableHead>Status</TableHead>
-                      <TableHead>Created</TableHead>
+                      <TableHead className="hidden md:table-cell">Created</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {communityStats?.recentCommunities?.map((community) => (
                       <TableRow key={community.id}>
-                        <TableCell className="font-medium">{community.name}</TableCell>
-                        <TableCell>@{community.handle}</TableCell>
+                        <TableCell className="font-medium">
+                          <div>
+                            <div className="font-medium">{community.name}</div>
+                            <div className="text-xs text-muted-foreground sm:hidden">@{community.handle}</div>
+                          </div>
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">@{community.handle}</TableCell>
                         <TableCell>
                           {community.status === 'active' ? (
                             <Badge className="bg-green-500">Active</Badge>
@@ -582,7 +517,7 @@ export default function AdminDashboardPage() {
                             <Badge variant="outline" className="border-red-300 text-red-600">Rejected</Badge>
                           )}
                         </TableCell>
-                        <TableCell>{new Date(community.createdAt).toLocaleDateString()}</TableCell>
+                        <TableCell className="hidden md:table-cell">{new Date(community.createdAt).toLocaleDateString()}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -626,8 +561,8 @@ export default function AdminDashboardPage() {
             <Button variant="outline" onClick={() => setIsRejectionDialogOpen(false)}>
               Cancel
             </Button>
-            <Button 
-              variant="destructive" 
+            <Button
+              variant="destructive"
               onClick={handleRejectCommunity}
               disabled={!rejectionReason.trim()}
             >

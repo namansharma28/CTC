@@ -166,29 +166,29 @@ export default function TechnicalLeadsProfiles() {
     return (
         <div className="space-y-6">
             {/* Summary Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
                 <Card>
-                    <CardContent className="p-4 text-center">
-                        <div className="text-2xl font-bold text-blue-600">{data.summary.totalTLs}</div>
-                        <div className="text-sm text-muted-foreground">Total TLs</div>
+                    <CardContent className="p-3 sm:p-4 text-center">
+                        <div className="text-xl sm:text-2xl font-bold text-blue-600">{data.summary.totalTLs}</div>
+                        <div className="text-xs sm:text-sm text-muted-foreground">Total TLs</div>
                     </CardContent>
                 </Card>
                 <Card>
-                    <CardContent className="p-4 text-center">
-                        <div className="text-2xl font-bold text-green-600">{data.summary.activeTLs}</div>
-                        <div className="text-sm text-muted-foreground">Active TLs</div>
+                    <CardContent className="p-3 sm:p-4 text-center">
+                        <div className="text-xl sm:text-2xl font-bold text-green-600">{data.summary.activeTLs}</div>
+                        <div className="text-xs sm:text-sm text-muted-foreground">Active TLs</div>
                     </CardContent>
                 </Card>
                 <Card>
-                    <CardContent className="p-4 text-center">
-                        <div className="text-2xl font-bold text-purple-600">{data.summary.totalReferrals}</div>
-                        <div className="text-sm text-muted-foreground">Total Referrals</div>
+                    <CardContent className="p-3 sm:p-4 text-center">
+                        <div className="text-xl sm:text-2xl font-bold text-purple-600">{data.summary.totalReferrals}</div>
+                        <div className="text-xs sm:text-sm text-muted-foreground">Total Referrals</div>
                     </CardContent>
                 </Card>
                 <Card>
-                    <CardContent className="p-4 text-center">
-                        <div className="text-2xl font-bold text-orange-600">{data.summary.thisMonthReferrals}</div>
-                        <div className="text-sm text-muted-foreground">This Month</div>
+                    <CardContent className="p-3 sm:p-4 text-center">
+                        <div className="text-xl sm:text-2xl font-bold text-orange-600">{data.summary.thisMonthReferrals}</div>
+                        <div className="text-xs sm:text-sm text-muted-foreground">This Month</div>
                     </CardContent>
                 </Card>
             </div>
@@ -196,20 +196,21 @@ export default function TechnicalLeadsProfiles() {
             {/* Main TL Profiles */}
             <Card>
                 <CardHeader>
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
                             <CardTitle className="flex items-center gap-2">
                                 <Shield className="h-5 w-5" />
-                                Technical Leads Profiles ({data.technicalLeads.length})
+                                <span className="hidden sm:inline">Technical Leads Profiles ({data.technicalLeads.length})</span>
+                                <span className="sm:hidden">TL Profiles ({data.technicalLeads.length})</span>
                             </CardTitle>
-                            <CardDescription>Detailed profiles and performance metrics for all Technical Leads</CardDescription>
+                            <CardDescription className="hidden sm:block">Detailed profiles and performance metrics for all Technical Leads</CardDescription>
                         </div>
                         <div className="flex items-center gap-2">
-                            <span className="text-sm text-muted-foreground">Sort by:</span>
+                            <span className="text-sm text-muted-foreground hidden sm:inline">Sort by:</span>
                             <select
                                 value={sortBy}
                                 onChange={(e) => setSortBy(e.target.value as any)}
-                                className="text-sm border rounded px-2 py-1"
+                                className="text-sm border rounded px-2 py-1 w-full sm:w-auto"
                             >
                                 <option value="referrals">Referrals</option>
                                 <option value="recent">Recent Activity</option>
@@ -224,43 +225,45 @@ export default function TechnicalLeadsProfiles() {
                             <Collapsible key={tl.id} open={expandedTL === tl.id} onOpenChange={(open) => setExpandedTL(open ? tl.id : null)}>
                                 <CollapsibleTrigger asChild>
                                     <Card className="cursor-pointer hover:shadow-md transition-shadow">
-                                        <CardContent className="p-4">
-                                            <div className="flex items-center justify-between">
-                                                <div className="flex items-center gap-4">
-                                                    <Avatar className="h-12 w-12">
+                                        <CardContent className="p-3 sm:p-4">
+                                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                                <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
+                                                    <Avatar className="h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0">
                                                         <AvatarImage src={tl.avatar || undefined} />
                                                         <AvatarFallback>{getInitials(tl.name)}</AvatarFallback>
                                                     </Avatar>
 
-                                                    <div className="flex-1">
-                                                        <div className="flex items-center gap-2 mb-1">
-                                                            <h3 className="font-semibold">{tl.name}</h3>
-                                                            <Badge variant="secondary">
+                                                    <div className="flex-1 min-w-0">
+                                                        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-1">
+                                                            <h3 className="font-semibold truncate">{tl.name}</h3>
+                                                            <Badge variant="secondary" className="w-fit">
                                                                 <Shield className="mr-1 h-3 w-3" />
                                                                 TL
                                                             </Badge>
                                                         </div>
-                                                        <p className="text-sm text-muted-foreground">{tl.email}</p>
+                                                        <p className="text-sm text-muted-foreground truncate">{tl.email}</p>
                                                         {tl.bio && (
-                                                            <p className="text-sm text-muted-foreground mt-1 line-clamp-1">{tl.bio}</p>
+                                                            <p className="text-sm text-muted-foreground mt-1 line-clamp-1 hidden sm:block">{tl.bio}</p>
                                                         )}
                                                     </div>
                                                 </div>
 
-                                                <div className="flex items-center gap-6">
-                                                    <div className="text-center">
-                                                        <div className="text-lg font-bold text-primary">{tl.statistics.totalReferrals}</div>
-                                                        <div className="text-xs text-muted-foreground">Total</div>
+                                                <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-6">
+                                                    <div className="grid grid-cols-3 gap-3 sm:flex sm:items-center sm:gap-6">
+                                                        <div className="text-center">
+                                                            <div className="text-base sm:text-lg font-bold text-primary">{tl.statistics.totalReferrals}</div>
+                                                            <div className="text-xs text-muted-foreground">Total</div>
+                                                        </div>
+                                                        <div className="text-center">
+                                                            <div className="text-base sm:text-lg font-bold text-green-600">{tl.statistics.thisMonth}</div>
+                                                            <div className="text-xs text-muted-foreground">Month</div>
+                                                        </div>
+                                                        <div className="text-center">
+                                                            <div className="text-xs text-muted-foreground">Joined</div>
+                                                            <div className="text-sm font-medium">{new Date(tl.joinedDate).toLocaleDateString()}</div>
+                                                        </div>
                                                     </div>
-                                                    <div className="text-center">
-                                                        <div className="text-lg font-bold text-green-600">{tl.statistics.thisMonth}</div>
-                                                        <div className="text-xs text-muted-foreground">This Month</div>
-                                                    </div>
-                                                    <div className="text-center">
-                                                        <div className="text-xs text-muted-foreground">Joined</div>
-                                                        <div className="text-sm font-medium">{new Date(tl.joinedDate).toLocaleDateString()}</div>
-                                                    </div>
-                                                    {expandedTL === tl.id ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                                                    {expandedTL === tl.id ? <ChevronUp className="h-4 w-4 flex-shrink-0" /> : <ChevronDown className="h-4 w-4 flex-shrink-0" />}
                                                 </div>
                                             </div>
                                         </CardContent>
@@ -271,7 +274,7 @@ export default function TechnicalLeadsProfiles() {
                                     <Card className="mt-2 border-l-4 border-l-primary">
                                         <CardContent className="p-6">
                                             <Tabs defaultValue="overview" className="w-full">
-                                                <TabsList className="grid w-full grid-cols-4">
+                                                <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
                                                     <TabsTrigger value="overview">Overview</TabsTrigger>
                                                     <TabsTrigger value="performance">Performance</TabsTrigger>
                                                     <TabsTrigger value="events">Top Events</TabsTrigger>
@@ -318,21 +321,21 @@ export default function TechnicalLeadsProfiles() {
                                                         {/* Quick Stats */}
                                                         <div>
                                                             <h4 className="font-semibold mb-3">Quick Statistics</h4>
-                                                            <div className="grid grid-cols-2 gap-3">
-                                                                <div className="text-center p-3 bg-muted/50 rounded-lg">
-                                                                    <div className="text-xl font-bold text-primary">{tl.statistics.totalReferrals}</div>
+                                                            <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                                                                <div className="text-center p-2 sm:p-3 bg-muted/50 rounded-lg">
+                                                                    <div className="text-lg sm:text-xl font-bold text-primary">{tl.statistics.totalReferrals}</div>
                                                                     <div className="text-xs text-muted-foreground">Total Referrals</div>
                                                                 </div>
-                                                                <div className="text-center p-3 bg-muted/50 rounded-lg">
-                                                                    <div className="text-xl font-bold text-green-600">{tl.statistics.thisMonth}</div>
+                                                                <div className="text-center p-2 sm:p-3 bg-muted/50 rounded-lg">
+                                                                    <div className="text-lg sm:text-xl font-bold text-green-600">{tl.statistics.thisMonth}</div>
                                                                     <div className="text-xs text-muted-foreground">This Month</div>
                                                                 </div>
-                                                                <div className="text-center p-3 bg-muted/50 rounded-lg">
-                                                                    <div className="text-xl font-bold text-blue-600">{tl.statistics.thisWeek}</div>
+                                                                <div className="text-center p-2 sm:p-3 bg-muted/50 rounded-lg">
+                                                                    <div className="text-lg sm:text-xl font-bold text-blue-600">{tl.statistics.thisWeek}</div>
                                                                     <div className="text-xs text-muted-foreground">This Week</div>
                                                                 </div>
-                                                                <div className="text-center p-3 bg-muted/50 rounded-lg">
-                                                                    <div className="text-xl font-bold text-purple-600">{tl.statistics.topEvents.length}</div>
+                                                                <div className="text-center p-2 sm:p-3 bg-muted/50 rounded-lg">
+                                                                    <div className="text-lg sm:text-xl font-bold text-purple-600">{tl.statistics.topEvents.length}</div>
                                                                     <div className="text-xs text-muted-foreground">Events Promoted</div>
                                                                 </div>
                                                             </div>

@@ -150,7 +150,7 @@ export default function TechnicalLeadsMonitor() {
   return (
     <div className="space-y-6">
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total TLs</CardTitle>
@@ -215,45 +215,47 @@ export default function TechnicalLeadsMonitor() {
                   <Card className="border-l-4 border-l-primary/20">
                     <CollapsibleTrigger asChild>
                       <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-4">
-                            <Avatar className="h-12 w-12">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                          <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
+                            <Avatar className="h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0">
                               <AvatarImage src={tl.avatar || undefined} />
                               <AvatarFallback>{getInitials(tl.name)}</AvatarFallback>
                             </Avatar>
                             
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-1">
-                                <h3 className="font-semibold">{tl.name}</h3>
-                                <Badge variant="secondary" className="text-xs">
+                            <div className="flex-1 min-w-0">
+                              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-1">
+                                <h3 className="font-semibold truncate">{tl.name}</h3>
+                                <Badge variant="secondary" className="text-xs w-fit">
                                   <Shield className="mr-1 h-3 w-3" />
                                   TL
                                 </Badge>
                               </div>
-                              <p className="text-sm text-muted-foreground">{tl.email}</p>
-                              <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
+                              <p className="text-sm text-muted-foreground truncate">{tl.email}</p>
+                              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 mt-2 text-xs text-muted-foreground">
                                 <span>Joined {formatDate(tl.joinedDate)}</span>
-                                <span>•</span>
+                                <span className="hidden sm:inline">•</span>
                                 <span>Last active {getTimeAgo(tl.lastActive)}</span>
                               </div>
                             </div>
                           </div>
                           
-                          <div className="flex items-center gap-6">
-                            <div className="text-center">
-                              <div className="text-2xl font-bold text-primary">{tl.statistics.totalReferrals}</div>
-                              <div className="text-xs text-muted-foreground">Total</div>
-                            </div>
-                            <div className="text-center">
-                              <div className="text-lg font-semibold">{tl.statistics.thisMonth}</div>
-                              <div className="text-xs text-muted-foreground">This Month</div>
-                            </div>
-                            <div className="text-center">
-                              <div className="text-lg font-semibold">{tl.statistics.thisWeek}</div>
-                              <div className="text-xs text-muted-foreground">This Week</div>
+                          <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-6">
+                            <div className="grid grid-cols-3 gap-3 sm:flex sm:items-center sm:gap-6">
+                              <div className="text-center">
+                                <div className="text-lg sm:text-2xl font-bold text-primary">{tl.statistics.totalReferrals}</div>
+                                <div className="text-xs text-muted-foreground">Total</div>
+                              </div>
+                              <div className="text-center">
+                                <div className="text-base sm:text-lg font-semibold">{tl.statistics.thisMonth}</div>
+                                <div className="text-xs text-muted-foreground">Month</div>
+                              </div>
+                              <div className="text-center">
+                                <div className="text-base sm:text-lg font-semibold">{tl.statistics.thisWeek}</div>
+                                <div className="text-xs text-muted-foreground">Week</div>
+                              </div>
                             </div>
                             
-                            <Button variant="ghost" size="sm">
+                            <Button variant="ghost" size="sm" className="flex-shrink-0">
                               {expandedTLs.has(tl.id) ? (
                                 <ChevronUp className="h-4 w-4" />
                               ) : (
@@ -267,7 +269,7 @@ export default function TechnicalLeadsMonitor() {
                     
                     <CollapsibleContent>
                       <CardContent className="pt-0">
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                           {/* Top Events */}
                           <div>
                             <h4 className="font-semibold mb-3 flex items-center gap-2">
