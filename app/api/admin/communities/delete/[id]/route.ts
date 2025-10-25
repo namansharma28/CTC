@@ -68,13 +68,13 @@ export async function DELETE(
         // Remove community from users' following lists
         await db.collection('users').updateMany(
           { following: params.id },
-          { $pull: { following: params.id } }
+          { $pull: { following: params.id } } as any
         );
 
         // Remove community from users' communities lists (if they were members)
         await db.collection('users').updateMany(
           { communities: params.id },
-          { $pull: { communities: params.id } }
+          { $pull: { communities: params.id } } as any
         );
 
         // Create notifications for community members

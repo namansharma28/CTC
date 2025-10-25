@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -99,7 +100,7 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-black">
       <LandingNavbar />
 
       {/* Hero Section */}
@@ -132,51 +133,10 @@ export default function LandingPage() {
         </div>
 
         {/* Navigation */}
-        <div className="absolute top-16 left-0 right-0 z-20">
-          <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">C</span>
-              </div>
-              <span className="text-white font-semibold text-lg">CodingThinker</span>
-            </div>
-
-            <nav className="hidden md:flex items-center gap-8">
-              <div className="flex items-center gap-1 text-white/80 hover:text-white cursor-pointer">
-                <span>Courses</span>
-                <span className="text-xs">+</span>
-              </div>
-              <div className="flex items-center gap-1 text-white/80 hover:text-white cursor-pointer">
-                <span>Programs</span>
-                <span className="text-xs">+</span>
-              </div>
-              <span className="text-white/80 hover:text-white cursor-pointer">Mentors</span>
-              <span className="text-white/80 hover:text-white cursor-pointer">Pricing</span>
-            </nav>
-
-            <div className="flex items-center gap-4">
-              {session ? (
-                <Button asChild className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
-                  <Link href="/home">Enter Platform</Link>
-                </Button>
-              ) : (
-                <>
-                  <Link href="/auth/signin" className="text-white/80 hover:text-white">Login</Link>
-                  <Button asChild className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
-                    <Link href="/auth/signup">Request a Demo</Link>
-                  </Button>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
+        
 
         {/* Main Content - Centered like in the image */}
-        <div className="container mx-auto px-4 relative z-10 flex flex-col items-center justify-center min-h-screen text-center pt-32">
-          {/* NEW Badge */}
-          <Badge className="mb-8 bg-blue-600/20 text-blue-400 border-blue-600/30 px-4 py-2 text-sm font-medium">
-            NEW v1.2 Beta is available
-          </Badge>
+        <div className="container mx-auto px-4 relative z-10 flex flex-col items-center justify-center min-h-screen text-center pt-10">
 
           {/* Main Heading - Larger and more prominent */}
           <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-12 leading-tight max-w-5xl">
@@ -275,177 +235,301 @@ export default function LandingPage() {
 
       </section>
 
-      {/* Stats Section */}
-      <section className="py-12 px-4 bg-muted/50">
-        <div className="container mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
-                  {stat.number}
-                </div>
-                <div className="text-muted-foreground">{stat.label}</div>
+      {/* Company Section */}
+      <section className="py-20 px-4 bg-black relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 2px,
+                rgba(255, 255, 255, 0.02) 2px,
+                rgba(255, 255, 255, 0.02) 4px
+              )
+            `
+          }}></div>
+        </div>
+
+        <div className="container mx-auto relative z-10">
+          {/* Main Description */}
+          <div className="text-center mb-16 max-w-4xl mx-auto">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-8 leading-tight">
+              At CodingThinker, we redefine identity and access management with a
+              <span className="text-gray-400"> scalable, modular platform tailored for seamless UX and
+                deployment adaptability. Our pay-as-you-go model
+                ensures you get exactly what you need.</span>
+            </h2>
+          </div>
+
+          {/* Company Logos */}
+          <div className="mb-20">
+            {/* First Row */}
+            <div className="flex items-center justify-center gap-12 md:gap-16 lg:gap-20 mb-8 opacity-40">
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 bg-green-600 rounded"></div>
+                <span className="text-white text-lg font-medium">Evernote</span>
               </div>
-            ))}
+              <span className="text-white text-lg font-medium">PayPal</span>
+              <div className="flex items-center gap-2">
+                <span className="text-white text-lg font-medium">amazon</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 bg-blue-500 rounded"></div>
+                <span className="text-white text-lg font-medium">Framer</span>
+              </div>
+              <span className="text-white text-lg font-medium">XXX</span>
+            </div>
+
+            {/* Second Row */}
+            <div className="flex items-center justify-center gap-12 md:gap-16 lg:gap-20 opacity-40">
+              <div className="flex items-center gap-2">
+                <span className="text-white text-lg font-medium">TESLA</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 bg-gray-600 rounded"></div>
+                <span className="text-white text-lg font-medium">INTERCOM</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 bg-purple-600 rounded"></div>
+                <span className="text-white text-lg font-medium">Discord</span>
+              </div>
+              <span className="text-white text-lg font-medium">gumroad</span>
+              <span className="text-white text-lg font-medium">XXX</span>
+            </div>
+          </div>
+
+          {/* Feature Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {/* Reliable */}
+            <div className="text-center">
+              <div className="w-16 h-16 mx-auto mb-6 bg-white/5 rounded-lg border border-white/10 flex items-center justify-center">
+                <Shield className="h-8 w-8 text-white/60" />
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-4">Reliable</h3>
+              <p className="text-gray-400 leading-relaxed">
+                CodingThinker has built scalable infrastructure to support your growth.
+              </p>
+            </div>
+
+            {/* Scalable */}
+            <div className="text-center">
+              <div className="w-16 h-16 mx-auto mb-6 bg-white/5 rounded-lg border border-white/10 flex items-center justify-center">
+                <Globe className="h-8 w-8 text-white/60" />
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-4">Scalable</h3>
+              <p className="text-gray-400 leading-relaxed">
+                Our failover and deduplication features make scaling easy.
+              </p>
+            </div>
+
+            {/* Secure */}
+            <div className="text-center">
+              <div className="w-16 h-16 mx-auto mb-6 bg-white/5 rounded-lg border border-white/10 flex items-center justify-center">
+                <CheckCircle className="h-8 w-8 text-white/60" />
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-4">Secure</h3>
+              <p className="text-gray-400 leading-relaxed">
+                CodingThinker ensures strong security and helps you meet industry standards.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 px-4">
-        <div className="container mx-auto">
+      <section id="features" className="py-20 px-4 bg-black relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 2px,
+                rgba(255, 255, 255, 0.02) 2px,
+                rgba(255, 255, 255, 0.02) 4px
+              )
+            `
+          }}></div>
+        </div>
+
+        <div className="container mx-auto relative z-10">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold mb-6">
+            <h2 className="text-3xl md:text-5xl font-bold mb-6 text-white">
               Why Choose Our Platform
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
               Discover the features that make our platform the perfect choice for your coding journey
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-              <Card key={index} className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-0 bg-gradient-to-br from-card to-card/50 backdrop-blur-sm">
-                <CardHeader>
-                  <div className="mb-4 p-3 rounded-full bg-primary/10 w-fit">{feature.icon}</div>
-                  <CardTitle className="text-xl">{feature.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-base leading-relaxed">
-                    {feature.description}
-                  </CardDescription>
-                </CardContent>
-              </Card>
+              <div key={index} className="bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 p-6 hover:bg-white/10 transition-all duration-300 hover:-translate-y-2">
+                <div className="mb-4 p-3 rounded-full bg-blue-600/20 w-fit">
+                  <div className="text-blue-400">
+                    {React.cloneElement(feature.icon, { className: "h-8 w-8" })}
+                  </div>
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-4">{feature.title}</h3>
+                <p className="text-gray-400 leading-relaxed">
+                  {feature.description}
+                </p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Courses Section */}
-      <section id="courses" className="py-20 px-4 bg-muted/30">
-        <div className="container mx-auto">
+      <section id="courses" className="py-20 px-4 bg-black relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 2px,
+                rgba(255, 255, 255, 0.02) 2px,
+                rgba(255, 255, 255, 0.02) 4px
+              )
+            `
+          }}></div>
+        </div>
+
+        <div className="container mx-auto relative z-10">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold mb-6">
+            <h2 className="text-3xl md:text-5xl font-bold mb-6 text-white">
               Master Your Skills
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-8">
               Choose from our comprehensive selection of courses designed to take you from beginner to professional.
               Each course includes hands-on projects and personalized mentoring.
             </p>
-            <Button variant="outline" size="lg" className="rounded-full">
+            <Button variant="outline" size="lg" className="rounded-full border-white/20 text-white hover:bg-white/10 hover:text-white">
               Explore all courses
             </Button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16">
             {courses.slice(0, 3).map((course, index) => (
-              <Card key={index} className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-0 bg-gradient-to-br from-card to-card/50">
-                <CardHeader>
-                  <div className="flex items-center justify-between mb-4">
-                    <Badge variant="secondary">{course.level}</Badge>
-                    <span className="text-sm text-muted-foreground">{course.duration}</span>
-                  </div>
-                  <CardTitle className="text-xl mb-2">{course.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-base mb-4 leading-relaxed">
-                    {course.description}
-                  </CardDescription>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {course.technologies.map((tech, techIndex) => (
-                      <Badge key={techIndex} variant="outline" className="text-xs">
-                        {tech}
-                      </Badge>
-                    ))}
-                  </div>
-                  <Button className="w-full rounded-full">
-                    Learn More
-                  </Button>
-                </CardContent>
-              </Card>
+              <div key={index} className="bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 p-6 hover:bg-white/10 transition-all duration-300 hover:-translate-y-2">
+                <div className="flex items-center justify-between mb-4">
+                  <Badge className="bg-blue-600/20 text-blue-400 border-blue-600/30">{course.level}</Badge>
+                  <span className="text-sm text-gray-400">{course.duration}</span>
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-4">{course.title}</h3>
+                <p className="text-gray-400 mb-4 leading-relaxed">
+                  {course.description}
+                </p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {course.technologies.map((tech, techIndex) => (
+                    <Badge key={techIndex} className="text-xs bg-white/10 text-white/80 border-white/20">
+                      {tech}
+                    </Badge>
+                  ))}
+                </div>
+                <Button className="w-full rounded-full bg-blue-600 hover:bg-blue-700 text-white">
+                  Learn More
+                </Button>
+              </div>
             ))}
           </div>
 
           {/* Additional courses row */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8 max-w-4xl mx-auto">
             {courses.slice(3).map((course, index) => (
-              <Card key={index + 3} className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-0 bg-gradient-to-br from-card to-card/50">
-                <CardHeader>
-                  <div className="flex items-center justify-between mb-4">
-                    <Badge variant="secondary">{course.level}</Badge>
-                    <span className="text-sm text-muted-foreground">{course.duration}</span>
-                  </div>
-                  <CardTitle className="text-xl mb-2">{course.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-base mb-4 leading-relaxed">
-                    {course.description}
-                  </CardDescription>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {course.technologies.map((tech, techIndex) => (
-                      <Badge key={techIndex} variant="outline" className="text-xs">
-                        {tech}
-                      </Badge>
-                    ))}
-                  </div>
-                  <Button className="w-full rounded-full">
-                    Learn More
-                  </Button>
-                </CardContent>
-              </Card>
+              <div key={index + 3} className="bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 p-6 hover:bg-white/10 transition-all duration-300 hover:-translate-y-2">
+                <div className="flex items-center justify-between mb-4">
+                  <Badge className="bg-blue-600/20 text-blue-400 border-blue-600/30">{course.level}</Badge>
+                  <span className="text-sm text-gray-400">{course.duration}</span>
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-4">{course.title}</h3>
+                <p className="text-gray-400 mb-4 leading-relaxed">
+                  {course.description}
+                </p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {course.technologies.map((tech, techIndex) => (
+                    <Badge key={techIndex} className="text-xs bg-white/10 text-white/80 border-white/20">
+                      {tech}
+                    </Badge>
+                  ))}
+                </div>
+                <Button className="w-full rounded-full bg-blue-600 hover:bg-blue-700 text-white">
+                  Learn More
+                </Button>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 px-4">
-        <div className="container mx-auto">
+      <section id="about" className="py-20 px-4 bg-black relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 2px,
+                rgba(255, 255, 255, 0.02) 2px,
+                rgba(255, 255, 255, 0.02) 4px
+              )
+            `
+          }}></div>
+        </div>
+
+        <div className="container mx-auto relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
                 Built for the Future of Learning
               </h2>
-              <p className="text-lg text-muted-foreground mb-6">
+              <p className="text-lg text-gray-400 mb-6">
                 Our platform combines cutting-edge technology with proven teaching methodologies
                 to create an unparalleled learning experience. Join thousands of students who have
                 transformed their careers with us.
               </p>
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <CheckCircle className="h-5 w-5 text-green-500" />
-                  <span>Industry-expert mentors and instructors</span>
+                  <CheckCircle className="h-5 w-5 text-green-400" />
+                  <span className="text-white">Industry-expert mentors and instructors</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <CheckCircle className="h-5 w-5 text-green-500" />
-                  <span>Hands-on projects and real-world applications</span>
+                  <CheckCircle className="h-5 w-5 text-green-400" />
+                  <span className="text-white">Hands-on projects and real-world applications</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <CheckCircle className="h-5 w-5 text-green-500" />
-                  <span>Personalized learning paths and AI assistance</span>
+                  <CheckCircle className="h-5 w-5 text-green-400" />
+                  <span className="text-white">Personalized learning paths and AI assistance</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <CheckCircle className="h-5 w-5 text-green-500" />
-                  <span>Career support and job placement assistance</span>
+                  <CheckCircle className="h-5 w-5 text-green-400" />
+                  <span className="text-white">Career support and job placement assistance</span>
                 </div>
               </div>
             </div>
             <div className="relative">
-              <div className="bg-gradient-to-br from-primary/20 via-muted/10 to-silver/20 rounded-2xl p-8 h-96 flex items-center justify-center backdrop-blur-sm">
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 h-96 flex items-center justify-center">
                 <div className="text-center">
                   <div className="text-6xl mb-4">💻</div>
-                  <h3 className="text-2xl font-bold mb-2">Ready to Code?</h3>
-                  <p className="text-muted-foreground">
+                  <h3 className="text-2xl font-bold mb-2 text-white">Ready to Code?</h3>
+                  <p className="text-gray-400">
                     Join thousands of students already learning with us
                   </p>
                   <div className="mt-6 flex justify-center gap-4">
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-primary">95%</div>
-                      <div className="text-xs text-muted-foreground">Success Rate</div>
+                      <div className="text-2xl font-bold text-blue-400">95%</div>
+                      <div className="text-xs text-gray-400">Success Rate</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-primary">5K+</div>
-                      <div className="text-xs text-muted-foreground">Students</div>
+                      <div className="text-2xl font-bold text-blue-400">5K+</div>
+                      <div className="text-xs text-gray-400">Students</div>
                     </div>
                   </div>
                 </div>
@@ -456,30 +540,45 @@ export default function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-gradient-to-r from-primary/10 via-muted/10 to-silver/10">
-        <div className="container mx-auto text-center">
+      <section className="py-20 px-4 bg-black relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 2px,
+                rgba(255, 255, 255, 0.02) 2px,
+                rgba(255, 255, 255, 0.02) 4px
+              )
+            `
+          }}></div>
+        </div>
+
+        <div className="container mx-auto text-center relative z-10">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-5xl font-bold mb-6">
+            <h2 className="text-3xl md:text-5xl font-bold mb-6 text-white">
               Ready to Transform Your Future?
             </h2>
-            <p className="text-xl text-muted-foreground mb-8">
+            <p className="text-xl text-gray-400 mb-8">
               Join thousands of students who have already started their coding journey with us.
               Get access to expert mentorship, hands-on projects, and a supportive community.
             </p>
             {session ? (
-              <Button size="lg" asChild className="text-lg px-8 py-4 rounded-full bg-gradient-to-r from-primary to-blue-600">
+              <Button size="lg" asChild className="text-lg px-8 py-4 rounded-full bg-blue-600 hover:bg-blue-700 text-white">
                 <Link href="/home">
                   Enter Platform <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
             ) : (
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" asChild className="text-lg px-8 py-4 rounded-full bg-gradient-to-r from-primary to-blue-600">
+                <Button size="lg" asChild className="text-lg px-8 py-4 rounded-full bg-blue-600 hover:bg-blue-700 text-white">
                   <Link href="/auth/signup">
                     Start Learning Today <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" asChild className="text-lg px-8 py-4 rounded-full border-2">
+                <Button size="lg" variant="outline" asChild className="text-lg px-8 py-4 rounded-full border-white/20 text-white hover:bg-white/10 hover:text-white">
                   <Link href="/auth/signin">Sign In</Link>
                 </Button>
               </div>
@@ -487,20 +586,20 @@ export default function LandingPage() {
 
             <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto">
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary mb-1">24/7</div>
-                <div className="text-sm text-muted-foreground">Support</div>
+                <div className="text-2xl font-bold text-blue-400 mb-1">24/7</div>
+                <div className="text-sm text-gray-400">Support</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary mb-1">100+</div>
-                <div className="text-sm text-muted-foreground">Projects</div>
+                <div className="text-2xl font-bold text-blue-400 mb-1">100+</div>
+                <div className="text-sm text-gray-400">Projects</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary mb-1">50+</div>
-                <div className="text-sm text-muted-foreground">Mentors</div>
+                <div className="text-2xl font-bold text-blue-400 mb-1">50+</div>
+                <div className="text-sm text-gray-400">Mentors</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary mb-1">95%</div>
-                <div className="text-sm text-muted-foreground">Success</div>
+                <div className="text-2xl font-bold text-blue-400 mb-1">95%</div>
+                <div className="text-sm text-gray-400">Success</div>
               </div>
             </div>
           </div>
@@ -508,51 +607,51 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer id="contact" className="py-12 px-4 bg-muted/50 border-t">
+      <footer id="contact" className="py-12 px-4 bg-black border-t border-white/10">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="col-span-1 md:col-span-2">
-              <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+              <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
                 CTC - Coding Thinker
               </h3>
-              <p className="text-muted-foreground mb-4">
+              <p className="text-gray-400 mb-4">
                 Transform your future with our innovative coding education platform.
                 Learn from industry experts and join a community of passionate developers
                 who are shaping the future of technology.
               </p>
               <div className="flex items-center gap-2">
-                <Star className="h-4 w-4 text-yellow-500" />
-                <Star className="h-4 w-4 text-yellow-500" />
-                <Star className="h-4 w-4 text-yellow-500" />
-                <Star className="h-4 w-4 text-yellow-500" />
-                <Star className="h-4 w-4 text-yellow-500" />
-                <span className="text-sm text-muted-foreground ml-2">
+                <Star className="h-4 w-4 text-yellow-400" />
+                <Star className="h-4 w-4 text-yellow-400" />
+                <Star className="h-4 w-4 text-yellow-400" />
+                <Star className="h-4 w-4 text-yellow-400" />
+                <Star className="h-4 w-4 text-yellow-400" />
+                <span className="text-sm text-gray-400 ml-2">
                   Rated 5/5 by 5,000+ students
                 </span>
               </div>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Courses</h4>
+              <h4 className="font-semibold mb-4 text-white">Courses</h4>
               <div className="space-y-2">
-                <div><a href="#" className="text-muted-foreground hover:text-primary">MERN Stack</a></div>
-                <div><a href="#" className="text-muted-foreground hover:text-primary">Data Analytics</a></div>
-                <div><a href="#" className="text-muted-foreground hover:text-primary">Java + DSA</a></div>
-                <div><a href="#" className="text-muted-foreground hover:text-primary">Python</a></div>
-                <div><a href="#" className="text-muted-foreground hover:text-primary">C/C++</a></div>
+                <div><a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">MERN Stack</a></div>
+                <div><a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">Data Analytics</a></div>
+                <div><a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">Java + DSA</a></div>
+                <div><a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">Python</a></div>
+                <div><a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">C/C++</a></div>
               </div>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Support</h4>
+              <h4 className="font-semibold mb-4 text-white">Support</h4>
               <div className="space-y-2">
-                <div><a href="#contact" className="text-muted-foreground hover:text-primary">Contact Us</a></div>
-                <div><a href="#" className="text-muted-foreground hover:text-primary">Help Center</a></div>
-                <div><a href="#" className="text-muted-foreground hover:text-primary">Community</a></div>
-                <div><a href="#" className="text-muted-foreground hover:text-primary">Career Support</a></div>
-                <div><Link href="/auth/signup" className="text-muted-foreground hover:text-primary">Join Now</Link></div>
+                <div><a href="#contact" className="text-gray-400 hover:text-blue-400 transition-colors">Contact Us</a></div>
+                <div><a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">Help Center</a></div>
+                <div><a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">Community</a></div>
+                <div><a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">Career Support</a></div>
+                <div><Link href="/auth/signup" className="text-gray-400 hover:text-blue-400 transition-colors">Join Now</Link></div>
               </div>
             </div>
           </div>
-          <div className="border-t mt-8 pt-8 text-center text-muted-foreground">
+          <div className="border-t border-white/10 mt-8 pt-8 text-center text-gray-400">
             <p>&copy; 2024 CTC - Coding Thinker. Empowering the next generation of developers.</p>
           </div>
         </div>
