@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Shield, Users, CheckCircle, XCircle, Loader2, LogOut, Calendar, BarChart, PlusCircle } from "lucide-react";
+import { Shield, Users, CheckCircle, XCircle, Loader2, LogOut, Calendar, BarChart, PlusCircle, Trash2, MoreHorizontal } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { handleApiResponse } from "@/lib/utils";
 import {
@@ -28,6 +28,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Dialog,
   DialogContent,
@@ -74,7 +80,7 @@ interface DashboardStats {
 interface CommunityStats {
   totalCommunities: number;
   pendingCommunities: number;
-  approvedCommunities: number;
+  activeCommunities: number;
   rejectedCommunities: number;
   recentCommunities: {
     id: string;
@@ -97,6 +103,8 @@ export default function AdminDashboardPage() {
   const [rejectionReason, setRejectionReason] = useState("");
   const [selectedCommunityId, setSelectedCommunityId] = useState<string | null>(null);
   const [isRejectionDialogOpen, setIsRejectionDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [communityToDelete, setCommunityToDelete] = useState<{ id: string; name: string } | null>(null);
 
   useEffect(() => {
     const checkAdminAuth = async () => {
@@ -328,6 +336,58 @@ export default function AdminDashboardPage() {
     }
   };
 
+  const openDeleteDialog = (community: { id: string; name: string }) => {
+    setCommunityToDelete(community);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleDeleteCommunity = async () => {
+    if (!communityToDelete) return;
+
+    setProcessingId(communityToDelete.id);
+    setIsDeleteDialogOpen(false);
+
+    try {
+      const adminToken = localStorage.getItem('adminToken');
+      const response = await fetch(`/api/admin/communities/delete/${communityToDelete.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${adminToken}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const success = await handleApiResponse(response, {
+        router,
+        toast,
+        successMessage: {
+          title: "Community Deleted",
+          description: `The community "${communityToDelete.name}" has been permanently deleted`
+        },
+        errorMessage: {
+          title: "Error",
+          description: "Failed to delete community"
+        },
+        redirectOnAuthError: true
+      });
+
+      if (success) {
+        // Refresh data to update the UI
+        await fetchData();
+      }
+    } catch (error) {
+      console.error('Error deleting community:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete community",
+        variant: "destructive",
+      });
+    } finally {
+      setProcessingId(null);
+      setCommunityToDelete(null);
+    }
+  };
+
   const handleLogout = async () => {
     try {
       // Clear admin token
@@ -470,6 +530,7 @@ export default function AdminDashboardPage() {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-muted-foreground">Active</p>
+                        <p className="text-2xl font-bold">{communityStats?.activeCommunities || 0}</p>
                       </div>
                       <CheckCircle className="h-8 w-8 text-green-500" />
                     </div>
@@ -496,6 +557,7 @@ export default function AdminDashboardPage() {
                       <TableHead className="hidden sm:table-cell">Handle</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead className="hidden md:table-cell">Created</TableHead>
+                      <TableHead className="w-[50px]">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -518,6 +580,29 @@ export default function AdminDashboardPage() {
                           )}
                         </TableCell>
                         <TableCell className="hidden md:table-cell">{new Date(community.createdAt).toLocaleDateString()}</TableCell>
+                        <TableCell>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 w-8 p-0"
+                                disabled={processingId === community.id}
+                              >
+                                <MoreHorizontal className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem
+                                onClick={() => openDeleteDialog({ id: community.id, name: community.name })}
+                                className="text-red-600 focus:text-red-600"
+                              >
+                                <Trash2 className="mr-2 h-4 w-4" />
+                                Delete Community
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -571,6 +656,35 @@ export default function AdminDashboardPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Community</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to permanently delete the community "{communityToDelete?.name}"?
+              This action cannot be undone and will:
+              <ul className="list-disc list-inside mt-2 space-y-1">
+                <li>Delete all community data</li>
+                <li>Delete all associated events</li>
+                <li>Delete all community updates</li>
+                <li>Remove the community from all members' profiles</li>
+                <li>Notify all community members</li>
+              </ul>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteCommunity}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Delete Community
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
