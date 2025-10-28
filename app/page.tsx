@@ -104,7 +104,7 @@ export default function LandingPage() {
       <LandingNavbar />
 
       {/* Hero Section */}
-      <section className="min-h-screen bg-gradient-to-b from-black to-blue-950 relative overflow-hidden">
+      <section className="min-h-screen bg-gradient-to-b from-black to-blue-950 relative overflow-hidden pt-5">
         {/* Background Pattern - Code-like grid pattern */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{
@@ -184,9 +184,6 @@ export default function LandingPage() {
                 <Link href="/auth/signup">Start Learning Now</Link>
               </Button>
             )}
-            <Button size="lg" variant="outline" className="border-blue-700/50 text-blue-400 hover:text-blue-300 hover:bg-blue-900/30 px-10 py-6 rounded-lg text-lg font-medium transition-all">
-              Explore Courses
-            </Button>
           </div>
 
           {/* Tech Stack Logos */}
@@ -616,51 +613,51 @@ export default function LandingPage() {
                 <div className="text-white/80 text-sm font-medium group-hover:text-blue-400">VS Code</div>
               </div>
               
-              <div className="bg-blue-950/30 backdrop-blur-sm rounded-lg border border-blue-800/20 p-4 flex flex-col items-center justify-center hover:transform hover:scale-105 transition-all duration-300 aspect-square group">
-                <div className="text-white text-3xl mb-2 group-hover:text-blue-400">
-                  <svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
+              <div className="bg-gradient-to-br from-blue-900/40 to-blue-950/40 backdrop-blur-sm rounded-xl border border-blue-700/30 p-5 flex flex-col items-center justify-center hover:transform hover:scale-105 transition-all duration-300 aspect-square group shadow-lg shadow-blue-900/10 hover:shadow-blue-500/20">
+                <div className="text-blue-400 text-3xl mb-3 group-hover:text-blue-300 transform group-hover:-translate-y-1 transition-all">
+                  <svg viewBox="0 0 24 24" width="42" height="42" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
                   </svg>
                 </div>
-                <div className="text-white/80 text-sm font-medium group-hover:text-blue-400">GitHub</div>
+                <div className="text-white text-sm font-medium group-hover:text-blue-300">GitHub</div>
               </div>
               
-              <div className="bg-blue-950/30 backdrop-blur-sm rounded-lg border border-blue-800/20 p-4 flex flex-col items-center justify-center hover:transform hover:scale-105 transition-all duration-300 aspect-square group">
-                <div className="text-white text-3xl mb-2 group-hover:text-blue-400">
-                  <svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
+              <div className="bg-gradient-to-br from-blue-900/40 to-blue-950/40 backdrop-blur-sm rounded-xl border border-blue-700/30 p-5 flex flex-col items-center justify-center hover:transform hover:scale-105 transition-all duration-300 aspect-square group shadow-lg shadow-blue-900/10 hover:shadow-blue-500/20">
+                <div className="text-blue-400 text-3xl mb-3 group-hover:text-blue-300 transform group-hover:-translate-y-1 transition-all">
+                  <svg viewBox="0 0 24 24" width="42" height="42" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="16 18 22 12 16 6"></polyline>
                     <polyline points="8 6 2 12 8 18"></polyline>
                     <line x1="19" y1="12" x2="5" y2="12"></line>
                   </svg>
                 </div>
-                <div className="text-white/80 text-sm font-medium group-hover:text-blue-400">React</div>
+                <div className="text-white text-sm font-medium group-hover:text-blue-300">React</div>
               </div>
               
-              <div className="bg-blue-950/30 backdrop-blur-sm rounded-lg border border-blue-800/20 p-4 flex flex-col items-center justify-center hover:transform hover:scale-105 transition-all duration-300 aspect-square group">
-                <div className="text-white text-3xl mb-2 group-hover:text-blue-400">
-                  <svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
+              <div className="bg-gradient-to-br from-blue-900/40 to-blue-950/40 backdrop-blur-sm rounded-xl border border-blue-700/30 p-5 flex flex-col items-center justify-center hover:transform hover:scale-105 transition-all duration-300 aspect-square group shadow-lg shadow-blue-900/10 hover:shadow-blue-500/20">
+                <div className="text-blue-400 text-3xl mb-3 group-hover:text-blue-300 transform group-hover:-translate-y-1 transition-all">
+                  <svg viewBox="0 0 24 24" width="42" height="42" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
                     <path d="M2 17l10 5 10-5"></path>
                     <path d="M2 12l10 5 10-5"></path>
                   </svg>
                 </div>
-                <div className="text-white/80 text-sm font-medium group-hover:text-blue-400">Node.js</div>
+                <div className="text-white text-sm font-medium group-hover:text-blue-300">Node.js</div>
               </div>
               
-              <div className="bg-blue-950/30 backdrop-blur-sm rounded-lg border border-blue-800/20 p-4 flex flex-col items-center justify-center hover:transform hover:scale-105 transition-all duration-300 aspect-square group">
-                <div className="text-white text-3xl mb-2 group-hover:text-blue-400">
-                  <svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
+              <div className="bg-gradient-to-br from-blue-900/40 to-blue-950/40 backdrop-blur-sm rounded-xl border border-blue-700/30 p-5 flex flex-col items-center justify-center hover:transform hover:scale-105 transition-all duration-300 aspect-square group shadow-lg shadow-blue-900/10 hover:shadow-blue-500/20">
+                <div className="text-blue-400 text-3xl mb-3 group-hover:text-blue-300 transform group-hover:-translate-y-1 transition-all">
+                  <svg viewBox="0 0 24 24" width="42" height="42" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path>
                     <line x1="16" y1="8" x2="2" y2="22"></line>
                     <line x1="17.5" y1="15" x2="9" y2="15"></line>
                   </svg>
                 </div>
-                <div className="text-white/80 text-sm font-medium group-hover:text-blue-400">MongoDB</div>
+                <div className="text-white text-sm font-medium group-hover:text-blue-300">MongoDB</div>
               </div>
               
-              <div className="bg-blue-950/30 backdrop-blur-sm rounded-lg border border-blue-800/20 p-4 flex flex-col items-center justify-center hover:transform hover:scale-105 transition-all duration-300 aspect-square group">
-                <div className="text-white text-3xl mb-2 group-hover:text-blue-400">
-                  <svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
+              <div className="bg-gradient-to-br from-blue-900/40 to-blue-950/40 backdrop-blur-sm rounded-xl border border-blue-700/30 p-5 flex flex-col items-center justify-center hover:transform hover:scale-105 transition-all duration-300 aspect-square group shadow-lg shadow-blue-900/10 hover:shadow-blue-500/20">
+                <div className="text-blue-400 text-3xl mb-3 group-hover:text-blue-300 transform group-hover:-translate-y-1 transition-all">
+                  <svg viewBox="0 0 24 24" width="42" height="42" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="10"></circle>
                     <line x1="14.31" y1="8" x2="20.05" y2="17.94"></line>
                     <line x1="9.69" y1="8" x2="21.17" y2="8"></line>
@@ -670,67 +667,58 @@ export default function LandingPage() {
                     <line x1="16.62" y1="12" x2="10.88" y2="21.94"></line>
                   </svg>
                 </div>
-                <div className="text-white/80 text-sm font-medium group-hover:text-blue-400">Python</div>
+                <div className="text-white text-sm font-medium group-hover:text-blue-300">Python</div>
               </div>
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
-              {/* Row 2 - More coding tools */}
-              <div className="bg-blue-950/30 backdrop-blur-sm rounded-lg border border-blue-800/20 p-4 flex flex-col items-center justify-center hover:transform hover:scale-105 transition-all duration-300 aspect-square group">
-                <div className="text-white text-3xl mb-2 group-hover:text-blue-400">
-                  <svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
+              
+              <div className="bg-gradient-to-br from-blue-900/40 to-blue-950/40 backdrop-blur-sm rounded-xl border border-blue-700/30 p-5 flex flex-col items-center justify-center hover:transform hover:scale-105 transition-all duration-300 aspect-square group shadow-lg shadow-blue-900/10 hover:shadow-blue-500/20">
+                <div className="text-blue-400 text-3xl mb-3 group-hover:text-blue-300 transform group-hover:-translate-y-1 transition-all">
+                  <svg viewBox="0 0 24 24" width="42" height="42" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
                     <line x1="8" y1="21" x2="16" y2="21"></line>
                     <line x1="12" y1="17" x2="12" y2="21"></line>
                   </svg>
                 </div>
-                <div className="text-white/80 text-sm font-medium group-hover:text-blue-400">Docker</div>
+                <div className="text-white text-sm font-medium group-hover:text-blue-300">Docker</div>
               </div>
               
-              <div className="bg-blue-950/30 backdrop-blur-sm rounded-lg border border-blue-800/20 p-4 flex flex-col items-center justify-center hover:transform hover:scale-105 transition-all duration-300 aspect-square group">
-                <div className="text-white text-3xl mb-2 group-hover:text-blue-400">
-                  <svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
+              <div className="bg-gradient-to-br from-blue-900/40 to-blue-950/40 backdrop-blur-sm rounded-xl border border-blue-700/30 p-5 flex flex-col items-center justify-center hover:transform hover:scale-105 transition-all duration-300 aspect-square group shadow-lg shadow-blue-900/10 hover:shadow-blue-500/20">
+                <div className="text-blue-400 text-3xl mb-3 group-hover:text-blue-300 transform group-hover:-translate-y-1 transition-all">
+                  <svg viewBox="0 0 24 24" width="42" height="42" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M18 10h-4V3H8v7H4l7 7 7-7z"></path>
                     <path d="M18 17v4H6v-4"></path>
                   </svg>
                 </div>
-                <div className="text-white/80 text-sm font-medium group-hover:text-blue-400">Git</div>
+                <div className="text-white text-sm font-medium group-hover:text-blue-300">Git</div>
               </div>
               
-              <div className="bg-blue-950/30 backdrop-blur-sm rounded-lg border border-blue-800/20 p-4 flex flex-col items-center justify-center hover:transform hover:scale-105 transition-all duration-300 aspect-square group">
-                <div className="text-white text-3xl mb-2 group-hover:text-blue-400">
-                  <svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
+              <div className="bg-gradient-to-br from-blue-900/40 to-blue-950/40 backdrop-blur-sm rounded-xl border border-blue-700/30 p-5 flex flex-col items-center justify-center hover:transform hover:scale-105 transition-all duration-300 aspect-square group shadow-lg shadow-blue-900/10 hover:shadow-blue-500/20">
+                <div className="text-blue-400 text-3xl mb-3 group-hover:text-blue-300 transform group-hover:-translate-y-1 transition-all">
+                  <svg viewBox="0 0 24 24" width="42" height="42" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                     <polyline points="22 4 12 14.01 9 11.01"></polyline>
                   </svg>
                 </div>
-                <div className="text-white/80 text-sm font-medium group-hover:text-blue-400">Jest</div>
+                <div className="text-white text-sm font-medium group-hover:text-blue-300">Jest</div>
               </div>
               
-              <div className="bg-blue-950/30 backdrop-blur-sm rounded-lg border border-blue-800/20 p-4 flex flex-col items-center justify-center hover:transform hover:scale-105 transition-all duration-300 aspect-square group">
-                <div className="text-white text-3xl mb-2 group-hover:text-blue-400">
-                  <svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
+              <div className="bg-gradient-to-br from-blue-900/40 to-blue-950/40 backdrop-blur-sm rounded-xl border border-blue-700/30 p-5 flex flex-col items-center justify-center hover:transform hover:scale-105 transition-all duration-300 aspect-square group shadow-lg shadow-blue-900/10 hover:shadow-blue-500/20">
+                <div className="text-blue-400 text-3xl mb-3 group-hover:text-blue-300 transform group-hover:-translate-y-1 transition-all">
+                  <svg viewBox="0 0 24 24" width="42" height="42" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                   </svg>
                 </div>
-                <div className="text-white/80 text-sm font-medium group-hover:text-blue-400">TypeScript</div>
+                <div className="text-white text-sm font-medium group-hover:text-blue-300">TypeScript</div>
               </div>
               
-              <div className="bg-blue-950/30 backdrop-blur-sm rounded-lg border border-blue-800/20 p-4 flex flex-col items-center justify-center hover:transform hover:scale-105 transition-all duration-300 aspect-square group">
-                <div className="text-white text-3xl mb-2 group-hover:text-blue-400">
-                  <svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
+              <div className="bg-gradient-to-br from-blue-900/40 to-blue-950/40 backdrop-blur-sm rounded-xl border border-blue-700/30 p-5 flex flex-col items-center justify-center hover:transform hover:scale-105 transition-all duration-300 aspect-square group shadow-lg shadow-blue-900/10 hover:shadow-blue-500/20">
+                <div className="text-blue-400 text-3xl mb-3 group-hover:text-blue-300 transform group-hover:-translate-y-1 transition-all">
+                  <svg viewBox="0 0 24 24" width="42" height="42" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
                     <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
                     <line x1="12" y1="22.08" x2="12" y2="12"></line>
                   </svg>
                 </div>
-                <div className="text-white/80 text-sm font-medium group-hover:text-blue-400">AWS</div>
-              </div>
-              
-              <div className="bg-blue-600 rounded-lg p-4 flex flex-col items-center justify-center hover:bg-blue-700 transition-all duration-300 aspect-square group">
-                <Button className="bg-transparent hover:bg-transparent text-white font-medium text-sm">
-                  View All Tools
-                </Button>
+                <div className="text-white text-sm font-medium group-hover:text-blue-300">AWS</div>
               </div>
             </div>
 
@@ -746,9 +734,6 @@ export default function LandingPage() {
                     Our curriculum is designed to teach you the exact tools and workflows used by professional developers at top tech companies. 
                     You'll graduate with practical experience in the technologies employers are looking for.
                   </p>
-                  <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-                    Explore Our Curriculum
-                  </Button>
                 </div>
                 <div className="bg-blue-950/30 backdrop-blur-sm rounded-lg border border-blue-800/20 p-6 font-mono text-sm">
                   <div className="space-y-2 text-white/80">
