@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useSession } from "next-auth/react";
 
 import { formatDistanceToNow } from "date-fns";
 import { formatDateWithFallback } from "@/lib/date-utils";
@@ -35,6 +36,7 @@ interface TNPPost {
 export default function TNPPostPage() {
   const params = useParams();
   const router = useRouter();
+  const { data: session } = useSession();
   const [post, setPost] = useState<TNPPost | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -118,6 +120,139 @@ export default function TNPPostPage() {
 
   const deadlinePassed = isDeadlinePassed(post.deadline);
 
+  const sidebarContent = (
+    <div className="space-y-6">
+      {/* Join our WhatsApp Community */}
+      {session?.user?.role !== 'operator' && (
+        <Card className="modern-card modern-card-hover border-green-500/20">
+          <CardHeader>
+            <CardTitle>Join our WhatsApp Community</CardTitle>
+            <CardDescription>
+              Connect with other students and stay updated!
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button asChild className="w-full bg-green-500 hover:bg-green-600 text-white">
+              <a href="#" target="_blank" rel="noopener noreferrer">
+                Join WhatsApp
+              </a>
+            </Button>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Apply Now */}
+      {!deadlinePassed && (
+        <Card className="modern-card modern-card-hover border-primary/20">
+          <CardHeader>
+            <CardTitle>Apply Now</CardTitle>
+            <CardDescription>
+              Don't miss this opportunity! Apply before the deadline.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {post.applicationLink ? (
+              <Button asChild className="w-full">
+                <a href={post.applicationLink} target="_blank" rel="noopener noreferrer">
+                  <ExternalLink className="h-4 w-4 mr-2" />
+                  Apply on Company Website
+                </a>
+              </Button>
+            ) : (
+              <div className="text-center p-4 bg-muted rounded-lg">
+                <p className="text-sm text-muted-foreground">
+                  Contact the TNP office or the company directly to apply for this position.
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Quick Info */}
+      <Card className="modern-card modern-card-hover">
+        <CardHeader>
+          <CardTitle>Quick Information</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div className="flex justify-between items-center text-sm">
+            <span className="text-muted-foreground">Company</span>
+            <span className="font-medium">{post.company}</span>
+          </div>
+          <div className="flex justify-between items-center text-sm">
+            <span className="text-muted-foreground">Location</span>
+            <span className="font-medium">{post.location}</span>
+          </div>
+          <div className="flex justify-between items-center text-sm">
+            <span className="text-muted-foreground">Type</span>
+            <Badge className={getTypeColor(post.type)}>
+              {post.type === 'both' ? 'Job & Internship' :
+                post.type === 'placement' ? 'Placement' :
+                  post.type ? post.type.charAt(0).toUpperCase() + post.type.slice(1) : 'Job'}
+            </Badge>
+          </div>
+          {post.salary && (
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-muted-foreground">Salary</span>
+              <Badge variant="outline">{post.salary}</Badge>
+            </div>
+          )}
+          <div className="flex justify-between items-center text-sm">
+            <span className="text-muted-foreground">Deadline</span>
+            <span className={`font-medium ${deadlinePassed ? "text-destructive" : ""}`}>
+              {formatDateWithFallback(post.deadline, 'Not specified')}
+            </span>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Tags */}
+      {post.tags && Array.isArray(post.tags) && post.tags.length > 0 && (
+        <Card className="modern-card modern-card-hover">
+          <CardHeader>
+            <CardTitle>Tags</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex gap-2 flex-wrap">
+              {post.tags.map(tag => (
+                <Badge key={tag} variant="secondary">
+                  #{tag}
+                </Badge>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Company Information */}
+      <Card className="modern-card modern-card-hover">
+        <CardHeader>
+          <CardTitle>Company Details</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center gap-3 mb-3">
+            <Avatar className="h-10 w-10">
+              <AvatarImage src="" />
+              <AvatarFallback>
+                <Building className="h-5 w-5" />
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <p className="font-medium">{post.company}</p>
+              <p className="text-sm text-muted-foreground">{post.location}</p>
+            </div>
+          </div>
+          <div className="pt-3 border-t text-xs text-muted-foreground space-y-1">
+            <p>Posted: {formatDateWithFallback(post.createdAt, 'Unknown')}</p>
+            {post.updatedAt && post.updatedAt !== post.createdAt && (
+              <p>Updated: {formatDateWithFallback(post.updatedAt, 'Unknown')}</p>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+
   return (
     <div className="container mx-auto py-6 px-4">
       {/* Header */}
@@ -129,11 +264,11 @@ export default function TNPPostPage() {
 
         {/* Cover Image */}
         {post.image && (
-          <div className="relative w-full h-64 md:h-80 lg:h-96 rounded-xl overflow-hidden mb-6 shadow-lg">
+          <div className="relative w-full h-auto rounded-xl mb-6 shadow-lg">
             <img
               src={post.image}
               alt={post.title}
-              className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+              className="w-full h-auto object-contain transition-transform duration-300 hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
             <div className="absolute bottom-6 left-6 right-6">
@@ -213,6 +348,11 @@ export default function TNPPostPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Sidebar content for small screens (above author, hidden on large) */}
+        <div className="lg:hidden space-y-6 mb-6">
+          {sidebarContent}
+        </div>
+
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
           {/* Description */}
@@ -243,130 +383,21 @@ export default function TNPPostPage() {
                 <CardTitle>Requirements</CardTitle>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-3">
+                <div className="space-y-3">
                   {post.requirements.map((requirement, index) => (
-                    <li key={index} className="flex items-start gap-2 text-sm">
-                      <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-                      <span>{requirement}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Application */}
-          {!deadlinePassed && (
-            <Card className="modern-card modern-card-hover border-primary/20">
-              <CardHeader>
-                <CardTitle>Apply Now</CardTitle>
-                <CardDescription>
-                  Don't miss this opportunity! Apply before the deadline.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {post.applicationLink ? (
-                  <Button asChild className="w-full silver-hover">
-                    <a href={post.applicationLink} target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="h-4 w-4 mr-2" />
-                      Apply on Company Website
-                    </a>
-                  </Button>
-                ) : (
-                  <div className="text-center p-4 bg-muted rounded-lg">
-                    <p className="text-sm text-muted-foreground">
-                      Contact the TNP office or the company directly to apply for this position.
+                    <p key={index} className="text-sm leading-relaxed">
+                      {requirement}
                     </p>
-                  </div>
-                )}
+                  ))}
+                </div>
               </CardContent>
             </Card>
           )}
         </div>
 
-        {/* Sidebar */}
-        <div className="space-y-6">
-          {/* Quick Info */}
-          <Card className="modern-card modern-card-hover">
-            <CardHeader>
-              <CardTitle>Quick Information</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-muted-foreground">Company</span>
-                <span className="font-medium">{post.company}</span>
-              </div>
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-muted-foreground">Location</span>
-                <span className="font-medium">{post.location}</span>
-              </div>
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-muted-foreground">Type</span>
-                <Badge className={getTypeColor(post.type)}>
-                  {post.type === 'both' ? 'Job & Internship' :
-                    post.type === 'placement' ? 'Placement' :
-                      post.type ? post.type.charAt(0).toUpperCase() + post.type.slice(1) : 'Job'}
-                </Badge>
-              </div>
-              {post.salary && (
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-muted-foreground">Salary</span>
-                  <Badge variant="outline">{post.salary}</Badge>
-                </div>
-              )}
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-muted-foreground">Deadline</span>
-                <span className={`font-medium ${deadlinePassed ? "text-destructive" : ""}`}>
-                  {formatDateWithFallback(post.deadline, 'Not specified')}
-                </span>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Tags */}
-          {post.tags && Array.isArray(post.tags) && post.tags.length > 0 && (
-            <Card className="modern-card modern-card-hover">
-              <CardHeader>
-                <CardTitle>Tags</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex gap-2 flex-wrap">
-                  {post.tags.map(tag => (
-                    <Badge key={tag} variant="secondary">
-                      #{tag}
-                    </Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Company Information */}
-          <Card className="modern-card modern-card-hover">
-            <CardHeader>
-              <CardTitle>Company Details</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center gap-3 mb-3">
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src="" />
-                  <AvatarFallback>
-                    <Building className="h-5 w-5" />
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <p className="font-medium">{post.company}</p>
-                  <p className="text-sm text-muted-foreground">{post.location}</p>
-                </div>
-              </div>
-              <div className="pt-3 border-t text-xs text-muted-foreground space-y-1">
-                <p>Posted: {formatDateWithFallback(post.createdAt, 'Unknown')}</p>
-                {post.updatedAt && post.updatedAt !== post.createdAt && (
-                  <p>Updated: {formatDateWithFallback(post.updatedAt, 'Unknown')}</p>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+        {/* Sidebar content for large screens (hidden on small) */}
+        <div className="hidden lg:block space-y-6">
+          {sidebarContent}
         </div>
       </div>
     </div>

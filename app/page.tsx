@@ -290,7 +290,7 @@ export default function LandingPage() {
         <div className="container mx-auto relative z-10">
           {/* Header */}
           <div className="text-center mb-16 max-w-4xl mx-auto">
-            <div className="inline-block px-3 py-1 bg-blue-900/30 rounded-full text-blue-400 text-sm font-medium mb-4">
+            <div className="inline-block px-3 py-1 bg-gray-900/30 rounded-full text-blue-400 text-sm font-medium mb-4">
               SUCCESS STORIES
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
@@ -397,132 +397,6 @@ export default function LandingPage() {
             backgroundSize: '20px 20px'
           }}></div>
         </div>
-
-        <div className="container mx-auto relative z-10">
-          {/* Section Header */}
-          <div className="text-center mb-16 max-w-3xl mx-auto">
-            <div className="inline-block px-3 py-1 bg-blue-900/30 rounded-full text-blue-400 text-sm font-medium mb-4">
-              FEATURED COURSES
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
-              Accelerate your career with our <span className="text-blue-400">expert-led courses</span>
-            </h2>
-            <p className="text-lg text-white/70">
-              Our curriculum is designed by industry professionals to ensure you learn the most in-demand skills
-              that employers are looking for today.
-            </p>
-          </div>
-
-          {/* Course Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto mb-16">
-            {/* MERN Stack Course */}
-            <div className="bg-blue-950/30 backdrop-blur-sm rounded-xl border border-blue-800/20 overflow-hidden hover:transform hover:scale-[1.02] transition-all duration-300 shadow-xl shadow-blue-900/10 group">
-              <div className="h-3 bg-gradient-to-r from-blue-600 to-purple-600"></div>
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <div className="w-12 h-12 bg-blue-900/50 rounded-lg flex items-center justify-center">
-                    <span className="text-2xl">🌐</span>
-                  </div>
-                  <Badge className="bg-blue-600 hover:bg-blue-700">Most Popular</Badge>
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">MERN Stack Development</h3>
-                <p className="text-white/70 mb-4 text-sm">
-                  Master both frontend and backend development. Build complete web applications from scratch using modern technologies.
-                </p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  <Badge variant="outline" className="border-blue-700/50 text-blue-400">MongoDB</Badge>
-                  <Badge variant="outline" className="border-blue-700/50 text-blue-400">Express.js</Badge>
-                  <Badge variant="outline" className="border-blue-700/50 text-blue-400">React</Badge>
-                  <Badge variant="outline" className="border-blue-700/50 text-blue-400">Node.js</Badge>
-                </div>
-                <div className="flex justify-between items-center text-sm text-white/60">
-                  <div className="flex items-center gap-1">
-                    <CalendarDays className="h-4 w-4" />
-                    <span>6 months</span>
-                  </div>
-                  <div>Beginner to Advanced</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Data Analytics Course */}
-            <div className="bg-blue-950/30 backdrop-blur-sm rounded-xl border border-blue-800/20 overflow-hidden hover:transform hover:scale-[1.02] transition-all duration-300 shadow-xl shadow-blue-900/10 group">
-              <div className="h-3 bg-gradient-to-r from-green-500 to-blue-500"></div>
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <div className="w-12 h-12 bg-blue-900/50 rounded-lg flex items-center justify-center">
-                    <span className="text-2xl">📊</span>
-                  </div>
-                  <Badge className="bg-green-600 hover:bg-green-700">High Demand</Badge>
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">Data Analytics</h3>
-                <p className="text-white/70 mb-4 text-sm">
-                  Learn to analyze and visualize data using Python, SQL, and modern analytics tools. Make data-driven decisions.
-                </p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  <Badge variant="outline" className="border-blue-700/50 text-blue-400">Python</Badge>
-                  <Badge variant="outline" className="border-blue-700/50 text-blue-400">SQL</Badge>
-                  <Badge variant="outline" className="border-blue-700/50 text-blue-400">Pandas</Badge>
-                  <Badge variant="outline" className="border-blue-700/50 text-blue-400">Matplotlib</Badge>
-                </div>
-                <div className="flex justify-between items-center text-sm text-white/60">
-                  <div className="flex items-center gap-1">
-                    <CalendarDays className="h-4 w-4" />
-                    <span>4 months</span>
-                  </div>
-                  <div>Intermediate</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Java + DSA Course */}
-            <div className="bg-blue-950/30 backdrop-blur-sm rounded-xl border border-blue-800/20 overflow-hidden hover:transform hover:scale-[1.02] transition-all duration-300 shadow-xl shadow-blue-900/10 group">
-              <div className="h-3 bg-gradient-to-r from-red-500 to-orange-500"></div>
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <div className="w-12 h-12 bg-blue-900/50 rounded-lg flex items-center justify-center">
-                    <span className="text-2xl">☕</span>
-                  </div>
-                  <Badge className="bg-orange-600 hover:bg-orange-700">Interview Prep</Badge>
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">Java + DSA</h3>
-                <p className="text-white/70 mb-4 text-sm">
-                  Master Java programming and Data Structures & Algorithms. Perfect for technical interviews and competitive programming.
-                </p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  <Badge variant="outline" className="border-blue-700/50 text-blue-400">Java</Badge>
-                  <Badge variant="outline" className="border-blue-700/50 text-blue-400">Algorithms</Badge>
-                  <Badge variant="outline" className="border-blue-700/50 text-blue-400">Data Structures</Badge>
-                  <Badge variant="outline" className="border-blue-700/50 text-blue-400">Problem Solving</Badge>
-                </div>
-                <div className="flex justify-between items-center text-sm text-white/60">
-                  <div className="flex items-center gap-1">
-                    <CalendarDays className="h-4 w-4" />
-                    <span>5 months</span>
-                  </div>
-                  <div>Beginner to Advanced</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* View All Courses Button */}
-          <div className="text-center">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg text-lg font-medium transition-all hover:scale-105 shadow-lg shadow-blue-600/20">
-              View All Courses
-            </Button>
-          </div>
-
-          {/* Stats Section */}
-          <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-blue-400 mb-2">{stat.number}</div>
-                <div className="text-white/70">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
       </section>
 
       {/* Why Choose Us Section */}
@@ -541,7 +415,7 @@ export default function LandingPage() {
         <div className="container mx-auto relative z-10">
           {/* Section Header */}
           <div className="text-center mb-16 max-w-3xl mx-auto">
-            <div className="inline-block px-3 py-1 bg-blue-900/30 rounded-full text-blue-400 text-sm font-medium mb-4">
+            <div className="inline-block px-3 py-1 bg-black/30 rounded-full text-blue-400 text-sm font-medium mb-4">
               WHY CHOOSE US
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">

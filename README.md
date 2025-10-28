@@ -158,6 +158,7 @@ GOOGLE_CLIENT_SECRET=your-google-client-secret
 CLOUDINARY_CLOUD_NAME=your-cloud-name
 CLOUDINARY_API_KEY=your-api-key
 CLOUDINARY_API_SECRET=your-api-secret
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=
 
 # Email Configuration (Optional)
 SMTP_HOST=smtp.gmail.com

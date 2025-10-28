@@ -68,7 +68,7 @@ export default function FeedCard({ item }: FeedCardProps) {
   const postImages = getPostImages();
   const allImages = item.image ? [item.image, ...postImages] : postImages;
   const hasImages = allImages.length > 0;
-  const hasMultipleImages = allImages.length > 1;
+  const hasMultipleImages = allImages.length > 2;
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % allImages.length);
@@ -99,14 +99,14 @@ export default function FeedCard({ item }: FeedCardProps) {
       <Link href={`/events/${event._id || event.id || item.id}`}>
         <Card className="overflow-hidden transition-all duration-300 modern-card-hover min-h-[420px]">
           <div className="relative">
-            <div className="h-64 w-full bg-gradient-to-r relative">
-              {item.image ? (
-                <>
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-full object-contain"
-                  />
+            <div className="h-auto w-full bg-gradient-to-r relative">
+            {item.image ? (
+              <>
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-auto object-contain"
+                />
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50" />
                 </>
               ) : null}
@@ -217,12 +217,12 @@ export default function FeedCard({ item }: FeedCardProps) {
       <Card className={`overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 modern-card-hover ${hasImages ? 'min-h-[500px]' : 'min-h-fit'}`}>
         {/* Image Section - Full height image display */}
         {hasImages && (
-          <div className="relative w-full h-80 bg-gray-100">
-            <div className="w-full h-full relative bg-black/5">
+          <div className="relative w-full h-auto bg-gray-100">
+            <div className="w-full h-auto relative bg-black/5">
               <img
                 src={allImages[currentImageIndex]}
                 alt={item.title}
-                className="w-full h-full object-contain"
+                className="w-full h-auto object-contain"
               />
               <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/30 pointer-events-none" />
 

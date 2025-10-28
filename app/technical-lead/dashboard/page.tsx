@@ -205,14 +205,6 @@ export default function TechnicalLeadDashboard() {
                         <p className="text-sm sm:text-base text-muted-foreground">Share events and track your referrals</p>
                     </div>
                 </div>
-                {session?.user?.email && (
-                    <Link href={`/profile/technical-lead/${encodeURIComponent(session.user.email)}`}>
-                        <Button variant="outline">
-                            <Eye className="mr-2 h-4 w-4" />
-                            View Public Profile
-                        </Button>
-                    </Link>
-                )}
             </div>
 
             {/* Stats Cards */}
