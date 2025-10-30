@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { CalendarDays, BookOpen, Briefcase, Plus, Compass, Users, Clock } from 'lucide-react';
+import { CalendarDays, BookOpen, Briefcase, Plus, Compass, Users, Clock, Phone } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -273,8 +273,18 @@ export default function Home() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Main Content Area */}
         <div className="lg:col-span-8">
-          <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
-
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-3xl font-bold">Dashboard</h1>
+            {session?.user?.role !== 'operator' && (
+              <Link href="https://wa.me/+919876543210" target="_blank" rel="noopener noreferrer" className="md:hidden">
+                <Button variant="outline" size="sm" className="flex items-center gap-2">
+                  <Phone className="h-4 w-4" />
+                  <span>WhatsApp</span>
+                </Button>
+              </Link>
+            )}
+          </div>
+          
           <Tabs defaultValue="all" className="w-full">
             <TabsList className="w-full grid grid-cols-4 h-auto p-1">
               <TabsTrigger value="all" className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 text-xs sm:text-sm">

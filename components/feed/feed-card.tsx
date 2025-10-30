@@ -97,7 +97,7 @@ export default function FeedCard({ item }: FeedCardProps) {
 
     return (
       <Link href={`/events/${event._id || event.id || item.id}`}>
-        <Card className="overflow-hidden transition-all duration-300 modern-card-hover min-h-[420px]">
+        <Card className="overflow-hidden transition-all duration-300 modern-card-hover">
           <div className="relative">
             <div className="h-auto w-full bg-gradient-to-r relative">
             {item.image ? (
@@ -214,7 +214,7 @@ export default function FeedCard({ item }: FeedCardProps) {
   // Regular layout for other content types
   return (
     <Link href={`/${item.type}/${item.id}`} className="block">
-      <Card className={`overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 modern-card-hover ${hasImages ? 'min-h-[500px]' : 'min-h-fit'}`}>
+      <Card className={`overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 modern-card-hover`}>
         {/* Image Section - Full height image display */}
         {hasImages && (
           <div className="relative w-full h-auto bg-gray-100">

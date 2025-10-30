@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { usePWAInstall } from "@/components/pwa/pwa-installer";
 import Link from "next/link";
 import { 
   User, 
@@ -95,6 +96,7 @@ export default function SettingsPage() {
     weeklyDigest: false,
   });
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const { isInstallable, isInstalled, installApp } = usePWAInstall();
   
   // PWA Installation state
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
@@ -575,6 +577,31 @@ export default function SettingsPage() {
           </Card>
 
           {/* PWA Installation Card */}
+          {isInstallable && !isInstalled && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Download className="h-5 w-5" />
+                  Install Application
+                </CardTitle>
+                <CardDescription>
+                  Install this app on your device for a better experience
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-col space-y-4">
+                  <p className="text-sm text-muted-foreground">
+                    Installing the app will allow you to access it directly from your home screen and use it offline.
+                  </p>
+                  <Button onClick={installApp} className="w-full sm:w-auto">
+                    <Download className="mr-2 h-4 w-4" />
+                    Install App
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+          
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">

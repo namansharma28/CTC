@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useSession } from "next-auth/react";
 
 import { formatDistanceToNow } from "date-fns";
 import { formatDateWithFallback } from "@/lib/date-utils";
@@ -36,7 +35,6 @@ interface TNPPost {
 export default function TNPPostPage() {
   const params = useParams();
   const router = useRouter();
-  const { data: session } = useSession();
   const [post, setPost] = useState<TNPPost | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -122,25 +120,6 @@ export default function TNPPostPage() {
 
   const sidebarContent = (
     <div className="space-y-6">
-      {/* Join our WhatsApp Community */}
-      {session?.user?.role !== 'operator' && (
-        <Card className="modern-card modern-card-hover border-green-500/20">
-          <CardHeader>
-            <CardTitle>Join our WhatsApp Community</CardTitle>
-            <CardDescription>
-              Connect with other students and stay updated!
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button asChild className="w-full bg-green-500 hover:bg-green-600 text-white">
-              <a href="#" target="_blank" rel="noopener noreferrer">
-                Join WhatsApp
-              </a>
-            </Button>
-          </CardContent>
-        </Card>
-      )}
-
       {/* Apply Now */}
       {!deadlinePassed && (
         <Card className="modern-card modern-card-hover border-primary/20">
@@ -264,12 +243,14 @@ export default function TNPPostPage() {
 
         {/* Cover Image */}
         {post.image && (
-          <div className="relative w-full h-auto rounded-xl mb-6 shadow-lg">
-            <img
-              src={post.image}
-              alt={post.title}
-              className="w-full h-auto object-contain transition-transform duration-300 hover:scale-105"
-            />
+          <div className="relative w-full rounded-xl overflow-hidden mb-6 shadow-lg">
+            <div className="max-h-[400px] md:max-h-[400px] w-full">
+              <img
+                src={post.image}
+                alt={post.title}
+                className="w-full object-contain transition-transform duration-300 hover:scale-105"
+              />
+            </div>
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
             <div className="absolute bottom-6 left-6 right-6">
               <div className="flex items-center gap-2 mb-3">

@@ -16,9 +16,11 @@ import {
   UserPlus,
   BarChart3,
   LogOut,
+  Download,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { usePWAInstall } from "@/components/pwa/pwa-installer";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -34,6 +36,7 @@ export default function BottomNavbar() {
   const pathname = usePathname();
   const { data: session } = useSession();
   const [isMoreOpen, setIsMoreOpen] = useState(false);
+  const { isInstallable, isInstalled, installApp } = usePWAInstall();
   
   const userRole = (session?.user as any)?.role;
   const isOperatorOrAdmin = userRole === 'operator' || userRole === 'admin';
@@ -128,6 +131,16 @@ export default function BottomNavbar() {
               <span>Calendar</span>
             </Link>
           </DropdownMenuItem>
+          
+          {/* PWA Install Button */}
+          {isInstallable && !isInstalled && (
+            <DropdownMenuItem onClick={installApp} className="cursor-pointer">
+              <div className="flex items-center gap-2">
+                <Download size={16} />
+                <span>Install App</span>
+              </div>
+            </DropdownMenuItem>
+          )}
 
           {/* CTC Student specific */}
           {isCTCStudent && (

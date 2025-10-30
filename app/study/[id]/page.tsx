@@ -112,12 +112,14 @@ export default function StudyPostPage() {
 
         {/* Cover Image */}
         {post.image && (
-          <div className="relative w-full h-auto rounded-xl mb-6 shadow-lg">
-            <img
-              src={post.image}
-              alt={post.title}
-              className="w-full h-auto object-contain transition-transform duration-300 hover:scale-105"
-            />
+          <div className="relative w-full rounded-xl overflow-hidden mb-6 shadow-lg">
+            <div className="max-h-[400px] md:max-h-[400px] w-full">
+              <img
+                src={post.image}
+                alt={post.title}
+                className="w-full object-contain transition-transform duration-300 hover:scale-105"
+              />
+            </div>
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
             <div className="absolute bottom-6 left-6 right-6">
               <Badge className="mb-3 bg-silver shadow-lg">
@@ -295,19 +297,6 @@ export default function StudyPostPage() {
               )}
             </CardContent>
           </Card>
-
-          {session?.user.role !== "operator" && (
-            <Card className="modern-card modern-card-hover">
-              <CardContent className="p-4 text-center">
-                <h3 className="text-lg font-semibold mb-3">Join our WhatsApp Community</h3>
-                <Button className="w-full" asChild>
-                  <a href="#" target="_blank" rel="noopener noreferrer">
-                    Join Now
-                  </a>
-                </Button>
-              </CardContent>
-            </Card>
-          )}
         </div>
       </div>
     </div>

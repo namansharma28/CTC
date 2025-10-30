@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   CalendarDays,
   Heart,
@@ -18,6 +18,8 @@ import {
   UserPlus,
   Briefcase,
   BookOpen,
+  Phone,
+  Download,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -25,6 +27,7 @@ import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSession } from "next-auth/react";
+import { usePWAInstall } from "@/components/pwa/pwa-installer";
 
 interface SidebarLinkProps {
   href: string;
@@ -73,6 +76,7 @@ export default function Sidebar() {
   const [userCommunities, setUserCommunities] = useState<Community[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const { isInstallable, isInstalled, installApp } = usePWAInstall();
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -147,6 +151,38 @@ export default function Sidebar() {
             collapsed={isSmallScreen}
           />
         ))}
+        
+        {/* WhatsApp Connect Button - Hidden for operators */}
+        {session?.user?.role !== 'operator' && (
+          <a 
+            href="https://wa.me/+919876543210" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className={cn(
+              "flex items-center gap-3 rounded-full px-4 py-3 text-base font-medium bg-green-500 hover:bg-green-600 text-white mt-2",
+            )}
+          >
+            <div className="text-white">
+              <Phone size={24} />
+            </div>
+            {!isSmallScreen && <span>Connect on WhatsApp</span>}
+          </a>
+        )}
+        
+        {/* PWA Install Button */}
+        {isInstallable && !isInstalled && (
+          <button
+            onClick={installApp}
+            className={cn(
+              "flex items-center gap-3 rounded-full px-4 py-3 text-base font-medium bg-primary hover:bg-primary/90 text-white mt-2",
+            )}
+          >
+            <div className="text-white">
+              <Download size={24} />
+            </div>
+            {!isSmallScreen && <span>Install App</span>}
+          </button>
+        )}
 
         {/* Operator/Admin only links */}
         {isOperatorOrAdmin && (
