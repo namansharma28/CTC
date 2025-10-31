@@ -159,7 +159,7 @@ export default function Sidebar() {
             target="_blank" 
             rel="noopener noreferrer"
             className={cn(
-              "flex items-center gap-3 rounded-full px-4 py-3 text-base font-medium bg-green-500 hover:bg-green-600 text-white mt-2",
+              "flex items-center gap-3 rounded-full px-4 py-3 text-base font-mediumhover:bg-green-600 text-white mt-2",
             )}
           >
             <div className="text-white">
@@ -174,7 +174,7 @@ export default function Sidebar() {
           <button
             onClick={installApp}
             className={cn(
-              "flex items-center gap-3 rounded-full px-4 py-3 text-base font-medium bg-primary hover:bg-primary/90 text-white mt-2",
+              "flex items-center gap-3 rounded-full px-4 py-3 text-base font-medium hover:bg-primary/90 text-white mt-2",
             )}
           >
             <div className="text-white">

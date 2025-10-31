@@ -118,14 +118,10 @@ export default function FeedCard({ item }: FeedCardProps) {
               </Badge>
               <h3 className="text-lg font-bold">{item.title}</h3>
             </div>
-            <div className="absolute top-2 right-2">
-              <Badge variant="secondary" className="bg-white/90 text-gray-800 text-xs">
-                {timeAgo}
-              </Badge>
-            </div>
           </div>
 
           <CardContent className="p-4 pt-3">
+            <p className="text-xs text-muted-foreground mb-3">{timeAgo}</p>
             {/* Community Info */}
             {event.community && (
               <div className="mb-3 flex items-center gap-2">
@@ -268,7 +264,6 @@ export default function FeedCard({ item }: FeedCardProps) {
                         (item as any).type === 'tnp' ? 'TNP' :
                           (item as any).type === 'study' ? 'Study' : (item as any).type}
                     </Badge>
-                    <p className="text-xs text-white/80">{timeAgo}</p>
                   </div>
                   <h3 className="text-lg font-bold mb-1">{item.title}</h3>
                   {item.eventDate && (
@@ -285,6 +280,7 @@ export default function FeedCard({ item }: FeedCardProps) {
 
 
         <CardContent className={hasImages ? "p-4" : "p-4 pb-3"}>
+          {hasImages && <p className="text-xs text-muted-foreground mb-3">{timeAgo}</p>}
           {/* Header for posts without images */}
           {!hasImages && (
             <div className="mb-3">
@@ -296,8 +292,8 @@ export default function FeedCard({ item }: FeedCardProps) {
                   {item.type === 'tnp' ? 'TNP' :
                     item.type === 'study' ? 'Study' : item.type}
                 </Badge>
-                <p className="text-xs text-muted-foreground">{timeAgo}</p>
               </div>
+              <p className="text-xs text-muted-foreground mb-3">{timeAgo}</p>
               <h3 className="text-lg font-bold mb-2">{item.title}</h3>
               {item.community && (
                 <div className="flex items-center gap-2 mb-1">
