@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { handleApiResponse } from "@/lib/utils";
+import { Progress } from "@/components/ui/progress";
 import {
   Select,
   SelectContent,
@@ -17,7 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Upload, X, FileText } from "lucide-react";
+import { Upload, X, FileText, FileIcon } from "lucide-react";
 import Link from "next/link";
 
 interface Form {
@@ -56,6 +58,7 @@ export default function SubmitFormPage({
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, UploadedFile>>({});
   const [uploadingFiles, setUploadingFiles] = useState<Record<string, boolean>>({});
+  const [uploadProgress, setUploadProgress] = useState<Record<string, number>>({});
 
   useEffect(() => {
     fetchForm();
@@ -203,6 +206,16 @@ export default function SubmitFormPage({
       return newFiles;
     });
     handleInputChange(fieldId, null);
+  };
+  
+  const handleFileChange = (fieldId: string, file: File | null) => {
+    if (file) {
+      handleFileUpload(fieldId, file, form?.fields.find(f => f.id === fieldId));
+    }
+  };
+
+  const handleRemoveFile = (fieldId: string) => {
+    removeFile(fieldId);
   };
 
   const formatFileSize = (bytes: number) => {
@@ -388,168 +401,126 @@ export default function SubmitFormPage({
           <p className="text-muted-foreground">{form.description}</p>
         </CardHeader>
         <CardContent>
-          <div className="space-y-6">
-            {form.fields.map((field) => (
-              <div key={field.id} className="space-y-2">
-                <Label htmlFor={field.id}>
-                  {field.label}
-                  {field.required && <span className="text-red-500 ml-1">*</span>}
-                </Label>
-                
-                {field.type === "text" && (
-                  <Input
-                    id={field.id}
-                    value={formData[field.id] || ""}
-                    onChange={(e) => handleInputChange(field.id, e.target.value)}
-                    placeholder={field.label.toLowerCase().includes('referred') ? 'Auto-filled from referral link (TL name)' : `Enter ${field.label.toLowerCase()}`}
-                    disabled={field.label.toLowerCase().includes('referred')}
-                    className={field.label.toLowerCase().includes('referred') ? 'bg-muted' : ''}
-                  />
-                )}
-                
-                {field.type === "email" && (
-                  <Input
-                    id={field.id}
-                    type="email"
-                    value={formData[field.id] || ""}
-                    onChange={(e) => handleInputChange(field.id, e.target.value)}
-                    placeholder="Enter your email"
-                  />
-                )}
-                
-                {field.type === "number" && (
-                  <Input
-                    id={field.id}
-                    type="number"
-                    value={formData[field.id] || ""}
-                    onChange={(e) => handleInputChange(field.id, parseFloat(e.target.value) || "")}
-                    placeholder="Enter a number"
-                  />
-                )}
-                
-                {field.type === "select" && (
-                  <Select
-                    onValueChange={(value: string) => handleInputChange(field.id, value)}
-                    value={formData[field.id] || ""}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder={`Select ${field.label.toLowerCase()}`} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {field.options?.filter(option => option.trim()).map((option) => (
-                        <SelectItem key={option} value={option}>
-                          {option}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
-                
-                {field.type === "checkbox" && (
-                  <div className="space-y-2">
-                    {field.options && field.options.length > 1 ? (
-                      // Multiple checkbox options
-                      field.options.filter(option => option.trim()).map((option) => (
-                        <div key={option} className="flex items-center space-x-2">
-                          <Checkbox
-                            id={`${field.id}-${option}`}
-                            checked={(formData[field.id] || []).includes(option)}
-                            onCheckedChange={(checked: boolean) => {
-                              const currentValues = formData[field.id] || [];
-                              if (checked) {
-                                handleInputChange(field.id, [...currentValues, option]);
-                              } else {
-                                handleInputChange(field.id, currentValues.filter((v: string) => v !== option));
-                              }
-                            }}
-                          />
-                          <Label htmlFor={`${field.id}-${option}`}>{option}</Label>
-                        </div>
-                      ))
-                    ) : (
-                      // Single checkbox
+            <div className="space-y-6">
+              {form.fields.map((field) => 
+                !field.label.toLowerCase().includes('referred') ? (
+                  <div key={field.id} className="space-y-2">
+                    <Label htmlFor={field.id}>
+                      {field.label}
+                      {field.required && <span className="text-red-500 ml-1">*</span>}
+                    </Label>
+                    
+                    {field.type === "text" && (
+                      <Input
+                        id={field.id}
+                        value={formData[field.id] || ""}
+                        onChange={(e) => handleInputChange(field.id, e.target.value)}
+                        placeholder={`Enter ${field.label.toLowerCase()}`}
+                      />
+                    )}
+                    
+                    {field.type === "email" && (
+                      <Input
+                        id={field.id}
+                        type="email"
+                        value={formData[field.id] || ""}
+                        onChange={(e) => handleInputChange(field.id, e.target.value)}
+                        placeholder="Enter your email"
+                      />
+                    )}
+                    
+                    {field.type === "number" && (
+                      <Input
+                        id={field.id}
+                        type="number"
+                        value={formData[field.id] || ""}
+                        onChange={(e) => handleInputChange(field.id, parseFloat(e.target.value) || "")}
+                        placeholder="Enter a number"
+                      />
+                    )}
+
+                    {field.type === "textarea" && (
+                      <Textarea
+                        id={field.id}
+                        value={formData[field.id] || ""}
+                        onChange={(e) => handleInputChange(field.id, e.target.value)}
+                        placeholder={`Enter ${field.label.toLowerCase()}`}
+                      />
+                    )}
+                    
+                    {field.type === "select" && (
+                      <Select
+                        onValueChange={(value: string) => handleInputChange(field.id, value)}
+                        value={formData[field.id] || ""}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={`Select ${field.label.toLowerCase()}`} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {field.options?.map((option) => (
+                            <SelectItem key={option} value={option}>
+                              {option}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+
+                    {field.type === "checkbox" && (
                       <div className="flex items-center space-x-2">
                         <Checkbox
                           id={field.id}
-                          checked={formData[field.id] || false}
-                          onCheckedChange={(checked: boolean) => handleInputChange(field.id, checked)}
-                        />
-                        <Label htmlFor={field.id}>
-                          {field.options?.[0]?.trim() || field.label}
-                        </Label>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {field.type === "file" && (
-                  <div className="space-y-4">
-                    {!uploadedFiles[field.id] ? (
-                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                        <input
-                          type="file"
-                          id={field.id}
-                          className="hidden"
-                          accept={field.fileTypes?.map(type => `.${type}`).join(',')}
-                          onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (file) {
-                              handleFileUpload(field.id, file, field);
-                            }
-                          }}
-                          disabled={uploadingFiles[field.id]}
+                          checked={!!formData[field.id]}
+                          onCheckedChange={(checked) => handleInputChange(field.id, checked)}
                         />
                         <label
                           htmlFor={field.id}
-                          className="cursor-pointer flex flex-col items-center gap-2"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                         >
-                          <Upload className="h-8 w-8 text-gray-400" />
-                          <div>
-                            <p className="font-medium">
-                              {uploadingFiles[field.id] ? "Uploading..." : "Click to upload"}
-                            </p>
-                            <p className="text-sm text-gray-500">
-                              {field.fileTypes?.join(', ').toUpperCase()} up to {field.maxFileSize || 5}MB
-                            </p>
-                          </div>
+                          {field.label}
                         </label>
                       </div>
-                    ) : (
-                      <div className="flex items-center justify-between p-3 border rounded-lg bg-gray-50">
-                        <div className="flex items-center gap-3">
-                          <FileText className="h-5 w-5 text-gray-400" />
-                          <div>
-                            <p className="font-medium">{uploadedFiles[field.id].name}</p>
-                            <p className="text-sm text-gray-500">
-                              {formatFileSize(uploadedFiles[field.id].size)}
-                            </p>
+                    )}
+
+                    {field.type === "file" && (
+                      <div className="flex flex-col space-y-2">
+                        <Input
+                          id={field.id}
+                          type="file"
+                          onChange={(e) => handleFileChange(field.id, e.target.files?.[0] || null)}
+                        />
+                        {uploadProgress[field.id] > 0 && uploadProgress[field.id] < 100 && (
+                          <Progress value={uploadProgress[field.id]} className="w-[60%]" />
+                        )}
+                        {formData[field.id] && typeof formData[field.id] === 'string' && (
+                          <div className="flex items-center space-x-2">
+                            <FileIcon className="h-4 w-4" />
+                            <span>{formData[field.id] as string}</span>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleRemoveFile(field.id)}
+                            >
+                              Remove
+                            </Button>
                           </div>
-                        </div>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => removeFile(field.id)}
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
+                        )}
                       </div>
                     )}
                   </div>
-                )}
-              </div>
-            ))}
-            
-            <Button 
-              onClick={onSubmit} 
-              className="w-full" 
-              disabled={isSubmitting || Object.values(uploadingFiles).some(Boolean)}
-            >
-              {isSubmitting ? "Submitting..." : "Submit"}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+                ) : null
+              )}
+              
+              <Button 
+                onClick={onSubmit} 
+                className="w-full" 
+                disabled={isSubmitting || Object.values(uploadingFiles).some(Boolean)}
+              >
+                {isSubmitting ? "Submitting..." : "Submit"}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
   );
 }

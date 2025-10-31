@@ -181,7 +181,7 @@ export default function CommunityHeader({ community, userPermissions }: Communit
 
   return (
     <div className="mb-6 space-y-6">
-      <div className="relative h-48 overflow-hidden bg-gradient-to-r from-[#91D6FF] to-purple-600 md:h-64 w-full">
+      <div className="relative h-48 overflow-hidden rounded-xl bg-gradient-to-r from-[#91D6FF] to-purple-600 md:h-64">
         {community.banner && (
           <img
             src={community.banner}
@@ -189,7 +189,7 @@ export default function CommunityHeader({ community, userPermissions }: Communit
             className="h-full w-full object-cover"
           />
         )}
-        <div className="absolute inset-x-0 bottom-0 flex items-end p-6 md:block hidden">
+        <div className="absolute inset-x-0 bottom-0 flex items-end p-6">
           <div className="relative flex flex-col md:flex-row md:items-end">
             <Avatar className="h-20 w-20 border-4 border-background md:h-24 md:w-24">
               <AvatarImage src={community.avatar} />
@@ -222,40 +222,7 @@ export default function CommunityHeader({ community, userPermissions }: Communit
         </div>
       </div>
 
-      {/* Mobile-specific header details */}
-      <div className="md:hidden block -mt-16 px-4">
-        <div className="flex items-end gap-4">
-          <Avatar className="h-20 w-20 border-4 border-background">
-            <AvatarImage src={community.avatar} />
-            <AvatarFallback>{community.name.substring(0, 2)}</AvatarFallback>
-          </Avatar>
-          <div className="flex-1">
-            <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-xl font-bold">
-                {community.name}
-              </h1>
-              {community.isVerified && (
-                <Badge className="border-blue-300 bg-blue-500/10 text-blue-500">
-                  Verified
-                </Badge>
-              )}
-              {community.status === 'pending' && (
-                <Badge className="border-yellow-300 bg-yellow-500/10 text-yellow-500">
-                  Pending Approval
-                </Badge>
-              )}
-              {community.status === 'rejected' && (
-                <Badge className="border-red-300 bg-red-500/10 text-red-500">
-                  Rejected
-                </Badge>
-              )}
-            </div>
-            <p className="text-sm text-muted-foreground">@{community.handle}</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center px-4 md:px-0">
+      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <div className="flex flex-wrap items-center gap-4 md:gap-6">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Users className="h-4 w-4" />

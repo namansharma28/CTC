@@ -20,6 +20,8 @@ import {
   BookOpen,
   Phone,
   Download,
+  Instagram,
+  Twitter,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -152,37 +154,7 @@ export default function Sidebar() {
           />
         ))}
         
-        {/* WhatsApp Connect Button - Hidden for operators */}
-        {session?.user?.role !== 'operator' && (
-          <a 
-            href="https://wa.me/+919876543210" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className={cn(
-              "flex items-center gap-3 rounded-full px-4 py-3 text-base font-mediumhover:bg-green-600 text-white mt-2",
-            )}
-          >
-            <div className="text-white">
-              <Phone size={24} />
-            </div>
-            {!isSmallScreen && <span>Connect on WhatsApp</span>}
-          </a>
-        )}
-        
-        {/* PWA Install Button */}
-        {isInstallable && !isInstalled && (
-          <button
-            onClick={installApp}
-            className={cn(
-              "flex items-center gap-3 rounded-full px-4 py-3 text-base font-medium hover:bg-primary/90 text-white mt-2",
-            )}
-          >
-            <div className="text-white">
-              <Download size={24} />
-            </div>
-            {!isSmallScreen && <span>Install App</span>}
-          </button>
-        )}
+        {/* Social media and app buttons moved to the container below */}
 
         {/* Operator/Admin only links */}
         {isOperatorOrAdmin && (
@@ -237,6 +209,55 @@ export default function Sidebar() {
               {session.user?.email}
             </p>
           </div>
+        </div>
+      )}
+      
+      {/* Social Media and Action Buttons Container - Hidden for operators */}
+      {session?.user && session.user.role !== 'operator' && (
+        <div className="mt-4 p-4 bg-accent/30 rounded-xl flex flex-col gap-3">
+          {/* Social Media Buttons Row */}
+          <div className="flex justify-center gap-3">
+            <a 
+              href="https://instagram.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="w-10 h-10 rounded-full bg-pink-600 hover:bg-pink-700 flex items-center justify-center text-white"
+            >
+              <Instagram size={20} />
+            </a>
+            <a 
+              href="https://wa.me/+919876543210" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="w-10 h-10 rounded-full bg-green-600 hover:bg-green-700 flex items-center justify-center text-white"
+            >
+              <Phone size={20} />
+            </a>
+            <a 
+              href="https://twitter.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="w-10 h-10 rounded-full bg-blue-500 hover:bg-blue-600 flex items-center justify-center text-white"
+            >
+              <Twitter size={20} />
+            </a>
+          </div>
+          
+          {/* Become Technical Lead Button */}
+          <a 
+            href="/apply-technical-lead" 
+            className="w-full rounded-lg bg-primary hover:bg-primary/90 text-white py-2 px-4 text-center text-sm font-medium"
+          >
+            Become Technical Lead
+          </a>
+          
+          {/* Install App Button */}
+          <button
+            onClick={installApp}
+            className="w-full rounded-lg bg-secondary hover:bg-secondary/90 text-white py-2 px-4 text-center text-sm font-medium"
+          >
+            Install App
+          </button>
         </div>
       )}
     </div>

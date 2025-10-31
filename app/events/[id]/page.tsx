@@ -262,10 +262,10 @@ export default function EventPage({ params }: { params: { id: string } }) {
   const userPermissions = event?.userPermissions;
 
   return (
-    <div className="pb-16">
+    <div className="container mx-auto pb-16">
       {/* Event Banner */}
       <div 
-        className="relative mb-6 h-64 overflow-hidden bg-gradient-to-r from-blue-500 to-purple-600 md:h-80 w-full"
+        className="relative mb-6 h-64 overflow-hidden rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 md:h-80"
         style={{
           backgroundImage: event.image 
             ? `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${event.image})`
@@ -274,7 +274,7 @@ export default function EventPage({ params }: { params: { id: string } }) {
           backgroundPosition: "center",
         }}
       >
-        <div className="absolute bottom-0 left-0 p-6 text-white md:block hidden">
+        <div className="absolute bottom-0 left-0 p-6 text-white">
           <Badge className="mb-2 bg-primary/80 hover:bg-primary/70">
             {event.eventType === 'online' ? 'Online Event' : 
              event.eventType === 'hybrid' ? 'Hybrid Event' : 'Event'}
@@ -296,28 +296,7 @@ export default function EventPage({ params }: { params: { id: string } }) {
         </div>
       </div>
 
-      {/* Mobile-specific header details */}
-      <div className="md:hidden block -mt-16 px-4">
-        <Badge className="mb-2 bg-primary/80 hover:bg-primary/70">
-          {event.eventType === 'online' ? 'Online Event' : 
-           event.eventType === 'hybrid' ? 'Hybrid Event' : 'Event'}
-        </Badge>
-        <h1 className="mb-1 text-2xl font-bold">{event.title}</h1>
-        <div className="mt-2 flex items-center gap-2">
-          <Avatar className="h-6 w-6 border-2 border-white">
-            <AvatarImage src={event.community.avatar} />
-            <AvatarFallback>{event.community.name.substring(0, 2)}</AvatarFallback>
-          </Avatar>
-          <Link 
-            href={`/communities/${event.community.handle}`} 
-            className="text-sm font-medium text-muted-foreground hover:underline"
-          >
-            {event.community.name}
-          </Link>
-        </div>
-      </div>
-
-      <div className="container mx-auto grid grid-cols-1 gap-8 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2 order-last lg:order-none">
           {/* Admin/Member Controls */}
           {isLoggedIn ? (

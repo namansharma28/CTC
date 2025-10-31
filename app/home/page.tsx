@@ -774,7 +774,7 @@ export default function Home() {
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: 0.4 + index * 0.1 }}
                         >
-                          <Link href={`/events/${event._id}`} className="block rounded-lg border p-3 md:p-4 transition-all hover:shadow-md hover:border-primary/30 bg-card ">
+                          <Link href={`/events/${event._id}`} className="block rounded-lg border p-3 md:p-4 transition-all hover:shadow-md hover:border-white/70 bg-card ">
                             <div className="flex items-center gap-3">
                               <div
                                 className="h-12 w-12 md:h-14 md:w-14 rounded-lg bg-gradient-to-r from-primary to-silver flex-shrink-0 flex items-center justify-center"
