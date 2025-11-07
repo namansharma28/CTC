@@ -535,10 +535,10 @@ export default function EventPage({ params }: { params: { id: string } }) {
               {/* <Separator className="my-4" />
               <h3 className="mb-3 font-semibold">Contact</h3>
               <div className="text-sm">
-                <p className="mt-2 flex items-center gap-2">
+                <p className="mt-2 flex items-center gap-2/section">
                   <User className="h-4 w-4 text-muted-foreground" />
                   <span>Event Coordinator</span>
-                </p>
+                </p>  
               </div> */}
             </CardContent>
           </Card>

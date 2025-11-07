@@ -91,7 +91,7 @@ export default function SubmitFormPage({
           }
         } else if (field.type === "file") {
           initialData[field.id] = null; // File field
-        } else if (field.label.toLowerCase().includes('referred')) {
+        } else if (field.label.toLowerCase().includes('referred') || field.label.toLowerCase().includes('referral') || field.label.toLowerCase().includes('refer')) {
           // Auto-populate referral field with TL name
           initialData[field.id] = (referralEventId === params.id && technicalLeadName) 
             ? technicalLeadName 
@@ -403,7 +403,7 @@ export default function SubmitFormPage({
         <CardContent>
             <div className="space-y-6">
               {form.fields.map((field) => 
-                !field.label.toLowerCase().includes('referred') ? (
+                !field.label.toLowerCase().includes('referred') && !field.label.toLowerCase().includes('referral') && !field.label.toLowerCase().includes('refer') ? (
                   <div key={field.id} className="space-y-2">
                     <Label htmlFor={field.id}>
                       {field.label}
