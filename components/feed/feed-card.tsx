@@ -259,7 +259,7 @@ export default function FeedCard({ item }: FeedCardProps) {
               {/* Overlay content */}
               <div className="absolute inset-0 flex items-end p-4 text-white">
                 <div className="w-full">
-                  <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center mb-2">
                     <Badge className={`mb-1 ${(item as any).type === 'event' ? 'bg-blue-500/80' :
                       (item as any).type === 'tnp' ? 'bg-green-500/80' :
                         (item as any).type === 'study' ? 'bg-silver/80' : 'bg-primary/80'
@@ -268,7 +268,6 @@ export default function FeedCard({ item }: FeedCardProps) {
                         (item as any).type === 'tnp' ? 'TNP' :
                           (item as any).type === 'study' ? 'Study' : (item as any).type}
                     </Badge>
-                    <p className="text-xs text-white/80">{timeAgo}</p>
                   </div>
                   <h3 className="text-lg font-bold mb-1">{item.title}</h3>
                   {item.eventDate && (
@@ -317,17 +316,20 @@ export default function FeedCard({ item }: FeedCardProps) {
 
           {/* Community info for posts with images */}
           {hasImages && item.community && (
-            <div className="mb-2 flex items-center gap-2">
-              <Avatar className="h-7 w-7">
-                <AvatarImage src={item.community.avatar || ''} />
-                <AvatarFallback className="text-xs">
-                  {item.community.name ? item.community.name.substring(0, 2) : 'CO'}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">{item.community.name || 'Community'}</p>
-                <p className="text-xs text-muted-foreground">@{item.community.handle || 'unknown'}</p>
+            <div className="mb-2 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Avatar className="h-7 w-7">
+                  <AvatarImage src={item.community.avatar || ''} />
+                  <AvatarFallback className="text-xs">
+                    {item.community.name ? item.community.name.substring(0, 2) : 'CO'}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">{item.community.name || 'Community'}</p>
+                  <p className="text-xs text-muted-foreground">@{item.community.handle || 'unknown'}</p>
+                </div>
               </div>
+              <p className="text-xs text-muted-foreground">{timeAgo}</p>
             </div>
           )}
 

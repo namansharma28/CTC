@@ -141,7 +141,7 @@ export default function Sidebar() {
   ];
 
   return (
-    <div className="h-[calc(100vh-3.5rem)] fixed top-14 flex flex-col py-2 px-2 overflow-y-auto">
+    <div className={cn("h-[calc(100vh-3.5rem)] fixed top-14 flex flex-col py-2 px-3 overflow-y-auto bg-gradient-to-b from-background to-accent/10", isSmallScreen ? "w-[80px]" : "w-[280px]")}>
       <div className="flex flex-col w-full">
         {sidebarLinks.map((link) => (
           <SidebarLink
@@ -191,10 +191,6 @@ export default function Sidebar() {
         )}
       </div>
 
-
-
-      {/* Community creation button removed - only available for operators/admins */}
-
       {session && !isSmallScreen && (
         <div className="mt-3 flex items-center gap-3 p-3 rounded-full cursor-pointer">
           <Avatar>
@@ -212,8 +208,8 @@ export default function Sidebar() {
         </div>
       )}
       
-      {/* Social Media and Action Buttons Container - Hidden for operators */}
-      {session?.user && session.user.role !== 'operator' && (
+      {/* Social Media and Action Buttons Container - Hidden when sidebar is collapsed or for operators */}
+      {session?.user && session.user.role !== 'operator' && !isSmallScreen && (
         <div className="mt-4 p-4 bg-accent/30 rounded-xl flex flex-col gap-3">
           {/* Social Media Buttons Row */}
           <div className="flex justify-center gap-3">

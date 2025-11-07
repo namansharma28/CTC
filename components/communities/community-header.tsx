@@ -181,23 +181,57 @@ export default function CommunityHeader({ community, userPermissions }: Communit
 
   return (
     <div className="mb-6 space-y-6">
-      <div className="relative h-48 overflow-hidden rounded-xl bg-gradient-to-r from-[#91D6FF] to-purple-600 md:h-64">
+      <div className="relative h-auto overflow-hidden rounded-xl  md:h-auto">
         {community.banner && (
           <img
             src={community.banner}
             alt={`${community.name} banner`}
-            className="h-full w-full object-cover"
+            className="w-full object-cover"
           />
         )}
-        <div className="absolute inset-x-0 bottom-0 flex items-end p-6">
-          <div className="relative flex flex-col md:flex-row md:items-end">
+        {/* Desktop: overlay on banner | Mobile: after banner */}
+        <div className="hidden md:absolute md:inset-x-0 md:bottom-0 md:flex md:items-end md:p-6">
+          <div className="relative flex flex-row md:items-end">
             <Avatar className="h-20 w-20 border-4 border-background md:h-24 md:w-24">
               <AvatarImage src={community.avatar} />
               <AvatarFallback>{community.name.substring(0, 2)}</AvatarFallback>
             </Avatar>
-            <div className="mt-3 md:ml-6 md:mt-0 md:pb-3">
+            <div className="ml-6 pb-3">
               <div className="flex flex-wrap items-center gap-2">
                 <h1 className="text-2xl font-bold text-white md:text-3xl">
+                  {community.name}
+                </h1>
+                {community.isVerified && (
+                  <Badge className="border-blue-300 bg-blue-500/10 text-white">
+                    Verified
+                  </Badge>
+                )}
+                {community.status === 'pending' && (
+                  <Badge className="border-yellow-300 bg-yellow-500/10 text-white">
+                    Pending Approval
+                  </Badge>
+                )}
+                {community.status === 'rejected' && (
+                  <Badge className="border-red-300 bg-red-500/10 text-white">
+                    Rejected
+                  </Badge>
+                )}
+              </div>
+              <p className="text-sm text-white/90">@{community.handle}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile: show after banner */}
+        <div className="md:hidden px-6 pb-6 pt-4 ">
+          <div className="flex items-end">
+            <Avatar className="h-20 w-20 border-4 border-background">
+              <AvatarImage src={community.avatar} />
+              <AvatarFallback>{community.name.substring(0, 2)}</AvatarFallback>
+            </Avatar>
+            <div className="ml-4">
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="text-2xl font-bold text-white">
                   {community.name}
                 </h1>
                 {community.isVerified && (
